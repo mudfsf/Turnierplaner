@@ -1,5 +1,9 @@
 Class {
-	#name : 'Turnier',
+	#name : 'Game',
 	#superclass : 'Object',
+	#instVars : [
+		'maximumTeamSize',
+		'teams'
+	],
 	#category : 'TurnierplanerApp'
 }

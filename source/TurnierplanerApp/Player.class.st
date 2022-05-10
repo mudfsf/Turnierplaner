@@ -1,5 +1,5 @@
 Class {
-	#name : 'Spieler',
+	#name : 'Player',
 	#superclass : 'Object',
 	#instVars : [
 		'firstName',
@@ -10,37 +10,37 @@ Class {
 }
 
 { #category : 'Not categorized' }
-Spieler >> email [
+Player >> email [
 
 	^email
 ]
 
 { #category : 'Not categorized' }
-Spieler >> email: anEmail [
+Player >> email: anEmail [
 
 	email := anEmail
 ]
 
 { #category : 'Not categorized' }
-Spieler >> firstName [
-	
+Player >> firstName [
+
 	^firstName
 ]
 
 { #category : 'Not categorized' }
-Spieler >> firstName: aFirstName [
+Player >> firstName: aFirstName [
 
 	firstName := aFirstName
 ]
 
 { #category : 'Not categorized' }
-Spieler >> lastName [
+Player >> lastName [
 
 	^lastName
 ]
 
 { #category : 'Not categorized' }
-Spieler >> lastName: aLastName [
+Player >> lastName: aLastName [
 
 	lastName := aLastName
 ]

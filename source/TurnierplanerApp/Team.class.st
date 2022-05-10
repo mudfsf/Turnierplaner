@@ -15,9 +15,9 @@ Team >> players [
 ]
 
 { #category : 'Not categorized' }
-Team >> players: aPlayers [
+Team >> players: anObject [
 
-	players := aPlayers
+	players := anObject
 ]
 
 { #category : 'Not categorized' }
