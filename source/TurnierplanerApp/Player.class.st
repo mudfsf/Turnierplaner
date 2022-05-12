@@ -9,37 +9,37 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 Player >> email [
 
 	^email
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 Player >> email: anEmail [
 
 	email := anEmail
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 Player >> firstName [
 
 	^firstName
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 Player >> firstName: aFirstName [
 
 	firstName := aFirstName
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 Player >> lastName [
 
 	^lastName
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 Player >> lastName: aLastName [
 
 	lastName := aLastName

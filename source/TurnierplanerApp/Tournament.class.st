@@ -1,20 +1,33 @@
 Class {
 	#name : 'Tournament',
-	#superclass : 'Object',
+	#superclass : 'Resultable',
 	#instVars : [
-		'tournamentType'
+		'tournamentType',
+		'games'
 	],
 	#category : 'TurnierplanerApp'
 }
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
+Tournament >> games [
+
+	^games
+]
+
+{ #category : 'Accessing' }
+Tournament >> games: aListOfGame [
+
+	games := aListOfGame
+]
+
+{ #category : 'Accessing' }
 Tournament >> tournamentType [
 
 	^tournamentType
 ]
 
-{ #category : 'Not categorized' }
-Tournament >> tournamentType: anObject [
+{ #category : 'Accessing' }
+Tournament >> tournamentType: aTournamentType [
 
-	tournamentType := anObject
+	tournamentType := aTournamentType
 ]

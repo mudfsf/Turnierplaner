@@ -8,25 +8,25 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 Team >> players [
 
 	^players
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 Team >> players: anObject [
 
 	players := anObject
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 Team >> teamName [
 
 	^teamName
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 Team >> teamName: aTeamName [
 
 	teamName := aTeamName
