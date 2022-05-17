@@ -1,4 +1,12 @@
 Package {
 	#name : 'TurnierplanerApp',
-	#vaPrerequisites : ['Me5MetronicApp']
+	#vaPrerequisites : ['Me5MetronicApp'],
+	#vaSubApplications : [
+	{
+		#condition : 'true',
+		#subapps : [
+			'TurnierplanerView'
+		]
+	}
+]
 }
