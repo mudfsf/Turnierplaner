@@ -1,11 +1,11 @@
 Class {
-	#name : 'TurnierplanerView',
+	#name : 'TournamentPlannerView',
 	#superclass : 'Me5BaseView',
 	#category : 'TurnierplanerApp'
 }
 
 { #category : 'Not categorized' }
-TurnierplanerView >> createComponents [
+TournamentPlannerView >> createComponents [
 
 	super createModules.
 	self addModuleByModuleClass: Me5ComboBoxModuleBundle.
@@ -21,19 +21,12 @@ TurnierplanerView >> createComponents [
 					addTabs: self theTabs;
 					yourself);
 				yourself);
-			yourself);
-					
-					
-	
-				
-		
-		
-				
+			yourself);	
 		yourself.
 ]
 
 { #category : 'Not categorized' }
-TurnierplanerView >> theDashboardTab [
+TournamentPlannerView >> theDashboardTab [
 
 | aResultDiv aScroller aSpielanzahl aSpieleInSpalte aOffsetX aOffsetY aSpielBreite aSpielHoehe aReihenabstand aSpaltenabstand aSpielUndAbstandHoehe |
 
@@ -89,9 +82,9 @@ aResultDiv addChild: (ClwHtmlSvgLine new
 ]
 
 { #category : 'Not categorized' }
-TurnierplanerView >> theTabs [
+TournamentPlannerView >> theTabs [
 
-	^OrderedCollection new
+^OrderedCollection new
 		add: (Me5Tab new
 			text: 'Dashboard';
 			icon: Me5I newFasHome;
@@ -131,14 +124,14 @@ TurnierplanerView >> theTabs [
 ]
 
 { #category : 'Not categorized' }
-TurnierplanerView >> theTurniereTab [
+TournamentPlannerView >> theTurniereTab [
 
-| aTurniere aTurniereDiv |
+	| aTurniere aTurniereDiv |
 
-aTurniere := #('Turnier 1' 'Turnier 2' 'Turnier 3').
-aTurniereDiv := Me5Div new.
+	aTurniere := #('Turnier 1' 'Turnier 2' 'Turnier 3').
+	aTurniereDiv := Me5Div new.
 
-aTurniere do: [:eachTurnier | 
+	aTurniere do: [:eachTurnier | 
 		aTurniereDiv addChild: (Me5Form new
 			addChildToBody: (Me5Portlet newInfo
 				title: 'Full Display Width')
@@ -149,5 +142,4 @@ aTurniere do: [:eachTurnier |
 
 
 	^aTurniereDiv.
-		
 ]

@@ -1,38 +1,38 @@
 Class {
-	#name : 'Startup',
+	#name : 'StartUp',
 	#superclass : 'Object',
 	#category : 'TurnierplanerApp'
 }
 
 { #category : 'Accessing' }
-Startup >> loadObject: anObject fromPath: aPath [
+StartUp >> loadAnObjectFromPath: aPath [
 	
-	| stream loader return |
+	| theStream theLoader theReturn |
 
-	stream := CfsReadFileStream open: aPath.
+	theStream := CfsReadFileStream open: aPath.
 		
-	stream isBytes: true.
-	loader := ObjectLoader new.
-	return := loader loadFromStream: stream.
-	stream close.
+	theStream isBytes: true.
+	theLoader := ObjectLoader new.
+	theReturn := theLoader loadFromStream: theStream.
+	theStream close.
 	
-	loader hasErrorOccurred
-		ifTrue: [self error: loader currentErrorString].
-	^return
+	theLoader hasErrorOccurred
+		ifTrue: [self error: theLoader currentErrorString].
+	^theReturn
 ]
 
 { #category : 'Accessing' }
-Startup >> saveObject: anObject onPath: aPath [
+StartUp >> saveObject: anObject onPath: aPath [
 	
-	| stream dumper |
+	| theStream theDumper |
 
-	stream := CfsWriteFileStream open: aPath.
+	theStream := CfsWriteFileStream open: aPath.
 		
-	stream isBytes: true.
-	dumper := ObjectDumper new.
-	 dumper unload: anObject intoStream: stream.
-	 stream close.
+	theStream isBytes: true.
+	theDumper := ObjectDumper new.
+	 theDumper unload: anObject intoStream: theStream.
+	 theStream close.
 	
-	dumper hasErrorOccurred
-		ifTrue: [self error: dumper currentErrorString].
+	theDumper hasErrorOccurred
+		ifTrue: [self error: theDumper currentErrorString].
 ]

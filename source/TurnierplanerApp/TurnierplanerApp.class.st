@@ -6,8 +6,10 @@ Class {
 
 { #category : 'Tonel-Metadata' }
 TurnierplanerApp class >> startUp [
-	"comment"
-	| theHttpServer |
+
+	| theHttpServer theStartUp|
+	
+	theStartUp := StartUp new.
 	theHttpServer := Me5SstHttpServer startUpHttpServerOnPort: '9003' serverApplicationClass: self.
-	theHttpServer addViewClass: TurnierplanerView
+	theHttpServer addViewClass: TournamentPlannerView 
 ]
