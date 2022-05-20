@@ -9,6 +9,16 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
+{ #category : 'instance creation' }
+Bet class >> player: aPlayer guess: aMetaResult stake: anObject [
+	^(self new)
+	player:aPlayer;
+	guess: aMetaResult;
+	stake:anObject;
+	yourself.
+	
+]
+
 { #category : 'Accessing' }
 Bet >> guess [
 

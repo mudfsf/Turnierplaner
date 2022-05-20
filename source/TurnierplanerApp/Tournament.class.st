@@ -8,6 +8,15 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
+{ #category : 'instance creation' }
+Tournament class >> tournamentType: aTournamentType games: aListOfGames [
+	^(self new)
+	tournamentType: aTournamentType;
+	games: aListOfGames;
+	yourself.
+	
+]
+
 { #category : 'Accessing' }
 Tournament >> games [
 
