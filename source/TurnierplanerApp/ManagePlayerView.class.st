@@ -181,18 +181,16 @@ ManagePlayerView >> saveEvent [
 
 	| theNumberOfEditedDataGridRows |
 
-	self listGrid validateEditedDataGridCellsForBlock: [ :eachEditedDataGridCell | | theField theValue |
-		theField := eachEditedDataGridCell field.
+	self listGrid validateEditedDataGridCellsForBlock: [ :eachEditedDataGridCell | | theFieldName theValue |
+		theFieldName := (self listGrid dataGridColumnDefinitions at: eachEditedDataGridCell field asNumber) title lowercaseFirstCharacter.
 		theValue := eachEditedDataGridCell value.
-		(theField = self firstNameField 
-			and: [theValue isEmptyOrNil])
-			ifTrue: [eachEditedDataGridCell errorText: 'Please enter a first name.'].
-		(theField = self lastNameField
-			and: [theValue isNil])
-			ifTrue: [eachEditedDataGridCell errorText: 'Please enter a last name.'].
-		(theField = self emailField
-			and: [theValue isNil])
-			ifTrue: [eachEditedDataGridCell errorText: 'Please enter an email address.']].
+		theValue isEmptyOrNil
+		ifTrue: [
+			(theFieldName at: 1) isVowel
+			ifFalse: [ eachEditedDataGridCell errorText: 'Please enter a ', theFieldName]
+			ifTrue: [ eachEditedDataGridCell errorText: 'Please enter an ', theFieldName ].
+		].
+	].
 
 	self listGrid hasValidationError
 		ifTrue: [^self showErrorNotificationWithMessage: 'Validation failed...'].
