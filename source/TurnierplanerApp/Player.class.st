@@ -9,16 +9,6 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
-{ #category : 'instance creation' }
-Player class >> firstName: aFirstName lastName: aLastName email: anEmail [
-	^(self new)
-	firstName:aFirstName;
-	lastName:aLastName;
-	email:anEmail;
-	yourself.
-	
-]
-
 { #category : 'Accessing' }
 Player >> email [
 
