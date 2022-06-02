@@ -57,7 +57,6 @@ ManagePlayerView >> createComponents [
 				dataSourceBlock: [self data];
 				addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
 					title: 'First name';
-					field: self firstNameField;
 					getterSelector: #firstName;
 					setterSelector: #firstName:;
 					enableHeaderSort;
@@ -66,20 +65,19 @@ ManagePlayerView >> createComponents [
 					yourself);
 				addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
 					title: 'Last name';
-					field: self lastNameField;
 					getterSelector: #lastName;
 					setterSelector: #lastName:;
 					enableHeaderSort;
 					enableInitialSort;
 					minWidth: 200;
 					yourself);
-				addDataGridColumnDefinition: (Me5DataGridTextAreaColumnDefinition new
+				addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
 					title: 'Email';
-					field: self emailField;
 					getterSelector: #email;
-					setterSelector: #email;
+					setterSelector: #email:;
 					enableHeaderSort;
 					minWidth: 200;
+					maxWidth:  'vw 40';
 					yourself);
 				yourself);
 			addChildToFootButtonGroup: (Me5Button newSuccess
