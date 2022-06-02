@@ -9,11 +9,11 @@ Class {
 
 { #category : 'Accessing' }
 UserSettings >> beforeCreateComponents [
-	|player|
-	
-	player:=Player firstName: 'Max' lastName: 'Muster'  email: 'max.muster@gmail.com'.
+	|thePlayer|
+	"User muss noch ermittelt werden"
+	thePlayer:=Player firstName: 'Max' lastName: 'Muster'  email: 'max.muster@gmail.com'.
 
-	self user:player.
+	self user:thePlayer.
 ]
 
 { #category : 'Accessing' }
