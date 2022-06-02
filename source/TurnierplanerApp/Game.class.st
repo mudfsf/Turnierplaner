@@ -8,6 +8,15 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
+{ #category : 'instance creation' }
+Game class >> maximumTeamSize: aNumber teams: anObject [
+
+	^(self new)
+	maximumTeamSize: aNumber;
+	teams: anObject;	
+	yourself.
+]
+
 { #category : 'Accessing' }
 Game >> maximumTeamSize [
 

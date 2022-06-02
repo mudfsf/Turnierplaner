@@ -9,6 +9,16 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
+{ #category : 'instance creation' }
+Result class >> player: aPlayer ranking: aRank points: aNumber [
+
+	^(self new)
+	player:aPlayer;
+	ranking:aRank;
+	points: aNumber;
+	yourself.
+]
+
 { #category : 'Accessing' }
 Result >> player [
 

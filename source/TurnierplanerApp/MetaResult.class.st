@@ -8,6 +8,15 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
+{ #category : 'instance creation' }
+MetaResult class >> context: aResultable results: aListOfResults [
+
+	^(self new)
+	context: aResultable;
+	results:aListOfResults;
+	yourself.
+]
+
 { #category : 'Accessing' }
 MetaResult >> context [
 
