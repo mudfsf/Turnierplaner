@@ -3,11 +3,7 @@ Class {
 	#superclass : 'Me5BaseView',
 	#instVars : [
 		'startUp',
-		'firstNameField',
-		'lastNameField',
-		'emailField',
 		'listGrid',
-		'outerDataList',
 		'data',
 		'placeholder'
 	],
@@ -48,6 +44,11 @@ ManagePlayerView >> beforeCreateComponents [
 { #category : 'Initial-Events' }
 ManagePlayerView >> createComponents [
 
+	(self data includes: self placeholder)
+	ifFalse: [
+		self data add: self placeholder.
+	].
+	
 	self
 		addChild: (Me5FormPortlet new
 		addCssClassColMd12;
@@ -127,42 +128,6 @@ ManagePlayerView >> delete: anEvent [
 ]
 
 { #category : 'Accessing' }
-ManagePlayerView >> emailField [
-
-	^emailField
-]
-
-{ #category : 'Accessing' }
-ManagePlayerView >> emailField: anObject [
-
-	emailField := anObject
-]
-
-{ #category : 'Accessing' }
-ManagePlayerView >> firstNameField [
-
-	^firstNameField
-]
-
-{ #category : 'Accessing' }
-ManagePlayerView >> firstNameField: anObject [
-
-	firstNameField := anObject
-]
-
-{ #category : 'Accessing' }
-ManagePlayerView >> lastNameField [
-
-	^lastNameField
-]
-
-{ #category : 'Accessing' }
-ManagePlayerView >> lastNameField: anObject [
-
-	lastNameField := anObject
-]
-
-{ #category : 'Accessing' }
 ManagePlayerView >> listGrid [
 
 	^listGrid
@@ -172,6 +137,12 @@ ManagePlayerView >> listGrid [
 ManagePlayerView >> listGrid: anObject [
 
 	listGrid := anObject
+]
+
+{ #category : 'Accessing' }
+ManagePlayerView >> placeholder [
+
+	^Player firstName: '' lastName: '' email: ''
 ]
 
 { #category : 'Events' }
@@ -193,9 +164,20 @@ ManagePlayerView >> saveEvent [
 	self listGrid hasValidationError
 		ifTrue: [^self showErrorNotificationWithMessage: 'Validation failed...'].
 
+	(self data includes: self placeholder)
+	ifFalse: [
+		self data add: self placeholder.
+	].
+
+	self listGrid dataSourceBlock: [ self data	].
+
 	self listGrid editedDataGridRows do: [ :eachEditedDataGridRow |
 		eachEditedDataGridRow editedDataGridCells do: [ :eachEditedDataGridCell |
 			eachEditedDataGridCell writeValueToObject]].
+
+	self data remove:  self placeholder ifAbsent: [
+		self showSuccessNotificationWithMessage: ('Added Player.')
+	].
 
 	self startUp saveObject: self data onPath: 'C:\Test\playersV2.dat'.
 	
