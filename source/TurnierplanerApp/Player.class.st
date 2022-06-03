@@ -20,6 +20,12 @@ Player class >> firstName: aFirstName lastName: aLastName email: anEmail [
 ]
 
 { #category : 'Accessing' }
+Player >> = anObject [
+
+	^ ((self firstName = anObject firstName and: [self lastName = anObject lastName]) and: [self email = anObject email])
+]
+
+{ #category : 'Accessing' }
 Player >> email [
 
 	^email

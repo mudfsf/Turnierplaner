@@ -10,6 +10,21 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
+{ #category : 'Events' }
+ManagePlayerView >> AddPlayerEvent [
+
+	(self data includes: (self placeholder))
+	ifFalse: [
+		self data add: self placeholder.
+	].
+	
+	self listGrid dataSourceBlock: [ self data	].
+	
+	self listGrid resetEditedDataGridCells.
+
+	self showSuccessNotificationWithMessage: ('Added row to save Player...')
+]
+
 { #category : 'Initial-Events' }
 ManagePlayerView >> beforeCreateComponents [
 
@@ -41,13 +56,23 @@ ManagePlayerView >> beforeCreateComponents [
 	self data: thePlayers.
 ]
 
+{ #category : 'Events' }
+ManagePlayerView >> ClearEvent [
+
+	(self data includes: (self placeholder))
+	ifTrue: [
+		self data remove: self placeholder.
+	].
+	
+	self listGrid dataSourceBlock: [ self data	].
+	
+	self listGrid resetEditedDataGridCells.
+
+	self showSuccessNotificationWithMessage: ('Cleared Grid...')
+]
+
 { #category : 'Initial-Events' }
 ManagePlayerView >> createComponents [
-
-	(self data includes: self placeholder)
-	ifFalse: [
-		self data add: self placeholder.
-	].
 	
 	self
 		addChild: (Me5FormPortlet new
@@ -80,15 +105,34 @@ ManagePlayerView >> createComponents [
 					minWidth: 200;
 					maxWidth:  'vw 40';
 					yourself);
-				yourself);
+				addDataGridColumnDefinition: (Me5DataGridComponentsHolderColumnDefinition new
+						title: 'Action';
+						setHorizontalAlignmentToRight;
+						componentsHolderBlock: [ :theDataGridComponentsHolderCell :theDataGridComponentsHoldingParameters |
+							theDataGridComponentsHolderCell
+								addChild: (Me5Button newPrimary
+									text: 'Löschen';
+									icon: Me5Flaticon newDelete;
+									addCssClassBtnSm;
+									addClickEventSelector: #deletePlayerEvent:;
+									yourself);
+								yourself];
+						yourself);
+					yourself);
 			addChildToFootButtonGroup: (Me5Button newSuccess
 				icon: Me5I newFasSave; 
-				text: 'Save';
+				text: 'Speichern';
 				addClickEventSelector: #saveEvent;
+				yourself);
+				addChildToFootButtonGroup: (Me5Button newInfo
+				icon: Me5I newFasPlus; 
+				text: 'Spieler hinzufügen';
+				addClickEventSelector: #AddPlayerEvent;
 				yourself);
 			addChildToFootButtonGroup: (Me5Button newWarning
 				icon: Me5I newFasUndo;
-				text: 'Reset';
+				text: 'Reinigen';
+				addClickEventSelector: #ClearEvent;
 				yourself);
 			yourself);
 		yourself
@@ -115,15 +159,34 @@ ManagePlayerView >> data: aListOfPlayer [
 ]
 
 { #category : 'Events' }
-ManagePlayerView >> delete: anEvent [
+ManagePlayerView >> deletePlayerEvent: anEvent [
 
-	| thePerson |
-	thePerson := anEvent dataGridComponentsHolderCellObject.
-	data remove: thePerson.
-	self startUp saveObject: self data onPath: 'C:\Test\players.dat'. "upgrade to playersV2.dat?"
-	self listGrid .
-	self listGrid resetEditedDataGridCells. "Tell the list grid that all changes were commited."
+	| thePlayer isSuccessful|
+	isSuccessful := false.
+	thePlayer := anEvent dataGridComponentsHolderCellObject.
+	
+	(self data includes:thePlayer)
+	ifTrue: [
+		 (self data size > 1)
+		 ifTrue: [
+			self data remove: thePlayer.
+			isSuccessful := true.
+		 ].
+	].
+	
+	self listGrid dataSourceBlock: [ self data	].
+	
+	self startUp saveObject: self data onPath: 'C:\Test\playersV2.dat'.
+	
+	self listGrid resetEditedDataGridCells.
 
+	isSuccessful
+	ifTrue: [
+		self showSuccessNotificationWithMessage: ('Deleted Player %1 %2...' bindWith: (thePlayer firstName) with: (thePlayer lastName)).
+	]
+	ifFalse: [
+		self showErrorNotificationWithMessage: ('Can not delete last Player...').
+	]
 
 ]
 
@@ -150,6 +213,8 @@ ManagePlayerView >> saveEvent [
 
 	| theNumberOfEditedDataGridRows |
 
+	theNumberOfEditedDataGridRows := self listGrid numberOfEditedDataGridRows.
+
 	self listGrid validateEditedDataGridCellsForBlock: [ :eachEditedDataGridCell | | theFieldName theValue |
 		theFieldName := (self listGrid dataGridColumnDefinitions at: eachEditedDataGridCell field asNumber) title lowercaseFirstCharacter.
 		theValue := eachEditedDataGridCell value.
@@ -163,26 +228,15 @@ ManagePlayerView >> saveEvent [
 
 	self listGrid hasValidationError
 		ifTrue: [^self showErrorNotificationWithMessage: 'Validation failed...'].
-
-	(self data includes: self placeholder)
-	ifFalse: [
-		self data add: self placeholder.
-	].
-
+	
 	self listGrid dataSourceBlock: [ self data	].
 
 	self listGrid editedDataGridRows do: [ :eachEditedDataGridRow |
 		eachEditedDataGridRow editedDataGridCells do: [ :eachEditedDataGridCell |
 			eachEditedDataGridCell writeValueToObject]].
 
-	self data remove:  self placeholder ifAbsent: [
-		self showSuccessNotificationWithMessage: ('Added Player.')
-	].
-
 	self startUp saveObject: self data onPath: 'C:\Test\playersV2.dat'.
-	
-	theNumberOfEditedDataGridRows := self listGrid numberOfEditedDataGridRows.
-	
+		
 	self listGrid resetEditedDataGridCells.
 
 	self showSuccessNotificationWithMessage: ('Saved %1 edited row(s)...' bindWith: theNumberOfEditedDataGridRows)
