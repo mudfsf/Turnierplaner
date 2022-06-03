@@ -1,6 +1,9 @@
 Class {
 	#name : 'TournamentPlannerView',
 	#superclass : 'Me5BaseView',
+	#instVars : [
+		'user'
+	],
 	#category : 'TurnierplanerApp'
 }
 
@@ -50,6 +53,9 @@ TournamentPlannerView >> dashboardTab [
 { #category : 'Not categorized' }
 TournamentPlannerView >> tabsCollection [
 
+	| theUserSettings |
+	theUserSettings := UserSettings new.
+
 	^OrderedCollection new
 		add: (Me5Tab new
 			text: 'Dashboard';
@@ -73,7 +79,7 @@ TournamentPlannerView >> tabsCollection [
 		add: (Me5Tab new
 			text: 'Einstellungen';
 			icon: Me5FontAwesomeIconSolid newCog;
-			addChildToTabPane: (Me5P new text: 'user settings');
+			addChildToTabPane: self userSettingsTab;
 			yourself);
 		add: (Me5Tab new
 			text: 'Admin-Tools';
@@ -133,4 +139,79 @@ TournamentPlannerView >> tournamentTab [
 
 	^theResultDiv.
 
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> user [
+
+	"<^iOf Object>"
+	"Answer the user of the receiver"
+
+	^user
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> user: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the user of the receiver"
+
+	user := anObject
+]
+
+{ #category : 'Not categorized' }
+TournamentPlannerView >> userSettingsTab [
+
+	| thePlayer |
+	"User muss noch ermittelt werden"
+	(self user = nil)
+		ifTrue: [
+			thePlayer:=Player firstName: 'Max' lastName: 'Muster'  email: 'max.muster@gmail.com'.
+			self user:thePlayer.] .
+
+
+
+	^(Me5Portlet newPrimary
+			title:'Einstellungen';
+		
+				addChildToBody: (Me5Row  new
+					addChild: (Me5TextField new
+						text:'Vorname';
+						value: user firstName;
+						placeholder:'Vorname';
+						addCssClassCol12;
+						addCssClassColLg6;
+					yourself);
+					addChild: (Me5TextField new
+						text:'Nachname';
+						value: user lastName;
+						placeholder: 'Nachname';
+						addCssClassColLg6;
+						addCssClassCol12;
+					yourself);	
+					addChild: (Me5TextField new
+						text:'E-Mail';
+						value: user email;
+						placeholder: 'E-Mail';
+						addCssClassColLg6;
+						addCssClassCol12;
+					yourself);	
+				yourself);
+				addChildToBody: (Me5Row new
+					addChild: (Me5PasswordField new
+							text:'Passwort';
+							placeholder: 'Passwort';
+							addCssClassColLg6;
+							addCssClassCol12;
+						yourself);	
+					yourself);
+			
+				
+				addChildToFoot: (Me5Button newPrimary
+					text:'Speichern';
+					icon: Me5I newFasSave;
+					"addClickEventSelector: #savePlayer;"
+					yourself);
+				
+			yourself).
 ]

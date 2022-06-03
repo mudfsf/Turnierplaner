@@ -2,7 +2,8 @@ Class {
 	#name : 'UserSettings',
 	#superclass : 'Me5BaseView',
 	#instVars : [
-		'user'
+		'user',
+		'theUserSettingsView'
 	],
 	#category : 'TurnierplanerApp'
 }
@@ -19,8 +20,8 @@ UserSettings >> beforeCreateComponents [
 
 { #category : 'Initial-Events' }
 UserSettings >> createComponents [
-	self
-		addChild: (Me5Portlet newPrimary
+	
+	self theUserSettingsView: (Me5Portlet newPrimary
 			title:'Einstellungen';
 			addChildToBody: (Me5Form new
 				addChildToBody: (Me5Row  new
@@ -62,10 +63,27 @@ UserSettings >> createComponents [
 					"addClickEventSelector: #savePlayer;"
 					yourself);
 				
-			yourself);
-		yourself
+			yourself).
 		
 		
+]
+
+{ #category : 'Accessing' }
+UserSettings >> theUserSettingsView [
+
+	"<^iOf Object>"
+	"Answer the theUserSettingsView of the receiver"
+
+	^theUserSettingsView
+]
+
+{ #category : 'Accessing' }
+UserSettings >> theUserSettingsView: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the theUserSettingsView of the receiver"
+
+	theUserSettingsView := anObject
 ]
 
 { #category : 'Accessing' }
