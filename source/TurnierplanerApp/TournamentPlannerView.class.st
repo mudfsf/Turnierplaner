@@ -9,7 +9,7 @@ TournamentPlannerView >> createComponents [
 
 	super createModules.
 	self addModuleByModuleClass: Me5ComboBoxModuleBundle.
-	
+
 	self 
 		addChild: (Me5H1 new
 			text: 'Turnierplaner';
@@ -18,83 +18,33 @@ TournamentPlannerView >> createComponents [
 		addChild: (Me5Form new
 			addChildToBody: (Me5Portlet new
 				addChildToBody: (Me5Tabbable newFilled
-					addTabs: self theTabs;
+					addTabs: self tabsCollection;
 					yourself);
 				yourself);
-			yourself);	
+			yourself);
 		yourself.
 ]
 
 { #category : 'Not categorized' }
-TournamentPlannerView >> theDashboardTab [
+TournamentPlannerView >> dashboardTab [
 
-| aResultDiv aScroller aNumberOfGames aGamesInColumn aOffsetX aOffsetY aGameWidth aGameHeight aRowSpacing aColumnSpacing aGameAndSpacingHeight |
-
-aNumberOfGames := 8.
-aGamesInColumn := aNumberOfGames.
-aOffsetX := 10.
-aOffsetY := 10.
-aGameWidth := 400.
-aGameHeight := 260.
-aRowSpacing := 20.
-aColumnSpacing := 100.
-aGameAndSpacingHeight := aGameHeight + aRowSpacing.
-
-
-aResultDiv := Me5Div new.
-
-aResultDiv addChild: (Me5H1 newWithText: 'Beispielansicht Turnier').
-aResultDiv addChild: (aScroller := Me5Scroller new
-	height: aNumberOfGames * aGameAndSpacingHeight).
-
-0 to: (aNumberOfGames log: 2) do: [:indexSpalten |
-	0 to: (aGamesInColumn - 1) do: [:indexReihen |
-		aScroller addChild: (Me5Portlet newSuccess
-			title: 'Gegner 1 VS Gegner 2';
-			setPositionToAbsolute;
-			top: aOffsetY + (indexReihen * aGameAndSpacingHeight);
-			left: aOffsetX + (indexSpalten * (aGameWidth + aColumnSpacing));
-			width: aGameWidth;
-			addChildToBody: (Me5Button newSuccess
-				text: 'Ergebnis eintragen';
-				yourself);
-			addChildToFoot: (Me5Button newSuccess
-				text: 'Wetten';
-				yourself);
-			yourself).
-	].
-	aGamesInColumn := aGamesInColumn / 2.
-	aOffsetY := aOffsetY + (aGameAndSpacingHeight / 2).
-	aGameAndSpacingHeight := aGameAndSpacingHeight * 2.
-	
-].
-	"
-aResultDiv addChild: (ClwHtmlSvgLine new
-	x1: 50;
-	y1: 50;
-	x2: 100;
-	y2: 100;
-	fill: 'black';
-	yourself).
-"
-
-^aResultDiv.
+^(Me5P new text: 'Dashboard').
 ]
 
 { #category : 'Not categorized' }
-TournamentPlannerView >> theTabs [
+TournamentPlannerView >> tabsCollection [
 
-^OrderedCollection new
+	^OrderedCollection new
 		add: (Me5Tab new
 			text: 'Dashboard';
 			icon: Me5I newFasHome;
-			addChildToTabPane: self theDashboardTab;
+			addChildToTabPane: self dashboardTab;
 			activateTab; "Make sure that 'activateTab' is called after you added a child to tabPane."
 			yourself);
 		add: (Me5Tab new
 			text: 'Turniere';
 			icon: Me5I newFasUser;
-			addChildToTabPane: self theTurniereTab;
+			addChildToTabPane: self tournamentTab;
 			yourself);
 		add: (Me5Tab new
 			text: 'Teams';
@@ -121,25 +71,54 @@ TournamentPlannerView >> theTabs [
 				yourself);
 			yourself);
 		yourself
+
 ]
 
 { #category : 'Not categorized' }
-TournamentPlannerView >> theTurniereTab [
+TournamentPlannerView >> tournamentTab [
 
-	| aTurniere aTurniereDiv |
+	| theResultDiv theTournamentList |
 
-	aTurniere := #('Turnier 1' 'Turnier 2' 'Turnier 3').
-	aTurniereDiv := Me5Div new.
+		theTournamentList := #('Tournament 1' 'Tournament 2' 'Tournament 3' 'Tournament 4').
 
-	aTurniere do: [:eachTurnier | 
-		aTurniereDiv addChild: (Me5Form new
-			addChildToBody: (Me5Portlet newInfo
-				title: 'Full Display Width')
-				).
-		
-		
-	].
+		theResultDiv := ((Me5Div new) addChild: Me5Row new).
 
 
-	^aTurniereDiv.
+		1 to: (theTournamentList size) do: [:index | 
+			theResultDiv addChild: (Me5Div new
+				addChild: (Me5Portlet newPrimary
+					title: (theTournamentList at: index);
+					addChildToBody: (Me5P new 
+						text: 'Gegner 1 VS Gegner 2';
+						fontSize: 'large';
+						yourself);
+					addChildToBody: (Me5A newButtonIconOnly
+						setTargetBlank;
+						icon: Me5I newFalAdjust;
+						href: ('TurnierplanerView/specificTournament?tournamentName=dasErsteTurnier %1&team=true' bindWith: index);
+						yourself);
+					addChildToFoot:  (Me5ProgressBar newPrimary
+						value: 65;
+						height: 20;
+						setPrimaryStyle;
+						yourself);
+					addChildToFoot: (Me5P new
+						text: '5 von 9';
+						textAlign: 'center';
+						fontSize: 'larger';
+						yourself);
+					setTargetBlank;
+
+					yourself);
+				padding: 15;
+				addCssClassColSm12;
+				addCssClassColMd6;
+				addCssClassColXl4;
+			yourself).
+		].
+
+
+
+	^theResultDiv.
+
 ]
