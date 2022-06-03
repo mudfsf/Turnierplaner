@@ -1,4 +1,4 @@
- Class {
+Class {
 	#name : 'Mixed',
 	#superclass : 'TournamentType',
 	#category : 'TurnierplanerApp'
