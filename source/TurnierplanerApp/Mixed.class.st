@@ -7,5 +7,13 @@ Class {
 { #category : 'Events' }
 Mixed >> getNumberOfLaps: aNumber [
 
- ^self error: 'Method not implemented'
+	|theNumberofLaps theLaps theKO|
+	
+	theLaps := Laps new.
+	theKO := KO new.
+	
+	theNumberofLaps := theLaps getNumberOfLaps: aNumber asNumber.
+	theNumberofLaps := theNumberofLaps + (theKO getNumberOfLaps: aNumber asNumber / 2).
+	
+	^theNumberofLaps
 ]

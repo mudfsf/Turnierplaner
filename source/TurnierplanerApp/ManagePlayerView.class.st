@@ -111,7 +111,7 @@ ManagePlayerView >> createComponents [
 						componentsHolderBlock: [ :theDataGridComponentsHolderCell :theDataGridComponentsHoldingParameters |
 							theDataGridComponentsHolderCell
 								addChild: (Me5Button newPrimary
-									text: 'Löschen';
+									text: 'Loeschen';
 									icon: Me5Flaticon newDelete;
 									addCssClassBtnSm;
 									addClickEventSelector: #deletePlayerEvent:;
@@ -126,7 +126,7 @@ ManagePlayerView >> createComponents [
 				yourself);
 				addChildToFootButtonGroup: (Me5Button newInfo
 				icon: Me5I newFasPlus; 
-				text: 'Spieler hinzufügen';
+				text: 'Spieler hinzufuegen';
 				addClickEventSelector: #AddPlayerEvent;
 				yourself);
 			addChildToFootButtonGroup: (Me5Button newWarning

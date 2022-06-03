@@ -5,7 +5,16 @@ Class {
 }
 
 { #category : 'Not categorized' }
-Laps >> GetNumberOfLaps: aNumber [
+Laps >> getNumberOfLaps: aNumber [
 
- ^self error: 'Method not implemented'
+	|theSum theCurrentIteration|
+
+	theSum := 0.
+	theCurrentIteration := 1.
+	
+	[ theCurrentIteration < aNumber asNumber ] whileTrue: [
+		theSum := theSum + theCurrentIteration.
+		theCurrentIteration := theCurrentIteration + 1
+	]. 
+	^theSum
 ]
