@@ -5,6 +5,16 @@ Class {
 }
 
 { #category : 'Not categorized' }
+TournamentPlannerView >> adminToolsTab [
+
+^(Me5A newButtonIconOnly
+						setTargetBlank;
+						text: 'Gehe zu ManagePlayerView';
+						href: ('TurnierplanerView/managePlayer');
+						yourself).
+]
+
+{ #category : 'Not categorized' }
 TournamentPlannerView >> createComponents [
 
 	super createModules.
@@ -28,7 +38,13 @@ TournamentPlannerView >> createComponents [
 { #category : 'Not categorized' }
 TournamentPlannerView >> dashboardTab [
 
-^(Me5P new text: 'Dashboard').
+^(Me5Div new
+	addChild: (Me5H1 new text: 'Dashboard');
+	addChild: Me5Hr new;
+	addChild: (Me5H4 new text: 'Shortcuts zu den Seiten');
+	addChild: self adminToolsTab;
+	yourself
+	).
 ]
 
 { #category : 'Not categorized' }
@@ -57,18 +73,12 @@ TournamentPlannerView >> tabsCollection [
 		add: (Me5Tab new
 			text: 'Einstellungen';
 			icon: Me5FontAwesomeIconSolid newCog;
-			addChildToTabPane: (Me5P new
-				text: 'You see the Profile tab right now.';
-				addCssClassMFontPrimary; "Only for presentation mode. Different text color to distinguish between different tabs in the example."
-				yourself);
+			addChildToTabPane: (Me5P new text: 'user settings');
 			yourself);
 		add: (Me5Tab new
 			text: 'Admin-Tools';
 			icon: Me5I newFasUser;
-			addChildToTabPane: (Me5P new
-				text: 'You see the Profile tab right now.';
-				addCssClassMFontPrimary; "Only for presentation mode. Different text color to distinguish between different tabs in the example."
-				yourself);
+			addChildToTabPane: self adminToolsTab;
 			yourself);
 		yourself
 
@@ -94,7 +104,9 @@ TournamentPlannerView >> tournamentTab [
 						yourself);
 					addChildToBody: (Me5A newButtonIconOnly
 						setTargetBlank;
-						icon: Me5I newFalAdjust;
+						icon: Me5I newFalCheck;
+						text: 'Mein Text Test';
+						backgroundColor: 'grey';
 						href: ('TurnierplanerView/specificTournament?tournamentName=dasErsteTurnier %1&team=true' bindWith: index);
 						yourself);
 					addChildToFoot:  (Me5ProgressBar newPrimary
