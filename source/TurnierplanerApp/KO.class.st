@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : 'Not categorized' }
-KO >> GetNumberOfLaps: aNumber [
+KO >> getNumberOfLaps: aNumber [
 
- ^self error: 'Method not implemented'
+ ^aNumber asNumber - 1
 ]
