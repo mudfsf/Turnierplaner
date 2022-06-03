@@ -7,16 +7,17 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
-{ #category : 'Accessing' }
+{ #category : 'Initial-Events' }
 UserSettings >> beforeCreateComponents [
 	|thePlayer|
 	"User muss noch ermittelt werden"
-	thePlayer:=Player firstName: 'Max' lastName: 'Muster'  email: 'max.muster@gmail.com'.
-
-	self user:thePlayer.
+	(self user = nil)
+		ifTrue: [
+			thePlayer:=Player firstName: 'Max' lastName: 'Muster'  email: 'max.muster@gmail.com'.
+			self user:thePlayer.] 
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Initial-Events' }
 UserSettings >> createComponents [
 	self
 		addChild: (Me5Portlet newPrimary
@@ -57,6 +58,8 @@ UserSettings >> createComponents [
 				
 				addChildToFoot: (Me5Button newPrimary
 					text:'Speichern';
+					icon: Me5I newFasSave;
+					"addClickEventSelector: #savePlayer;"
 					yourself);
 				
 			yourself);
