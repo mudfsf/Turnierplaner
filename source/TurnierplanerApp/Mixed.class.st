@@ -1,11 +1,11 @@
-Class {
+ Class {
 	#name : 'Mixed',
 	#superclass : 'TournamentType',
 	#category : 'TurnierplanerApp'
 }
 
-{ #category : 'Not categorized' }
-Mixed >> GetNumberOfLaps: aNumber [
+{ #category : 'Events' }
+Mixed >> getNumberOfLaps: aNumber [
 
  ^self error: 'Method not implemented'
 ]

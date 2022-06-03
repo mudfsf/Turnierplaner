@@ -4,7 +4,7 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
-{ #category : 'Not categorized' }
+{ #category : 'Event' }
 TournamentType >> GetNumberOfLaps: aNumber [
 
  ^self error: 'Method not implemented'

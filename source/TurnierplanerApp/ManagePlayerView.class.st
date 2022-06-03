@@ -114,13 +114,13 @@ ManagePlayerView >> data: aListOfPlayer [
 	data := aListOfPlayer
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Events' }
 ManagePlayerView >> delete: anEvent [
 
 	| thePerson |
 	thePerson := anEvent dataGridComponentsHolderCellObject.
 	data remove: thePerson.
-	self startUp saveObject: self data onPath: 'C:\Test\players.dat'. 
+	self startUp saveObject: self data onPath: 'C:\Test\players.dat'. "upgrade to playersV2.dat?"
 	self listGrid .
 	self listGrid resetEditedDataGridCells. "Tell the list grid that all changes were commited."
 

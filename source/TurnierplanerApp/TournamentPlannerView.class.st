@@ -28,33 +28,33 @@ TournamentPlannerView >> createComponents [
 { #category : 'Not categorized' }
 TournamentPlannerView >> theDashboardTab [
 
-| aResultDiv aScroller aSpielanzahl aSpieleInSpalte aOffsetX aOffsetY aSpielBreite aSpielHoehe aReihenabstand aSpaltenabstand aSpielUndAbstandHoehe |
+| aResultDiv aScroller aNumberOfGames aGamesInColumn aOffsetX aOffsetY aGameWidth aGameHeight aRowSpacing aColumnSpacing aGameAndSpacingHeight |
 
-aSpielanzahl := 8.
-aSpieleInSpalte := aSpielanzahl.
+aNumberOfGames := 8.
+aGamesInColumn := aNumberOfGames.
 aOffsetX := 10.
 aOffsetY := 10.
-aSpielBreite := 400.
-aSpielHoehe := 260.
-aReihenabstand := 20.
-aSpaltenabstand := 100.
-aSpielUndAbstandHoehe := aSpielHoehe + aReihenabstand.
+aGameWidth := 400.
+aGameHeight := 260.
+aRowSpacing := 20.
+aColumnSpacing := 100.
+aGameAndSpacingHeight := aGameHeight + aRowSpacing.
 
 
 aResultDiv := Me5Div new.
 
 aResultDiv addChild: (Me5H1 newWithText: 'Beispielansicht Turnier').
 aResultDiv addChild: (aScroller := Me5Scroller new
-	height: aSpielanzahl * aSpielUndAbstandHoehe).
+	height: aNumberOfGames * aGameAndSpacingHeight).
 
-0 to: (aSpielanzahl log: 2) do: [:indexSpalten |
-	0 to: (aSpieleInSpalte - 1) do: [:indexReihen |
+0 to: (aNumberOfGames log: 2) do: [:indexSpalten |
+	0 to: (aGamesInColumn - 1) do: [:indexReihen |
 		aScroller addChild: (Me5Portlet newSuccess
 			title: 'Gegner 1 VS Gegner 2';
 			setPositionToAbsolute;
-			top: aOffsetY + (indexReihen * aSpielUndAbstandHoehe);
-			left: aOffsetX + (indexSpalten * (aSpielBreite + aSpaltenabstand));
-			width: aSpielBreite;
+			top: aOffsetY + (indexReihen * aGameAndSpacingHeight);
+			left: aOffsetX + (indexSpalten * (aGameWidth + aColumnSpacing));
+			width: aGameWidth;
 			addChildToBody: (Me5Button newSuccess
 				text: 'Ergebnis eintragen';
 				yourself);
@@ -63,9 +63,9 @@ aResultDiv addChild: (aScroller := Me5Scroller new
 				yourself);
 			yourself).
 	].
-	aSpieleInSpalte := aSpieleInSpalte / 2.
-	aOffsetY := aOffsetY + (aSpielUndAbstandHoehe / 2).
-	aSpielUndAbstandHoehe := aSpielUndAbstandHoehe * 2.
+	aGamesInColumn := aGamesInColumn / 2.
+	aOffsetY := aOffsetY + (aGameAndSpacingHeight / 2).
+	aGameAndSpacingHeight := aGameAndSpacingHeight * 2.
 	
 ].
 	"
