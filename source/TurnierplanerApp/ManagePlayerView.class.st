@@ -45,7 +45,7 @@ ManagePlayerView >> beforeCreateComponents [
 	self startUp: StartUp new.	
 	"self startUp saveObject: player onPath: 'C:\Test\playersV2.dat'."
 	
-	thePlayers := self startUp loadAnObjectFromPath: 'C:\Test\playersV2.dat'.
+	thePlayers := self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat'.
 	
 	"self placeholder:  (Player new
 		firstName: '';
@@ -176,7 +176,7 @@ ManagePlayerView >> deletePlayerEvent: anEvent [
 	
 	self listGrid dataSourceBlock: [ self data	].
 	
-	self startUp saveObject: self data onPath: 'C:\Test\playersV2.dat'.
+	self startUp saveObject: self data onPath: 'C:\TournamentPlanner\Memory\players.dat'.
 	
 	self listGrid resetEditedDataGridCells.
 
@@ -235,7 +235,7 @@ ManagePlayerView >> saveEvent [
 		eachEditedDataGridRow editedDataGridCells do: [ :eachEditedDataGridCell |
 			eachEditedDataGridCell writeValueToObject]].
 
-	self startUp saveObject: self data onPath: 'C:\Test\playersV2.dat'.
+	self startUp saveObject: self data onPath: 'C:\TournamentPlanner\Memory\players.dat'.
 		
 	self listGrid resetEditedDataGridCells.
 
