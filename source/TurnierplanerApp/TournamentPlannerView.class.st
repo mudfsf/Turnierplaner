@@ -94,6 +94,8 @@ TournamentPlannerView >> createModules [
 	super createModules.
 	
 	self addModuleByModuleClass: Me5ComboBoxModuleBundle.
+	self addModuleByModuleClass: Me5DataGridModuleBundle.
+	self addModuleByModuleClass: Bs4TooltipsterTooltipModuleBundle.
 ]
 
 { #category : 'Not categorized' }
@@ -119,7 +121,13 @@ theDashboard addChild: (Me5P new text: 'a').
 { #category : 'Not categorized' }
 TournamentPlannerView >> tabsCollection [
 
-	| theUserSettings |
+	| theUserSettings theManagedPlayerView|
+	
+	theManagedPlayerView := (ManagePlayerView new
+	data: self collectionOfPlayers;
+	parent: self;
+	yourself).	
+	theManagedPlayerView createView.
 	theUserSettings := UserSettings new.
 
 	^OrderedCollection new
@@ -150,7 +158,7 @@ TournamentPlannerView >> tabsCollection [
 		add: (Me5Tab new
 			text: 'Admin-Tools';
 			icon: Me5I newFasUser;
-			addChildToTabPane: self adminToolsTab;
+			addChildToTabPane: theManagedPlayerView view"self adminToolsTab";
 			yourself);
 		yourself
 

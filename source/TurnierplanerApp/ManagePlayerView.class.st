@@ -1,17 +1,19 @@
 Class {
 	#name : 'ManagePlayerView',
-	#superclass : 'Me5BaseView',
+	#superclass : 'Object',
 	#instVars : [
 		'startUp',
 		'listGrid',
 		'data',
-		'placeholder'
+		'placeholder',
+		'view',
+		'parent'
 	],
 	#category : 'TurnierplanerApp'
 }
 
 { #category : 'Events' }
-ManagePlayerView >> AddPlayerEvent [
+ManagePlayerView >> addPlayerEvent [
 
 	(self data includes: (self placeholder))
 	ifFalse: [
@@ -22,42 +24,11 @@ ManagePlayerView >> AddPlayerEvent [
 	
 	self listGrid resetEditedDataGridCells.
 
-	self showSuccessNotificationWithMessage: ('Added row to save Player...')
-]
-
-{ #category : 'Initial-Events' }
-ManagePlayerView >> beforeCreateComponents [
-
-	| thePlayers player|
-
-	"player := OrderedCollection new.
-	player add: (Player new
-		firstName: 'A';
-		lastName:  'B';
-		email: 'A@B.com';
-		yourself).
-	player add: (Player new
-		firstName: 'C';
-		lastName:  'D';
-		email: 'C@D.com';
-		yourself)."
-		
-	self startUp: StartUp new.	
-	"self startUp saveObject: player onPath: 'C:\Test\playersV2.dat'."
-	
-	thePlayers := self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat'.
-	
-	"self placeholder:  (Player new
-		firstName: '';
-		lastName: '';
-		email: '';
-		yourself).
-	thePlayers add: self placeholder."
-	self data: thePlayers.
+	self parent showSuccessNotificationWithMessage: ('Added row to save Player...')
 ]
 
 { #category : 'Events' }
-ManagePlayerView >> ClearEvent [
+ManagePlayerView >> clearEvent [
 
 	(self data includes: (self placeholder))
 	ifTrue: [
@@ -68,14 +39,16 @@ ManagePlayerView >> ClearEvent [
 	
 	self listGrid resetEditedDataGridCells.
 
-	self showSuccessNotificationWithMessage: ('Cleared Grid...')
+	self parent showSuccessNotificationWithMessage: ('Cleared Grid...')
 ]
 
 { #category : 'Initial-Events' }
-ManagePlayerView >> createComponents [
+ManagePlayerView >> createView [
+
+	self startUp: StartUp new.
 	
-	self
-		addChild: (Me5FormPortlet new
+	self view: Me5Div new.
+	self view addChild: (Me5Portlet new
 		addCssClassColMd12;
 			addChildToBody: (listGrid := Me5ListGrid new
 				addCssClassColMd12;
@@ -110,40 +83,34 @@ ManagePlayerView >> createComponents [
 						setHorizontalAlignmentToRight;
 						componentsHolderBlock: [ :theDataGridComponentsHolderCell :theDataGridComponentsHoldingParameters |
 							theDataGridComponentsHolderCell
-								addChild: (Me5Button newPrimary
-									text: 'Loeschen';
-									icon: Me5Flaticon newDelete;
-									addCssClassBtnSm;
-									addClickEventSelector: #deletePlayerEvent:;
-									yourself);
+								addChild: (Me5Button newSuccess
+								icon: Me5I newFasSave; 
+								text: 'Löschen';
+								addClickEventSelector: #deletePlayerEvent: eventReceiver: self;
+								yourself);
 								yourself];
 						yourself);
 					yourself);
 			addChildToFootButtonGroup: (Me5Button newSuccess
 				icon: Me5I newFasSave; 
 				text: 'Speichern';
-				addClickEventSelector: #saveEvent;
+				addClickEventSelector: #saveEvent eventReceiver: self;
 				yourself);
 				addChildToFootButtonGroup: (Me5Button newInfo
 				icon: Me5I newFasPlus; 
 				text: 'Spieler hinzufuegen';
-				addClickEventSelector: #AddPlayerEvent;
+				addClickEventSelector: #addPlayerEvent eventReceiver: self;
 				yourself);
 			addChildToFootButtonGroup: (Me5Button newWarning
 				icon: Me5I newFasUndo;
 				text: 'Reinigen';
-				addClickEventSelector: #ClearEvent;
+				addClickEventSelector: #clearEvent eventReceiver: self;
 				yourself);
-			yourself);
-		yourself
-]
+		yourself).
+		
+		self listGrid resetEditedDataGridCells.
 
-{ #category : 'Initial-Events' }
-ManagePlayerView >> createModules [
 
-	super createModules.
-	self addModuleByModuleClass: Me5DataGridModuleBundle.
-	self addModuleByModuleClass: Bs4TooltipsterTooltipModuleBundle.
 ]
 
 { #category : 'Accessing' }
@@ -182,10 +149,10 @@ ManagePlayerView >> deletePlayerEvent: anEvent [
 
 	isSuccessful
 	ifTrue: [
-		self showSuccessNotificationWithMessage: ('Deleted Player %1 %2...' bindWith: (thePlayer firstName) with: (thePlayer lastName)).
+		self parent showSuccessNotificationWithMessage: ('Deleted Player %1 %2...' bindWith: (thePlayer firstName) with: (thePlayer lastName)).
 	]
 	ifFalse: [
-		self showErrorNotificationWithMessage: ('Can not delete last Player...').
+		self parent showErrorNotificationWithMessage: ('Can not delete last Player...').
 	]
 
 ]
@@ -200,6 +167,18 @@ ManagePlayerView >> listGrid [
 ManagePlayerView >> listGrid: anObject [
 
 	listGrid := anObject
+]
+
+{ #category : 'Accessing' }
+ManagePlayerView >> parent [
+
+	^parent
+]
+
+{ #category : 'Accessing' }
+ManagePlayerView >> parent: anObject [
+
+	parent := anObject
 ]
 
 { #category : 'Accessing' }
@@ -227,7 +206,7 @@ ManagePlayerView >> saveEvent [
 	].
 
 	self listGrid hasValidationError
-		ifTrue: [^self showErrorNotificationWithMessage: 'Validation failed...'].
+		ifTrue: [^self view showErrorNotificationWithMessage: 'Validation failed...'].
 	
 	self listGrid dataSourceBlock: [ self data	].
 
@@ -239,7 +218,7 @@ ManagePlayerView >> saveEvent [
 		
 	self listGrid resetEditedDataGridCells.
 
-	self showSuccessNotificationWithMessage: ('Saved %1 edited row(s)...' bindWith: theNumberOfEditedDataGridRows)
+	self parent showSuccessNotificationWithMessage: ('Saved %1 edited row(s)...' bindWith: theNumberOfEditedDataGridRows)
 ]
 
 { #category : 'Accessing' }
@@ -252,4 +231,16 @@ ManagePlayerView >> startUp [
 ManagePlayerView >> startUp: anObject [
 
 	startUp := anObject
+]
+
+{ #category : 'Accessing' }
+ManagePlayerView >> view [
+
+	^view
+]
+
+{ #category : 'Accessing' }
+ManagePlayerView >> view: anObject [
+
+	view := anObject
 ]
