@@ -1,5 +1,5 @@
 Class {
-	#name : 'ManagePlayerView',
+	#name : 'ManagePlayers',
 	#superclass : 'Object',
 	#instVars : [
 		'startUp',
@@ -13,7 +13,7 @@ Class {
 }
 
 { #category : 'Events' }
-ManagePlayerView >> addPlayerEvent [
+ManagePlayers >> addPlayerEvent [
 
 	(self data includes: (self placeholder))
 	ifFalse: [
@@ -28,7 +28,7 @@ ManagePlayerView >> addPlayerEvent [
 ]
 
 { #category : 'Events' }
-ManagePlayerView >> clearEvent [
+ManagePlayers >> clearEvent [
 
 	(self data includes: (self placeholder))
 	ifTrue: [
@@ -43,7 +43,7 @@ ManagePlayerView >> clearEvent [
 ]
 
 { #category : 'Initial-Events' }
-ManagePlayerView >> createView [
+ManagePlayers >> createView [
 
 	self startUp: StartUp new.
 	
@@ -52,7 +52,7 @@ ManagePlayerView >> createView [
 		addCssClassColMd12;
 			addChildToBody: (listGrid := Me5ListGrid new
 				addCssClassColMd12;
-				height: '60vh';
+				height: '55vh';
 				dataSourceBlock: [self data];
 				addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
 					title: 'First name';
@@ -83,8 +83,8 @@ ManagePlayerView >> createView [
 						setHorizontalAlignmentToRight;
 						componentsHolderBlock: [ :theDataGridComponentsHolderCell :theDataGridComponentsHoldingParameters |
 							theDataGridComponentsHolderCell
-								addChild: (Me5Button newSuccess
-								icon: Me5I newFasSave; 
+								addChild: (Me5Button newDanger
+								icon: Me5I newFarTrash; 
 								text: 'Löschen';
 								addClickEventSelector: #deletePlayerEvent: eventReceiver: self;
 								yourself);
@@ -108,25 +108,25 @@ ManagePlayerView >> createView [
 				yourself);
 		yourself).
 		
-		self listGrid resetEditedDataGridCells.
+		self listGrid resetSelectedObjects.
 
 
 ]
 
 { #category : 'Accessing' }
-ManagePlayerView >> data [
+ManagePlayers >> data [
 
 	^data
 ]
 
 { #category : 'Accessing' }
-ManagePlayerView >> data: aListOfPlayer [
+ManagePlayers >> data: aListOfPlayer [
 
 	data := aListOfPlayer
 ]
 
 { #category : 'Events' }
-ManagePlayerView >> deletePlayerEvent: anEvent [
+ManagePlayers >> deletePlayerEvent: anEvent [
 
 	| thePlayer isSuccessful|
 	isSuccessful := false.
@@ -158,37 +158,37 @@ ManagePlayerView >> deletePlayerEvent: anEvent [
 ]
 
 { #category : 'Accessing' }
-ManagePlayerView >> listGrid [
+ManagePlayers >> listGrid [
 
 	^listGrid
 ]
 
 { #category : 'Accessing' }
-ManagePlayerView >> listGrid: anObject [
+ManagePlayers >> listGrid: anObject [
 
 	listGrid := anObject
 ]
 
 { #category : 'Accessing' }
-ManagePlayerView >> parent [
+ManagePlayers >> parent [
 
 	^parent
 ]
 
 { #category : 'Accessing' }
-ManagePlayerView >> parent: anObject [
+ManagePlayers >> parent: anObject [
 
 	parent := anObject
 ]
 
 { #category : 'Accessing' }
-ManagePlayerView >> placeholder [
+ManagePlayers >> placeholder [
 
 	^Player firstName: '' lastName: '' email: ''
 ]
 
 { #category : 'Events' }
-ManagePlayerView >> saveEvent [
+ManagePlayers >> saveEvent [
 
 	| theNumberOfEditedDataGridRows |
 
@@ -222,25 +222,25 @@ ManagePlayerView >> saveEvent [
 ]
 
 { #category : 'Accessing' }
-ManagePlayerView >> startUp [
+ManagePlayers >> startUp [
 
 	^startUp
 ]
 
 { #category : 'Accessing' }
-ManagePlayerView >> startUp: anObject [
+ManagePlayers >> startUp: anObject [
 
 	startUp := anObject
 ]
 
 { #category : 'Accessing' }
-ManagePlayerView >> view [
+ManagePlayers >> view [
 
 	^view
 ]
 
 { #category : 'Accessing' }
-ManagePlayerView >> view: anObject [
+ManagePlayers >> view: anObject [
 
 	view := anObject
 ]

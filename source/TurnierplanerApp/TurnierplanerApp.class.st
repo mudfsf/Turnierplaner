@@ -15,7 +15,6 @@ TurnierplanerApp class >> addRouteToHttpServer [
 	theRootPathDefinition := ClwGroupRouteDefinition forPath: ''.
 
 	theRootPathDefinition addRouteDefinitionForPath: 'SpecificTournament' name: '/specificTournament' viewClass: SpecificTournamentView.
-	theRootPathDefinition addRouteDefinitionForPath: 'ManagePlayer' name: '/managePlayer' viewClass: ManagePlayerView.
 
 	self httpServer
 		addRoutesForDefinition: theRootPathDefinition configuration: (ClwRouteCalculatorConfiguration new

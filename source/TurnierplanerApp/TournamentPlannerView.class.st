@@ -123,7 +123,7 @@ TournamentPlannerView >> tabsCollection [
 
 	| theUserSettings theManagedPlayerView|
 	
-	theManagedPlayerView := (ManagePlayerView new
+	theManagedPlayerView := (ManagePlayers new
 	data: self collectionOfPlayers;
 	parent: self;
 	yourself).	
