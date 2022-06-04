@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'maximumTeamSize',
-		'teams'
+		'teams',
+		'layer'
 	],
 	#category : 'TurnierplanerApp'
 }
@@ -15,6 +16,18 @@ Game class >> maximumTeamSize: aNumber teams: anObject [
 	maximumTeamSize: aNumber;
 	teams: anObject;	
 	yourself.
+]
+
+{ #category : 'Accessing' }
+Game >> layer [
+
+	^layer
+]
+
+{ #category : 'Accessing' }
+Game >> layer: aNumber [
+
+	layer := aNumber
 ]
 
 { #category : 'Accessing' }

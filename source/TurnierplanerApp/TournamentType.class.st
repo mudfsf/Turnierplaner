@@ -5,7 +5,13 @@ Class {
 }
 
 { #category : 'Event' }
-TournamentType >> GetNumberOfLaps: aNumber [
+TournamentType >> getCollectionOfGames: aNumberOfGames [
+
+ ^self error: 'Method not implemented'
+]
+
+{ #category : 'Event' }
+TournamentType >> getNumberOfLaps: aNumber [
 
  ^self error: 'Method not implemented'
 ]
