@@ -26,7 +26,7 @@ TournamentPlannerView >> beforeCreateComponents [
 
 	theMemory := StartUp new.	
 
-	theBlob := OrderedCollection new.
+	"theBlob := OrderedCollection new.
 		
 	theMemory saveObject: theBlob onPath: 'C:\TournamentPlanner\Memory\tournaments.dat'.
 
@@ -36,7 +36,7 @@ TournamentPlannerView >> beforeCreateComponents [
 		email: 'TestAdmin@Test.com';
 		yourself).
 		
-	theMemory saveObject: theBlob onPath: 'C:\TournamentPlanner\Memory\players.dat'.
+	theMemory saveObject: theBlob onPath: 'C:\TournamentPlanner\Memory\players.dat'."
 	
 	self collectionOfTournaments: (theMemory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat').
 	self collectionOfPlayers:  (theMemory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat').
@@ -164,8 +164,7 @@ TournamentPlannerView >> tabsCollection [
 
 ]
 
-{ #category : 'Not categorized',
-  #vaVisibility : 'private' }
+{ #category : 'Not categorized' }
 TournamentPlannerView >> tournamentTab [
 
 	| theResultDiv theTournamentList |
