@@ -2,7 +2,9 @@ Class {
 	#name : 'TournamentPlannerView',
 	#superclass : 'Me5BaseView',
 	#instVars : [
-		'user'
+		'user',
+		'collectionOfPlayers',
+		'collectionOfTournaments'
 	],
 	#category : 'TurnierplanerApp'
 }
@@ -17,11 +19,59 @@ TournamentPlannerView >> adminToolsTab [
 						yourself).
 ]
 
-{ #category : 'Not categorized' }
-TournamentPlannerView >> createComponents [
+{ #category : 'Initials' }
+TournamentPlannerView >> beforeCreateComponents [
 
-	super createModules.
-	self addModuleByModuleClass: Me5ComboBoxModuleBundle.
+	| theMemory theBlob|
+
+	theMemory := StartUp new.	
+
+	theBlob := OrderedCollection new.
+		
+	theMemory saveObject: theBlob onPath: 'C:\TournamentPlanner\Memory\tournaments.dat'.
+
+		theBlob add: (Player new
+		firstName: 'TestAdmin';
+		lastName:  '';
+		email: 'TestAdmin@Test.com';
+		yourself).
+		
+	theMemory saveObject: theBlob onPath: 'C:\TournamentPlanner\Memory\players.dat'.
+	
+	self collectionOfTournaments: (theMemory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat').
+	self collectionOfPlayers:  (theMemory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat').
+
+
+	
+
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> collectionOfPlayers [
+
+	^collectionOfPlayers
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> collectionOfPlayers: aCollectionOfPlayer [
+
+	collectionOfPlayers := aCollectionOfPlayer
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> collectionOfTournaments [
+
+	^collectionOfTournaments
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> collectionOfTournaments: aCollectionOfTournament [
+
+	collectionOfTournaments := aCollectionOfTournament
+]
+
+{ #category : 'Initials' }
+TournamentPlannerView >> createComponents [
 
 	self 
 		addChild: (Me5H1 new
@@ -36,6 +86,14 @@ TournamentPlannerView >> createComponents [
 				yourself);
 			yourself);
 		yourself.
+]
+
+{ #category : 'Initials' }
+TournamentPlannerView >> createModules [
+
+	super createModules.
+	
+	self addModuleByModuleClass: Me5ComboBoxModuleBundle.
 ]
 
 { #category : 'Not categorized' }
@@ -98,7 +156,8 @@ TournamentPlannerView >> tabsCollection [
 
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Not categorized',
+  #vaVisibility : 'private' }
 TournamentPlannerView >> tournamentTab [
 
 	| theResultDiv theTournamentList |
