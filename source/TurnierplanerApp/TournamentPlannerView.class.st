@@ -41,8 +41,16 @@ TournamentPlannerView >> createComponents [
 { #category : 'Not categorized' }
 TournamentPlannerView >> dashboardTab [
 
+ | theDashboard |
+
+theDashboard := Me5Div new.
+
+theDashboard addChild: (Me5P new text: 'a').
+
 ^(Me5Div new
 	addChild: (Me5H1 new text: 'Dashboard');
+	addChild: Me5Hr new;
+	addChild: theDashboard;
 	addChild: Me5Hr new;
 	addChild: (Me5H4 new text: 'Shortcuts zu den Seiten');
 	addChild: self adminToolsTab;
