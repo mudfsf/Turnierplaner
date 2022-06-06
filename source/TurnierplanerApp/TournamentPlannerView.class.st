@@ -46,6 +46,11 @@ TournamentPlannerView >> beforeCreateComponents [
 
 ]
 
+{ #category : 'Not categorized' }
+TournamentPlannerView >> buttonNewTournament [
+
+]
+
 { #category : 'Accessing' }
 TournamentPlannerView >> collectionOfPlayers [
 
@@ -172,7 +177,19 @@ TournamentPlannerView >> tournamentTab [
 		theTournamentList := #('Tournament 1' 'Tournament 2' 'Tournament 3' 'Tournament 4').
 
 		theResultDiv := ((Me5Div new) addChild: Me5Row new).
-
+		
+		theResultDiv addChild: (Me5Div new
+			addChild: (Me5Button newSuccess 
+				text: 'Turnier hinzufügen';
+				icon: Me5I newFasPlus;
+				addClickEventSelector: #buttonNewTournament;
+				addCssClassCol1;
+				yourself);
+			addChild: (Me5P new
+				"text: (self collectionOfTournaments games asString)"
+			);
+			addCssClassCol12;
+			yourself).
 
 		1 to: (theTournamentList size) do: [:index | 
 			theResultDiv addChild: (Me5Div new
