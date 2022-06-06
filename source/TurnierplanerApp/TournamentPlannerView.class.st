@@ -109,8 +109,76 @@ TournamentPlannerView >> dashboardTab [
  | theDashboard |
 
 theDashboard := Me5Div new.
-
-theDashboard addChild: (Me5P new text: 'a').
+theDashboard 
+addChild:  (Me5H2 new
+	text: 'HR-Works Turnierplaner';
+	addChild: (Me5Portlet new
+				addChildToBody: (Me5Div new
+					addChild: (Me5H3 new
+						text: 'Nächstes Spiel für dich');
+					addChild: 
+						(Me5Hr new);
+					addChild: 
+						(Me5H5 new text: 'Turnier: Best Team Now');
+					addChild: 
+						(Me5H5 new text: 'Team Yeah VS Team Nope');
+					addChild: 
+						(Me5Hr new);
+					addChild: 
+						(Me5H5 new text: 'In 3 Tagen um 15:30');
+						yourself);
+					yourself);
+				yourself);
+	addChild: (Me5Portlet new
+				addChildToBody: (Me5Div new
+				addChild: 
+				(Me5H3 new
+						text: 'Laufende Turniere');
+				addChild: 
+						(Me5Hr new);
+				addChild: 
+						(Me5H5 new text: 'Turnier: Best Team Now');
+				addChild: 
+						(Me5H6 new text: '5 übrige Spiele');
+				addChild: 
+					(Me5ProgressBar newPrimary
+										addCssClassMProgressLg;
+										value: 50;
+										yourself);
+				addChild: 
+						(Me5Hr new);									
+				addChild: 
+						(Me5H5 new text: 'Best Player Now');
+				addChild: 
+						(Me5H6 new text: '12 übrige Spiele');
+				addChild: 
+					(Me5ProgressBar newPrimary
+										addCssClassMProgressLg;
+										value: 50;
+										yourself);
+						yourself);
+					yourself);
+	addChild: (Me5Portlet new
+				addChildToBody: (Me5Div new
+				addChild: 
+				(Me5H3 new
+						text: 'Wetten');
+				addChild: 
+						(Me5Hr new);
+				addChild: 
+						(Me5H5 new text: '35€');
+				addChild: 
+						(Me5Hr new);									
+				addChild: 
+						(Me5H5 new text: 'Laufende Wetten');
+				addChild: 
+						(Me5H5 new text: '5€');
+				addChild: 
+						(Me5H6 new text: 'Team Yeah - 14.6.2022');
+						yourself);
+					yourself);	
+yourself.
+			
 
 ^(Me5Div new
 	addChild: (Me5H1 new text: 'Dashboard');
@@ -180,7 +248,7 @@ TournamentPlannerView >> tournamentTab [
 		
 		theResultDiv addChild: (Me5Div new
 			addChild: (Me5Button newSuccess 
-				text: 'Turnier hinzufügen';
+				text: 'Turnier hinzufÃ¼gen';
 				icon: Me5I newFasPlus;
 				addClickEventSelector: #buttonNewTournament;
 				addCssClassCol1;

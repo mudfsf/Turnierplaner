@@ -85,7 +85,7 @@ ManagePlayers >> createView [
 							theDataGridComponentsHolderCell
 								addChild: (Me5Button newDanger
 								icon: Me5I newFarTrash; 
-								text: 'Löschen';
+								text: 'LÃ¶schen';
 								addClickEventSelector: #deletePlayerEvent: eventReceiver: self;
 								yourself);
 								yourself];
