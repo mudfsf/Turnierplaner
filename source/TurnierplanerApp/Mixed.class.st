@@ -4,16 +4,32 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
-{ #category : 'API' }
-Mixed >> getCollectionOfGames: aNumberOfGames [
-	|startUp players games|
-	startUp:= StartUp new. 
-	players:=startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat'.
-	games:=OrderedCollection new.
-	games add: (Game new).
-		
+{ #category : 'Not categorized' }
+Mixed >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
 	
- ^self error: 'Method not implemented'
+	|theLaps theKO theCollectionOfTeams|
+	theCollectionOfTeams := (OrderedCollection new
+		add: (Team new
+			teamName: 'first';
+			yourself);
+		add: (Team new
+			teamName: 'second';
+			yourself);
+		add: (Team new
+			teamName: 'third';
+			yourself);
+		add: (Team new
+			teamName: 'fourtht';
+			yourself);
+	yourself).
+	theLaps := Laps new.
+	theKO := KO new.
+	theKO initialize.
+	^ (OrderedCollection new
+		addAll: (theLaps getCollectionOfGamesWithTeams: aCollectionOfTeams);
+		addAll: (theKO getCollectionOfGamesWithTeams: theCollectionOfTeams);
+		yourself).
+
 ]
 
 { #category : 'API' }

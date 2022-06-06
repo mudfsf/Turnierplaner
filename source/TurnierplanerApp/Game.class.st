@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'maximumTeamSize',
 		'teams',
-		'layer'
+		'layer',
+		'name'
 	],
 	#category : 'TurnierplanerApp'
 }
@@ -40,6 +41,18 @@ Game >> maximumTeamSize [
 Game >> maximumTeamSize: anObject [
 
 	maximumTeamSize := anObject
+]
+
+{ #category : 'Accessing' }
+Game >> name [
+
+	^name
+]
+
+{ #category : 'Accessing' }
+Game >> name: anObject [
+
+	name := anObject
 ]
 
 { #category : 'Accessing' }

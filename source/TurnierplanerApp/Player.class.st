@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'firstName',
 		'lastName',
-		'email'
+		'email',
+		'symbol'
 	],
 	#category : 'TurnierplanerApp'
 }
@@ -22,7 +23,7 @@ Player class >> firstName: aFirstName lastName: aLastName email: anEmail [
 { #category : 'Accessing' }
 Player >> = anObject [
 
-	^ ((self firstName = anObject firstName and: [self lastName = anObject lastName]) and: [self email = anObject email])
+	^ (((self firstName = anObject firstName and: [self lastName = anObject lastName]) and: [self email = anObject email]) and: [ self symbol = anObject symbol ])
 ]
 
 { #category : 'Accessing' }
@@ -59,4 +60,16 @@ Player >> lastName [
 Player >> lastName: aLastName [
 
 	lastName := aLastName
+]
+
+{ #category : 'Accessing' }
+Player >> symbol [
+
+	^symbol
+]
+
+{ #category : 'Accessing' }
+Player >> symbol: anObject [
+
+	symbol := anObject
 ]

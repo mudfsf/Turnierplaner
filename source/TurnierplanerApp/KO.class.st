@@ -1,54 +1,92 @@
 Class {
 	#name : 'KO',
 	#superclass : 'TournamentType',
+	#instVars : [
+		'layer',
+		'gameCollection'
+	],
 	#category : 'TurnierplanerApp'
 }
 
+{ #category : 'API',
+  #vaVisibility : 'private' }
+KO >> gameCollection [
+
+	^gameCollection
+]
+
+{ #category : 'API',
+  #vaVisibility : 'private' }
+KO >> gameCollection: aGameCollection [
+
+	gameCollection := aGameCollection
+]
+
 { #category : 'API' }
-KO >> getCollectionOfGames: aNumberOfGames [
-|startUp thePlayerCollection theGameCollection theTeamCollection theTeamIndex thePlayerIndex theLayerNumber|
-	"Load players"
-	startUp := StartUp new. 
-	thePlayerCollection :=startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat'.
-	thePlayerIndex := 1.
+KO >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
+
+	| theCollectionSize theRecursiveParamListCollectionOfGames theTeam theGame |
 	
-	"Create teams"
-	theTeamCollection := OrderedCollection new.
-	theTeamIndex := 1.
-	2 timesRepeat: [
-		|theTemporaryTeam theTemporaryPlayers|
-		theTemporaryTeam := Team new.
-		theTemporaryTeam teamName: ('Team %1' bindWith: theTeamIndex).
-		theTeamIndex := theTeamIndex + 1.
-		
-		"add Player to team"
-		theTemporaryPlayers := OrderedCollection new.
-		2 timesRepeat: [
-			theTemporaryPlayers add: (thePlayerCollection at: thePlayerIndex).
-			thePlayerIndex := thePlayerIndex + 1.
-		].
-		
-		theTemporaryTeam players: theTemporaryPlayers.
-		
-		theTeamCollection add: theTemporaryTeam.
+	self layer: self layer + 1.
+	theRecursiveParamListCollectionOfGames := OrderedCollection new.
+	theCollectionSize := aCollectionOfTeams size.
+	theCollectionSize even
+	ifFalse: [
+		theTeam := aCollectionOfTeams last.
+		theRecursiveParamListCollectionOfGames add: theTeam.
+		aCollectionOfTeams remove: theTeam
+		ifAbsent: [].
 	].
 	
-	"Create games"
-	theLayerNumber := 1.
-	aNumberOfGames timesRepeat: [
-		|theTemporaryGame|
-		theTemporaryGame := Game new.
-		theTemporaryGame layer: theLayerNumber.
+	1 to: (theCollectionSize / 2) do: [
+		:eachIndex |
+		theGame := (Game new
+			layer: self layer;
+			teams: OrderedCollection new;
+			name: '';
+			yourself).
+		theTeam := aCollectionOfTeams at: eachIndex.
+		theGame teams add: theTeam.
+		theGame name: theGame name, theTeam teamName.
+		theTeam :=aCollectionOfTeams at: (theCollectionSize - eachIndex +1).
+		theGame teams add: theTeam.
+		theGame name: theGame name, ' vs ', theTeam teamName.
+		self gameCollection add: theGame.
+		theRecursiveParamListCollectionOfGames add: (Team new
+			teamName: 'Winner of game ', theGame name; 
+			yourself). 
 	].
 	
+	aCollectionOfTeams size <= 2
+	ifFalse: [ ^self getCollectionOfGamesWithTeams: theRecursiveParamListCollectionOfGames ]
+	ifTrue: [ ^self gameCollection ]
+
 	
-	
-	
- ^self error: 'Method not implemented'
 ]
 
 { #category : 'API' }
 KO >> getNumberOfLaps: aNumber [
 
  ^aNumber asNumber - 1
+]
+
+{ #category : 'API' }
+KO >> initialize [
+
+	self layer: 0.
+	self gameCollection: OrderedCollection new.
+]
+
+{ #category : 'API',
+  #vaVisibility : 'private' }
+KO >> layer [
+
+	^layer
+]
+
+{ #category : 'API',
+  #vaVisibility : 'private' }
+KO >> layer: anObject [
+
+	layer := anObject
 ]
