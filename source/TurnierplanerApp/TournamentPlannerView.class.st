@@ -215,13 +215,10 @@ TournamentPlannerView >> tabsCollection [
 			icon: Me5I newFasUser;
 			addChildToTabPane: self tournamentTab;
 			yourself);
-		add: (Me5Tab new
+	add: (Me5Tab new
 			text: 'Teams';
 			icon: Me5FontAwesomeIconSolid newSmile;
-			addChildToTabPane: (Me5P new
-				text: 'You see the Profile tab right now.';
-				addCssClassMFontPrimary; "Only for presentation mode. Different text color to distinguish between different tabs in the example."
-				yourself);
+			addChildToTabPane: self teamsTab;
 			yourself);
 		add: (Me5Tab new
 			text: 'Einstellungen';
@@ -234,6 +231,78 @@ TournamentPlannerView >> tabsCollection [
 			addChildToTabPane: theManagedPlayerView view"self adminToolsTab";
 			yourself);
 		yourself
+
+]
+
+{ #category : 'Not categorized' }
+TournamentPlannerView >> teamsTab [
+
+	| theCurrentPlayerNameDiv theResultDiv theTeamList thePlayerLists thePersonen |
+
+		theTeamList := #('Team Ameise' 'Team Baum' 'Team Cello' 'Team Durian').
+		thePlayerLists := #(
+			#('Anika' 'Arnold' 'Ali' 'Andreas')
+			#('Bernd' 'Bianca' 'Bob' 'Bettina')
+			#('Cevin' 'Cynthia' 'Cem' 'Charles')
+			#('Dorotea' 'Daniel' 'Dalia' 'Debora')
+		).
+		thePersonen := #('Anika' 'Arnold' 'Ali' 'Andreas' 'Bernd' 'Bianca' 'Bob' 'Bettina' 'Cevin' 'Cynthia' 'Cem' 'Charles' 'Dorotea' 'Daniel' 'Dalia' 'Debora').
+
+		theResultDiv := ((Me5Div new) addChild: Me5Row new).
+		1 to: (theTeamList size) do: [:index | 
+			theCurrentPlayerNameDiv := Me5Div new.
+			1 to: ((thePlayerLists at: index) size) do: [:innerIndex | 	
+				theCurrentPlayerNameDiv addChild: (Me5Div new
+				addChild: (Me5P new 
+						text: ((thePlayerLists at: index) at: innerIndex);
+						fontSize: 'large';
+						yourself)).
+			].
+			theResultDiv addChild: (Me5Div new
+				addChild: (Me5Portlet newPrimary
+					title: (theTeamList at: index);
+					addChildToBody: theCurrentPlayerNameDiv;
+					addChildToFoot: (Me5Button newDanger
+						text: 'Löschen';
+						icon: Me5Flaticon newDelete1;
+						"addClickEventSelector: #deleteTeam;"
+						yourself);
+					yourself);
+				padding: 15;
+				addCssClassColSm12;
+				addCssClassColMd6;
+				addCssClassColXl4;
+			yourself).
+		].
+		theResultDiv addChild: (Me5Div new
+				addChild: (Me5Portlet newSuccess
+					title: 'Neues Team erstellen';
+					addChildToBody: (Me5TextField new
+						text: 'Teamname:';
+						"value: teamName;"
+						placeholder: 'Teamname';
+						addCssClassCol12;
+						addCssClassColLg6;
+					yourself);
+					addChildToBody: (Me5MultiComboBox new
+						text: 'Teammitglieder';
+						helpText: 'Im Team:';
+						objects: thePersonen;
+						placeholder: 'Personen';
+						yourself);
+					addChildToFoot: (Me5Button newSuccess
+						text: 'Speichern';
+						icon: Me5I newFasSave;
+						"addClickEventSelector: #saveTeam;"
+						yourself);
+					yourself);
+				padding: 15;
+				addCssClassColSm12;
+				addCssClassColMd6;
+				addCssClassColXl4;
+			yourself).
+
+	^theResultDiv.
 
 ]
 
