@@ -25,17 +25,26 @@ KO >> gameCollection: aGameCollection [
 { #category : 'API' }
 KO >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
 
-	| theCollectionSize theRecursiveParamListCollectionOfGames theTeam theGame |
-	
+	| theCollectionSize theRecursiveParamListCollectionOfGames theTeam theGame hasToContinue|
+
 	self layer: self layer + 1.
 	theRecursiveParamListCollectionOfGames := OrderedCollection new.
 	theCollectionSize := aCollectionOfTeams size.
+	theCollectionSize > 2
+	ifFalse: [
+		hasToContinue := false
+	]
+	ifTrue: [ 		
+		hasToContinue := true
+	].
+
 	theCollectionSize even
 	ifFalse: [
 		theTeam := aCollectionOfTeams last.
 		theRecursiveParamListCollectionOfGames add: theTeam.
 		aCollectionOfTeams remove: theTeam
 		ifAbsent: [].
+		theCollectionSize := theCollectionSize - 1
 	].
 	
 	1 to: (theCollectionSize / 2) do: [
@@ -57,9 +66,9 @@ KO >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
 			yourself). 
 	].
 	
-	aCollectionOfTeams size <= 2
-	ifFalse: [ ^self getCollectionOfGamesWithTeams: theRecursiveParamListCollectionOfGames ]
-	ifTrue: [ ^self gameCollection ]
+	hasToContinue 
+	ifTrue: [ ^self getCollectionOfGamesWithTeams: theRecursiveParamListCollectionOfGames ]
+	ifFalse: [ ^self gameCollection ]
 
 	
 ]

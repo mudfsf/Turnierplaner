@@ -7,29 +7,39 @@ Class {
 { #category : 'Not categorized' }
 Mixed >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
 	
-	|theLaps theKO theCollectionOfTeams|
-	theCollectionOfTeams := (OrderedCollection new
-		add: (Team new
-			teamName: 'first';
-			yourself);
-		add: (Team new
-			teamName: 'second';
-			yourself);
-		add: (Team new
-			teamName: 'third';
-			yourself);
-		add: (Team new
-			teamName: 'fourtht';
-			yourself);
-	yourself).
+	|theLaps theKO theCollectionOfTeams theCollectionOfGames|
+
+	theCollectionOfTeams := OrderedCollection new.
+	theCollectionOfTeams addAll: aCollectionOfTeams.
+	theCollectionOfGames := OrderedCollection new.
 	theLaps := Laps new.
 	theKO := KO new.
 	theKO initialize.
-	^ (OrderedCollection new
-		addAll: (theLaps getCollectionOfGamesWithTeams: aCollectionOfTeams);
-		addAll: (theKO getCollectionOfGamesWithTeams: theCollectionOfTeams);
-		yourself).
+	aCollectionOfTeams size > 4
+	ifTrue: [
+		theCollectionOfGames addAll: (theLaps getCollectionOfGamesWithTeams: aCollectionOfTeams).
+		theCollectionOfTeams := (OrderedCollection new
+			add: (Team new
+				teamName: 'first';
+				players: OrderedCollection new;
+				yourself);
+			add: (Team new
+				teamName: 'second';
+				players: OrderedCollection new;
+				yourself);
+			add: (Team new
+				teamName: 'third';
+				players: OrderedCollection new;
+				yourself);
+			add: (Team new
+				teamName: 'fourtht';
+				players: OrderedCollection new;
+				yourself);
+			yourself).
+	].
 
+	theCollectionOfGames addAll: (theKO getCollectionOfGamesWithTeams: theCollectionOfTeams).
+	^theCollectionOfGames
 ]
 
 { #category : 'API' }
