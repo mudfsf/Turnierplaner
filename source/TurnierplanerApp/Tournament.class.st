@@ -3,7 +3,11 @@ Class {
 	#superclass : 'Resultable',
 	#instVars : [
 		'tournamentType',
-		'games'
+		'games',
+		'name',
+		'numberOfGames',
+		'numberOfPlayedGames',
+		'gameMode'
 	],
 	#category : 'TurnierplanerApp'
 }
@@ -18,6 +22,18 @@ Tournament class >> tournamentType: aTournamentType games: aListOfGames [
 ]
 
 { #category : 'Accessing' }
+Tournament >> gameMode [
+
+	^gameMode
+]
+
+{ #category : 'Accessing' }
+Tournament >> gameMode: aSymbol [
+
+	gameMode := aSymbol
+]
+
+{ #category : 'Accessing' }
 Tournament >> games [
 
 	^games
@@ -27,6 +43,44 @@ Tournament >> games [
 Tournament >> games: aListOfGame [
 
 	games := aListOfGame
+]
+
+{ #category : 'Accessing' }
+Tournament >> name [
+
+	^name
+]
+
+{ #category : 'Accessing' }
+Tournament >> name: anObject [
+
+	name := anObject
+]
+
+{ #category : 'Accessing' }
+Tournament >> numberOfGames [
+
+	^numberOfGames
+	
+]
+
+{ #category : 'Accessing' }
+Tournament >> numberOfGames: aNumber [
+
+	numberOfGames := aNumber
+	
+]
+
+{ #category : 'Accessing' }
+Tournament >> numberOfPlayedGames [
+
+	^numberOfPlayedGames
+]
+
+{ #category : 'Accessing' }
+Tournament >> numberOfPlayedGames: aNumber [
+
+	numberOfPlayedGames := aNumber
 ]
 
 { #category : 'Accessing' }

@@ -5,9 +5,9 @@ Class {
 }
 
 { #category : 'Event' }
-TournamentType >> getCollectionOfGames: aNumberOfGames [
+TournamentType >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
 
- ^self error: 'Method not implemented'
+	 ^self error: 'Method not implemented'
 ]
 
 { #category : 'Event' }

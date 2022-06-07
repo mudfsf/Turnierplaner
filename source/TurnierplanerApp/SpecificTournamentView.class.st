@@ -7,7 +7,7 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
-{ #category : 'Not categorized' }
+{ #category : 'Initial-Events' }
 SpecificTournamentView >> createComponents [
 
 	| theQueryParameters |
@@ -60,33 +60,33 @@ SpecificTournamentView >> theGameID: aNumber [
 { #category : 'Not categorized' }
 SpecificTournamentView >> theSpecificTournament [
 
-| theSvgLine theResultDiv theScroller theSpielanzahl theSpieleInSpalte theOffsetX theOffsetY theSpielbreite theSpielhoehe theReihenabstand theSpaltenabstand theSpielhoeheUndAbstand theKoordinatenLinienArray theAnzahlSpalten |
+| theSvgLine theResultDiv theScroller theNumberOfGames theGamesinColumn theOffsetX theOffsetY theGameWidth theGameHeight theRowsSpacing theColumnSpacing theGameHeightAndSpacing theCoordinatesLineArray theNumberOfColumn |
 
-theSpielanzahl := 8.
-theSpieleInSpalte := theSpielanzahl.
+theNumberOfGames := 8.
+theGamesinColumn := theNumberOfGames.
 theOffsetX := 10.
 theOffsetY := 10.
-theSpielbreite := 400.
-theSpielhoehe := 260.
-theReihenabstand := 20.
-theSpaltenabstand := 100.
-theSpielhoeheUndAbstand := theSpielhoehe + theReihenabstand.
-theAnzahlSpalten := ((theSpielanzahl log: 2) + 1) asInteger.
-theKoordinatenLinienArray := Array new: theAnzahlSpalten.
+theGameWidth := 400.
+theGameHeight := 260.
+theRowsSpacing := 20.
+theColumnSpacing := 100.
+theGameHeightAndSpacing := theGameHeight + theRowsSpacing.
+theNumberOfColumn := ((theNumberOfGames log: 2) + 1) asInteger.
+theCoordinatesLineArray := Array new: theNumberOfColumn.
 "{ spalte { reihe { x1 y1 x2 y2 } reihe {...} reihe {...} reihe {...} } spalte {...} spalte {...} }"
 
 theResultDiv := Me5Div new.
 
 theResultDiv addChild: (Me5H1 newWithText: 'Beispielansicht Turnier').
 theResultDiv addChild: (theScroller := Me5Scroller new
-	height: 2 * theSpielanzahl * theSpielhoeheUndAbstand).
+	height: 2 * theNumberOfGames * theGameHeightAndSpacing).
 
-1 to: theAnzahlSpalten do: [:indexSpalten |
-	theKoordinatenLinienArray at: indexSpalten put: (Array new: theSpieleInSpalte).
-	1 to: (theSpieleInSpalte) do: [:indexReihen |
+1 to: theNumberOfColumn do: [:indexSpalten |
+	theCoordinatesLineArray at: indexSpalten put: (Array new: theGamesinColumn).
+	1 to: (theGamesinColumn) do: [:indexReihen |
 		| theTop theLeft |
-		theTop := theOffsetY + ((indexReihen - 1) * theSpielhoeheUndAbstand).
-		theLeft := theOffsetX + ((indexSpalten - 1) * (theSpielbreite + theSpaltenabstand)).
+		theTop := theOffsetY + ((indexReihen - 1) * theGameHeightAndSpacing).
+		theLeft := theOffsetX + ((indexSpalten - 1) * (theGameWidth + theColumnSpacing)).
 
 		"theGameID := (indexSpalten * indexReihen)."
 
@@ -96,7 +96,7 @@ theResultDiv addChild: (theScroller := Me5Scroller new
 			zIndex: 1;
 			top: theTop;
 			left: theLeft;
-			width: theSpielbreite;
+			width: theGameWidth;
 			addChildToBody: (Me5Button newSuccess
 				text: 'Ergebnis eintragen';
 
@@ -107,37 +107,37 @@ theResultDiv addChild: (theScroller := Me5Scroller new
 				yourself);
 			yourself).
 "set line coordinates (1er) x1 y1"
-		(theKoordinatenLinienArray at: indexSpalten) at: indexReihen put: ((Array new: 4) at: 1 put: theLeft; at: 2 put: theTop; yourself).
+		(theCoordinatesLineArray at: indexSpalten) at: indexReihen put: ((Array new: 4) at: 1 put: theLeft; at: 2 put: theTop; yourself).
 		"set line coordinates (2er) x2 y2"
 		indexSpalten > 1 ifTrue: [
-			((theKoordinatenLinienArray at: (indexSpalten - 1)) at: ((indexReihen * 2) - 1)) at: 3 put: theLeft; at: 4 put: theTop; yourself.
-			((theKoordinatenLinienArray at: (indexSpalten - 1)) at: (indexReihen * 2)) at: 3 put: theLeft; at: 4 put: theTop; yourself.
+			((theCoordinatesLineArray at: (indexSpalten - 1)) at: ((indexReihen * 2) - 1)) at: 3 put: theLeft; at: 4 put: theTop; yourself.
+			((theCoordinatesLineArray at: (indexSpalten - 1)) at: (indexReihen * 2)) at: 3 put: theLeft; at: 4 put: theTop; yourself.
 		].
 	].
-	theSpieleInSpalte := theSpieleInSpalte / 2.
-	theOffsetY := theOffsetY + (theSpielhoeheUndAbstand / 2).
-	theSpielhoeheUndAbstand := theSpielhoeheUndAbstand * 2.
+	theGamesinColumn := theGamesinColumn / 2.
+	theOffsetY := theOffsetY + (theGameHeightAndSpacing / 2).
+	theGameHeightAndSpacing := theGameHeightAndSpacing * 2.
 
 ].
 
-theKoordinatenLinienArray size.
+theCoordinatesLineArray size.
 
 
 "draw Lines"
 
-1 to: (theKoordinatenLinienArray size - 1) do: [:theSpalte |
-	1 to: ((theKoordinatenLinienArray at: theSpalte) size ) do: [:theReihe |
+1 to: (theCoordinatesLineArray size - 1) do: [:theSpalte |
+	1 to: ((theCoordinatesLineArray at: theSpalte) size ) do: [:theReihe |
 
 		| theMaxX theMaxY theCoordinatesXY |
 
-		theCoordinatesXY := (theKoordinatenLinienArray at: theSpalte) at: theReihe.
+		theCoordinatesXY := (theCoordinatesLineArray at: theSpalte) at: theReihe.
 		((theCoordinatesXY at: 1) > (theCoordinatesXY at: 3)) ifTrue: [theMaxX := theCoordinatesXY at: 1] ifFalse: [theMaxX := theCoordinatesXY at: 3].
 		((theCoordinatesXY at: 2) > (theCoordinatesXY at: 4)) ifTrue: [theMaxY := theCoordinatesXY at: 2] ifFalse: [theMaxY := theCoordinatesXY at: 4].
 		theSvgLine := (Me5SvgLine new
-		x1: (theCoordinatesXY at: 1) + (theSpielbreite * 0.75);
-		y1: (theCoordinatesXY at: 2) + (theSpielhoehe * 0.5);
-		x2: (theCoordinatesXY at: 3) + (theSpielbreite * 0.25);
-		y2: (theCoordinatesXY at: 4) + (theSpielhoehe * 0.5);
+		x1: (theCoordinatesXY at: 1) + (theGameWidth * 0.75);
+		y1: (theCoordinatesXY at: 2) + (theGameHeight * 0.5);
+		x2: (theCoordinatesXY at: 3) + (theGameWidth * 0.25);
+		y2: (theCoordinatesXY at: 4) + (theGameHeight * 0.5);
 		strokeWidth: 5;
 		stroke: 'lightGrey';
 		svgHeight: theMaxY * 2;

@@ -181,8 +181,76 @@ TournamentPlannerView >> dashboardTab [
  | theDashboard |
 
 theDashboard := Me5Div new.
-
-theDashboard addChild: (Me5P new text: 'a').
+theDashboard 
+addChild:  (Me5H2 new
+	text: 'HR-Works Turnierplaner';
+	addChild: (Me5Portlet new
+				addChildToBody: (Me5Div new
+					addChild: (Me5H3 new
+						text: 'Nächstes Spiel für dich');
+					addChild: 
+						(Me5Hr new);
+					addChild: 
+						(Me5H5 new text: 'Turnier: Best Team Now');
+					addChild: 
+						(Me5H5 new text: 'Team Yeah VS Team Nope');
+					addChild: 
+						(Me5Hr new);
+					addChild: 
+						(Me5H5 new text: 'In 3 Tagen um 15:30');
+						yourself);
+					yourself);
+				yourself);
+	addChild: (Me5Portlet new
+				addChildToBody: (Me5Div new
+				addChild: 
+				(Me5H3 new
+						text: 'Laufende Turniere');
+				addChild: 
+						(Me5Hr new);
+				addChild: 
+						(Me5H5 new text: 'Turnier: Best Team Now');
+				addChild: 
+						(Me5H6 new text: '5 übrige Spiele');
+				addChild: 
+					(Me5ProgressBar newPrimary
+										addCssClassMProgressLg;
+										value: 50;
+										yourself);
+				addChild: 
+						(Me5Hr new);									
+				addChild: 
+						(Me5H5 new text: 'Best Player Now');
+				addChild: 
+						(Me5H6 new text: '12 übrige Spiele');
+				addChild: 
+					(Me5ProgressBar newPrimary
+										addCssClassMProgressLg;
+										value: 50;
+										yourself);
+						yourself);
+					yourself);
+	addChild: (Me5Portlet new
+				addChildToBody: (Me5Div new
+				addChild: 
+				(Me5H3 new
+						text: 'Wetten');
+				addChild: 
+						(Me5Hr new);
+				addChild: 
+						(Me5H5 new text: '35€');
+				addChild: 
+						(Me5Hr new);									
+				addChild: 
+						(Me5H5 new text: 'Laufende Wetten');
+				addChild: 
+						(Me5H5 new text: '5€');
+				addChild: 
+						(Me5H6 new text: 'Team Yeah - 14.6.2022');
+						yourself);
+					yourself);	
+yourself.
+			
 
 ^(Me5Div new
 	addChild: (Me5H1 new text: 'Dashboard');
@@ -291,13 +359,10 @@ TournamentPlannerView >> tabsCollection [
 			icon: Me5I newFasUser;
 			addChildToTabPane: self tournamentTab;
 			yourself);
-		add: (Me5Tab new
+	add: (Me5Tab new
 			text: 'Teams';
 			icon: Me5FontAwesomeIconSolid newSmile;
-			addChildToTabPane: (Me5P new
-				text: 'You see the Profile tab right now.';
-				addCssClassMFontPrimary; "Only for presentation mode. Different text color to distinguish between different tabs in the example."
-				yourself);
+			addChildToTabPane: self teamsTab;
 			yourself);
 		add: (Me5Tab new
 			text: 'Einstellungen';
@@ -332,6 +397,78 @@ TournamentPlannerView >> tournamentRow: anObject [
 ]
 
 { #category : 'Not categorized' }
+TournamentPlannerView >> teamsTab [
+
+	| theCurrentPlayerNameDiv theResultDiv theTeamList thePlayerLists thePersonen |
+
+		theTeamList := #('Team Ameise' 'Team Baum' 'Team Cello' 'Team Durian').
+		thePlayerLists := #(
+			#('Anika' 'Arnold' 'Ali' 'Andreas')
+			#('Bernd' 'Bianca' 'Bob' 'Bettina')
+			#('Cevin' 'Cynthia' 'Cem' 'Charles')
+			#('Dorotea' 'Daniel' 'Dalia' 'Debora')
+		).
+		thePersonen := #('Anika' 'Arnold' 'Ali' 'Andreas' 'Bernd' 'Bianca' 'Bob' 'Bettina' 'Cevin' 'Cynthia' 'Cem' 'Charles' 'Dorotea' 'Daniel' 'Dalia' 'Debora').
+
+		theResultDiv := ((Me5Div new) addChild: Me5Row new).
+		1 to: (theTeamList size) do: [:index | 
+			theCurrentPlayerNameDiv := Me5Div new.
+			1 to: ((thePlayerLists at: index) size) do: [:innerIndex | 	
+				theCurrentPlayerNameDiv addChild: (Me5Div new
+				addChild: (Me5P new 
+						text: ((thePlayerLists at: index) at: innerIndex);
+						fontSize: 'large';
+						yourself)).
+			].
+			theResultDiv addChild: (Me5Div new
+				addChild: (Me5Portlet newPrimary
+					title: (theTeamList at: index);
+					addChildToBody: theCurrentPlayerNameDiv;
+					addChildToFoot: (Me5Button newDanger
+						text: 'Löschen';
+						icon: Me5Flaticon newDelete1;
+						"addClickEventSelector: #deleteTeam;"
+						yourself);
+					yourself);
+				padding: 15;
+				addCssClassColSm12;
+				addCssClassColMd6;
+				addCssClassColXl4;
+			yourself).
+		].
+		theResultDiv addChild: (Me5Div new
+				addChild: (Me5Portlet newSuccess
+					title: 'Neues Team erstellen';
+					addChildToBody: (Me5TextField new
+						text: 'Teamname:';
+						"value: teamName;"
+						placeholder: 'Teamname';
+						addCssClassCol12;
+						addCssClassColLg6;
+					yourself);
+					addChildToBody: (Me5MultiComboBox new
+						text: 'Teammitglieder';
+						helpText: 'Im Team:';
+						objects: thePersonen;
+						placeholder: 'Personen';
+						yourself);
+					addChildToFoot: (Me5Button newSuccess
+						text: 'Speichern';
+						icon: Me5I newFasSave;
+						"addClickEventSelector: #saveTeam;"
+						yourself);
+					yourself);
+				padding: 15;
+				addCssClassColSm12;
+				addCssClassColMd6;
+				addCssClassColXl4;
+			yourself).
+
+	^theResultDiv.
+
+]
+
+{ #category : 'Not categorized' }
 TournamentPlannerView >> tournamentTab [
 
 	| theResultDiv theRow theTournamentList textFieldTournamentName radioGroupGameType radioGroupMode multiComboBoxRivals |
@@ -346,7 +483,7 @@ TournamentPlannerView >> tournamentTab [
 		
 		self tournamentRow addChild: (Me5Div new
 			addChild: (Me5Button newSuccess 
-				text: 'Turnier hinzufügen';
+				text: 'Turnier hinzufÃ¼gen';
 				icon: Me5I newFasPlus;
 				addClickEventSelector: #buttonNewTournament;
 				addCssClassCol2;
