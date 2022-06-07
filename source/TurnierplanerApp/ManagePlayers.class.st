@@ -48,6 +48,8 @@ ManagePlayers >> createView [
 	self startUp: StartUp new.
 	
 	self view: Me5Div new.
+	self view addChild: (Me5H1 new text: 'Admin-Tools').
+	self view addChild: Me5Hr new.
 	self view addChild: (Me5Portlet new
 		addCssClassColMd12;
 			addChildToBody: (listGrid := Me5ListGrid new
