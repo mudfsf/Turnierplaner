@@ -378,29 +378,11 @@ TournamentPlannerView >> tabsCollection [
 
 ]
 
-{ #category : 'Accessing' }
-TournamentPlannerView >> tournamentRow [
-
-	"<^iOf Object>"
-	"Answer the tournamentRow of the receiver"
-
-	^tournamentRow
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> tournamentRow: anObject [
-
-	"<anObject: iOf Object, ^self>"
-	"Set the tournamentRow of the receiver"
-
-	tournamentRow := anObject
-]
-
 { #category : 'Not categorized' }
 TournamentPlannerView >> teamsTab [
 
-	| theCurrentPlayerNameDiv theResultDiv theTeamList thePlayerLists thePersonen |
-
+	| theCurrentPlayerNameDiv theResultDiv theRow theTeamList thePlayerLists thePersonen |
+		
 		theTeamList := #('Team Ameise' 'Team Baum' 'Team Cello' 'Team Durian').
 		thePlayerLists := #(
 			#('Anika' 'Arnold' 'Ali' 'Andreas')
@@ -410,7 +392,7 @@ TournamentPlannerView >> teamsTab [
 		).
 		thePersonen := #('Anika' 'Arnold' 'Ali' 'Andreas' 'Bernd' 'Bianca' 'Bob' 'Bettina' 'Cevin' 'Cynthia' 'Cem' 'Charles' 'Dorotea' 'Daniel' 'Dalia' 'Debora').
 
-		theResultDiv := ((Me5Div new) addChild: Me5Row new).
+		theRow := Me5Row new.
 		1 to: (theTeamList size) do: [:index | 
 			theCurrentPlayerNameDiv := Me5Div new.
 			1 to: ((thePlayerLists at: index) size) do: [:innerIndex | 	
@@ -420,7 +402,7 @@ TournamentPlannerView >> teamsTab [
 						fontSize: 'large';
 						yourself)).
 			].
-			theResultDiv addChild: (Me5Div new
+			theRow addChild: (Me5Div new
 				addChild: (Me5Portlet newPrimary
 					title: (theTeamList at: index);
 					addChildToBody: theCurrentPlayerNameDiv;
@@ -436,7 +418,7 @@ TournamentPlannerView >> teamsTab [
 				addCssClassColXl4;
 			yourself).
 		].
-		theResultDiv addChild: (Me5Div new
+		theRow addChild: (Me5Div new
 				addChild: (Me5Portlet newSuccess
 					title: 'Neues Team erstellen';
 					addChildToBody: (Me5TextField new
@@ -464,8 +446,33 @@ TournamentPlannerView >> teamsTab [
 				addCssClassColXl4;
 			yourself).
 
+
+	theResultDiv := (Me5Div new).
+	theResultDiv addChild: (Me5H1 new text: 'Teams').
+	theResultDiv addChild: Me5Hr new.
+	theResultDiv addChild: theRow.
+
+
 	^theResultDiv.
 
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> tournamentRow [
+
+	"<^iOf Object>"
+	"Answer the tournamentRow of the receiver"
+
+	^tournamentRow
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> tournamentRow: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the tournamentRow of the receiver"
+
+	tournamentRow := anObject
 ]
 
 { #category : 'Not categorized' }
@@ -593,7 +600,10 @@ TournamentPlannerView >> userSettingsTab [
 
 
 
-	^(Me5Portlet newPrimary
+	^(Me5Div new
+		addChild:	(Me5H1 new text: 'Einstellungen');
+		addChild: Me5Hr new;
+		addChild: (Me5Portlet newPrimary
 			title:'Einstellungen';
 		
 				addChildToBody: (Me5Row  new
@@ -634,6 +644,6 @@ TournamentPlannerView >> userSettingsTab [
 					icon: Me5I newFasSave;
 					"addClickEventSelector: #savePlayer;"
 					yourself);
-				
+				yourself);
 			yourself).
 ]
