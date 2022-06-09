@@ -245,40 +245,56 @@ TournamentPlannerView >> createTournamentTextFieldTournamentName: anObject [
 { #category : 'Not categorized' }
 TournamentPlannerView >> dashboardTab [
 
- | theDashboard |
-
+ | theDashboard theTextNextGame theTextActualTournament theTextActualMatch theTextDateForNextMatch 
+ theTextRunningTournaments theTextBestTeamNowInTheTournament theTextTeamMatchesInTheTournament 
+ theTextBestPlayerNowInTheTournament theTextPlayerMatchesInTheTournament theTextForBets 
+ theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets theTextWithOutcome|
+ 
+ theTextNextGame := Me5H3 new text: 'N&auml;chstes Spiel f&uuml;r dich'.
+ theTextActualTournament := Me5H5 new text: 'Turnier: Bestes Team'.
+ theTextActualMatch := Me5H5 new text: 'Team Yeah VS Team Nope'.
+ theTextDateForNextMatch := Me5H5 new text: 'In 3 Tagen um 15:30'.
+ theTextRunningTournaments := Me5H3 new text: 'Laufende Turniere'.
+ theTextBestTeamNowInTheTournament := Me5H5 new text: 'Turnier: Bestes Team'.
+ theTextTeamMatchesInTheTournament := Me5H6 new text: '5 &Uuml;brige Spiele'.
+ theTextBestPlayerNowInTheTournament := Me5H5 new text: 'Bester Spieler'.
+ theTextPlayerMatchesInTheTournament := Me5H6 new text: '12 &Uuml;brige Spiele'.
+ theTextForBets := Me5H3 new text: 'Wetten'.
+ theTextWithWageredMoney := Me5H5 new text: '35&euro;'.
+ theTextForRunningBets := Me5H5 new text: 'Laufende Wetten'.
+ theTextWithWageredMoneyForTheBets := Me5H5 new text: '5&euro;'.
+ theTextWithOutcome := Me5H6 new text: 'Team Yeah - 14.6.2022'.
+ 
 theDashboard := Me5Div new.
 theDashboard 
 addChild:  (Me5H2 new
 	text: 'HR-Works Turnierplaner';
 	addChild: (Me5Portlet new
 				addChildToBody: (Me5Div new
-					addChild: (Me5H3 new
-						text: 'NÃƒÆ’Ã‚Â¤chstes Spiel fÃƒÆ’Ã‚Â¼r dich');
+					addChild: (theTextNextGame);
 					addChild: 
 						(Me5Hr new);
 					addChild: 
-						(Me5H5 new text: 'Turnier: Best Team Now');
+						(theTextActualTournament);
 					addChild: 
-						(Me5H5 new text: 'Team Yeah VS Team Nope');
+						(theTextActualMatch);
 					addChild: 
 						(Me5Hr new);
 					addChild: 
-						(Me5H5 new text: 'In 3 Tagen um 15:30');
+						(theTextDateForNextMatch);
 						yourself);
 					yourself);
 				yourself);
 	addChild: (Me5Portlet new
 				addChildToBody: (Me5Div new
 				addChild: 
-				(Me5H3 new
-						text: 'Laufende Turniere');
+				(theTextRunningTournaments);
 				addChild: 
 						(Me5Hr new);
 				addChild: 
-						(Me5H5 new text: 'Turnier: Best Team Now');
+						(theTextBestTeamNowInTheTournament);
 				addChild: 
-						(Me5H6 new text: '5 ÃƒÆ’Ã‚Â¼brige Spiele');
+						(theTextTeamMatchesInTheTournament);
 				addChild: 
 					(Me5ProgressBar newPrimary
 										addCssClassMProgressLg;
@@ -287,9 +303,9 @@ addChild:  (Me5H2 new
 				addChild: 
 						(Me5Hr new);									
 				addChild: 
-						(Me5H5 new text: 'Best Player Now');
+						(theTextBestPlayerNowInTheTournament);
 				addChild: 
-						(Me5H6 new text: '12 ÃƒÆ’Ã‚Â¼brige Spiele');
+						(theTextPlayerMatchesInTheTournament);
 				addChild: 
 					(Me5ProgressBar newPrimary
 										addCssClassMProgressLg;
@@ -300,20 +316,19 @@ addChild:  (Me5H2 new
 	addChild: (Me5Portlet new
 				addChildToBody: (Me5Div new
 				addChild: 
-				(Me5H3 new
-						text: 'Wetten');
+				(theTextForBets);
 				addChild: 
 						(Me5Hr new);
 				addChild: 
-						(Me5H5 new text: '35ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬');
+						(theTextWithWageredMoney);
 				addChild: 
 						(Me5Hr new);									
 				addChild: 
-						(Me5H5 new text: 'Laufende Wetten');
+						(theTextForRunningBets);
 				addChild: 
-						(Me5H5 new text: '5ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬');
+						(theTextWithWageredMoneyForTheBets);
 				addChild: 
-						(Me5H6 new text: 'Team Yeah - 14.6.2022');
+						(theTextWithOutcome);
 						yourself);
 					yourself);	
 yourself.
