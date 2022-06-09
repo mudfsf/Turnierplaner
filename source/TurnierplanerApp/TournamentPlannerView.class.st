@@ -6,6 +6,7 @@ Class {
 		'user',
 		'collectionOfPlayers',
 		'collectionOfTournaments',
+		'collectionOfTeams',
 		'tournamentRow',
 		'createTournamentRadioGroupGameMode',
 		'createTournamentRadioGroupTournamentType',
@@ -45,6 +46,7 @@ TournamentPlannerView >> beforeCreateComponents [
 	
 	self collectionOfTournaments: (self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat').
 	self collectionOfPlayers:  (self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat').
+	self collectionOfTeams:  (self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\teams.dat').
 
 	
 
@@ -127,6 +129,24 @@ TournamentPlannerView >> collectionOfPlayers [
 TournamentPlannerView >> collectionOfPlayers: aCollectionOfPlayer [
 
 	collectionOfPlayers := aCollectionOfPlayer
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> collectionOfTeams [
+
+	"<^hOf Collection of: {iOf Object}>"
+	"Answer the collectionOfTeams of the receiver"
+
+	^collectionOfTeams
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> collectionOfTeams: aCollectionOfTeams [
+
+	"<aCollection: hOf Collection of: {iOf Object}, ^self>"
+	"Set the collectionOfTeams of the receiver"
+
+	collectionOfTeams := aCollectionOfTeams
 ]
 
 { #category : 'Accessing' }
@@ -458,7 +478,7 @@ TournamentPlannerView >> teamsTab [
 					title: (theTeamList at: index);
 					addChildToBody: theCurrentPlayerNameDiv;
 					addChildToFoot: (Me5Button newDanger
-						text: 'LÃƒÆ’Ã‚Â¶schen';
+						text: 'L&ouml;schen';
 						icon: Me5Flaticon newDelete1;
 						"addClickEventSelector: #deleteTeam;"
 						yourself);
@@ -546,7 +566,7 @@ TournamentPlannerView >> tournamentTab [
 				addObjects: #('Einzel' 'Team');
 				yourself);
 			addChild: (multiComboBoxRivals := Me5Select2MultiSelectBox new
-				text: 'Rivalen (muss noch dynamisch werden dass teams oder spieler angezeigt werden können)';
+				text: 'Rivalen (muss noch dynamisch werden dass teams oder spieler angezeigt werden kÃ¶nnen)';
 				addObjects: #(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20);
 				yourself);
 			addChild: (Me5Button newPrimary
@@ -575,7 +595,7 @@ TournamentPlannerView >> tournamentTab [
 		
 		"self tournamentRow addChild: (Me5Div new
 			addChild: (Me5Button newSuccess 
-				text: 'Turnier hinzufügen';
+				text: 'Turnier hinzufÃ¼gen';
 				icon: Me5I newFasPlus;
 				addClickEventSelector: #buttonNewTournament;
 				addCssClassCol2;
