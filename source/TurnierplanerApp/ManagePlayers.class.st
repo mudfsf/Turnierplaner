@@ -57,7 +57,7 @@ ManagePlayers >> createView [
 				height: '55vh';
 				dataSourceBlock: [self data];
 				addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
-					title: 'First name';
+					title: 'Vorname';
 					getterSelector: #firstName;
 					setterSelector: #firstName:;
 					enableHeaderSort;
@@ -65,7 +65,7 @@ ManagePlayers >> createView [
 					maxWidth:  'vw 40';
 					yourself);
 				addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
-					title: 'Last name';
+					title: 'Nachname';
 					getterSelector: #lastName;
 					setterSelector: #lastName:;
 					enableHeaderSort;
@@ -73,7 +73,7 @@ ManagePlayers >> createView [
 					minWidth: 200;
 					yourself);
 				addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
-					title: 'Email';
+					title: 'E-Mail';
 					getterSelector: #email;
 					setterSelector: #email:;
 					enableHeaderSort;
@@ -87,7 +87,7 @@ ManagePlayers >> createView [
 							theDataGridComponentsHolderCell
 								addChild: (Me5Button newDanger
 								icon: Me5I newFarTrash; 
-								text: 'LÃ¶schen';
+								text: 'L&ouml;schen';
 								addClickEventSelector: #deletePlayerEvent: eventReceiver: self;
 								yourself);
 								yourself];
@@ -100,7 +100,7 @@ ManagePlayers >> createView [
 				yourself);
 				addChildToFootButtonGroup: (Me5Button newInfo
 				icon: Me5I newFasPlus; 
-				text: 'Spieler hinzufuegen';
+				text: 'Spieler hinzuf&uuml;gen';
 				addClickEventSelector: #addPlayerEvent eventReceiver: self;
 				yourself);
 			addChildToFootButtonGroup: (Me5Button newWarning
