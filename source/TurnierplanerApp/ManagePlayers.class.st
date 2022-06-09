@@ -25,12 +25,6 @@ ManagePlayers >> addPlayerEvent [
 	self view showSuccessNotificationWithMessage: ('Added row to save Player...')
 ]
 
-{ #category : 'Initial-Events' }
-ManagePlayers >> afterCreateComponents [
-	
-	(self listGrid dataGridColumnDefinitionsAttribute at: 4) redraw
-]
-
 { #category : 'Events' }
 ManagePlayers >> clearEvent [
 
@@ -86,6 +80,7 @@ ManagePlayers >> createComponents [
 				:theDataGridComponentsHolderCell :theDataGridComponentsHoldingParameters |
 				theDataGridComponentsHolderCell
 				addChild: (Me5Button newDanger
+					addCssClassBtnSm;
 					icon: Me5I newFarTrash; 
 					text: 'L&ouml;schen';
 					addClickEventSelector: #deletePlayerEvent: eventReceiver: self;
@@ -98,8 +93,10 @@ ManagePlayers >> createComponents [
 	self addChild: Me5Hr new.
 	self addChild: (Me5FormPortlet new
 		addCssClassColMd12;
-			addChildToBody: self listGrid;
-			addChildToFootButtonGroup: (Me5Button newSuccess
+		addChildToBody: (Me5Div new
+			addChild: self listGrid;
+			yourself); 
+		addChildToFootButtonGroup: (Me5Button newSuccess
 				icon: Me5I newFasSave; 
 				text: 'Speichern';
 				addClickEventSelector: #saveEvent eventReceiver: self;
@@ -114,7 +111,10 @@ ManagePlayers >> createComponents [
 				text: 'Reinigen';
 				addClickEventSelector: #clearEvent eventReceiver: self;
 				yourself);
-		yourself)
+		yourself).
+		
+		self listGrid resetEditedDataGridCells.
+		self listGrid resetSortingCache
 ]
 
 { #category : 'Accessing' }
@@ -157,7 +157,8 @@ ManagePlayers >> deletePlayerEvent: anEvent [
 	]
 	ifFalse: [
 		self view showErrorNotificationWithMessage: ('Can not delete last Player...').
-	]
+	].
+	self view resetTournamentTabWithPlayers: self data
 
 ]
 
@@ -182,7 +183,7 @@ ManagePlayers >> placeholder [
 { #category : 'Events' }
 ManagePlayers >> saveEvent [
 
-	| theNumberOfEditedDataGridRows |
+	| theNumberOfEditedDataGridRows thePlayers|
 
 	theNumberOfEditedDataGridRows := self listGrid numberOfEditedDataGridRows.
 
@@ -206,11 +207,16 @@ ManagePlayers >> saveEvent [
 		eachEditedDataGridRow editedDataGridCells do: [ :eachEditedDataGridCell |
 			eachEditedDataGridCell writeValueToObject]].
 
+	self view collectionOfPlayers: self data.
 	self startUp saveObject: self data onPath: 'C:\TournamentPlanner\Memory\players.dat'.
 		
 	self listGrid resetEditedDataGridCells.
+	
+	self view showSuccessNotificationWithMessage: ('Saved %1 edited row(s)...' bindWith: theNumberOfEditedDataGridRows).
+	
+	self view collectionOfPlayers: self data.
 
-	self view showSuccessNotificationWithMessage: ('Saved %1 edited row(s)...' bindWith: theNumberOfEditedDataGridRows)
+	self view resetTournamentTabWithPlayers: self data
 ]
 
 { #category : 'Accessing' }
