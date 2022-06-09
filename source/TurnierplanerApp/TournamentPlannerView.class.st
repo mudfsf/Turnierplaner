@@ -169,12 +169,10 @@ TournamentPlannerView >> createComponents [
 			text: 'Turnierplaner';
 			yourself
 		);
-		addChild: (Me5Form new
-			addChildToBody: (Me5Portlet new
-				addChildToBody: (Me5Tabbable newFilled
-					addTabs: self tabsCollection;
-					yourself);
-				yourself);
+		addChild: (Me5Portlet new	
+			addChildToBody: (Me5Tabbable newFilled
+				addTabs: self tabsCollection;
+				yourself);				
 			yourself);
 		yourself.
 ]
@@ -490,7 +488,7 @@ TournamentPlannerView >> teamsTab [
 			yourself).
 		].
 		theRow addChild: (Me5Div new
-				addChild: (Me5Portlet newSuccess
+				addChild: (Me5FormPortlet newSuccess
 					title: 'Neues Team erstellen';
 					addChildToBody: (Me5TextField new
 						text: 'Teamname:';
@@ -553,29 +551,30 @@ TournamentPlannerView >> tournamentTab [
 
 		"theTournamentList := #('Tournament 1' 'Tournament 2' 'Tournament 3' 'Tournament 4')."
 			
-		createTournamentDiv := (Me5Div new		
-			addChild: (textFieldTournamentName := Me5TextField new
-				text: 'Tournier Name';
-				yourself);
-			addChild: (radioGroupTournamentType := Me5RadioGroup new
-				text: 'Turnierart';
-				addObjects: #('KO' 'Runden' 'Mixed');
-				yourself);
-			addChild: (radioGroupGameMode := Me5RadioGroup new
-				text: 'Spielmodus';
-				addObjects: #('Einzel' 'Team');
-				yourself);
-			addChild: (multiComboBoxRivals := Me5Select2MultiSelectBox new
-				text: 'Rivalen (muss noch dynamisch werden dass teams oder spieler angezeigt werden kÃ¶nnen)';
-				addObjects: #(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20);
-				yourself);
-			addChild: (Me5Button newPrimary
-					text: 'Turnier Erstellen';
-					addClickEventSelector: #buttonNewTournament;
+		createTournamentDiv := (Me5Div new
+			addChild: (Me5Form new
+				addChildToBody: (textFieldTournamentName := Me5TextField new
+					text: 'Tournier Name';
 					yourself);
-			addCssClassCol6;
-			yourself).
-
+				addChildToBody: (radioGroupTournamentType := Me5RadioGroup new
+					text: 'Turnierart';
+					addObjects: #('KO' 'Runden' 'Mixed');
+					yourself);
+				addChildToBody: (radioGroupGameMode := Me5RadioGroup new
+					text: 'Spielmodus';
+					addObjects: #('Einzel' 'Team');
+					yourself);
+				addChildToBody: (multiComboBoxRivals := Me5Select2MultiSelectBox new
+					text: 'Rivalen (muss noch dynamisch werden dass teams oder spieler angezeigt werden k&ouml;nnen)';
+					addObjects: #(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20);
+					yourself);
+				addChildToBody: (Me5Button newPrimary
+						text: 'Turnier Erstellen';
+						addClickEventSelector: #buttonNewTournament;
+						yourself);
+				addCssClassCol6;
+				yourself)
+			).
 			
 		collapsibleAccordion := (Me5Accordion new
 				addChild: (Me5AccordionItem new
@@ -595,7 +594,7 @@ TournamentPlannerView >> tournamentTab [
 		
 		"self tournamentRow addChild: (Me5Div new
 			addChild: (Me5Button newSuccess 
-				text: 'Turnier hinzufÃ¼gen';
+				text: 'Turnier hinzuf&uuml;gen';
 				icon: Me5I newFasPlus;
 				addClickEventSelector: #buttonNewTournament;
 				addCssClassCol2;
@@ -697,7 +696,7 @@ TournamentPlannerView >> userSettingsTab [
 	^(Me5Div new
 		addChild:	(Me5H1 new text: 'Einstellungen');
 		addChild: Me5Hr new;
-		addChild: (Me5Portlet newPrimary
+		addChild: (Me5FormPortlet newPrimary
 			title:'Einstellungen';
 		
 				addChildToBody: (Me5Row  new
