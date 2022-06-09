@@ -403,17 +403,12 @@ TournamentPlannerView >> startUp: anObject [
 { #category : 'Not categorized' }
 TournamentPlannerView >> tabsCollection [
 
-	| theUserSettings theManagedPlayerView theCreateTournamentModal |
+	| theUserSettings theCreateTournamentModal |
 	
 	"theCreateTournamentModal := (CreateTournamentModal  new
 	yourself).
 	theCreateTournamentModal createView."
 	
-	theManagedPlayerView := (ManagePlayers new
-	data: self collectionOfPlayers;
-	parent: self;
-	yourself).	
-	theManagedPlayerView createView.
 	theUserSettings := UserSettings new.
 
 	^OrderedCollection new
@@ -441,7 +436,10 @@ TournamentPlannerView >> tabsCollection [
 		add: (Me5Tab new
 			text: 'Admin-Tools';
 			icon: Me5I newFasUser;
-			addChildToTabPane: theManagedPlayerView view"self adminToolsTab";
+			addChildToTabPane: (ManagePlayers new
+				data: self collectionOfPlayers;
+				createComponents;
+				yourself)"self adminToolsTab";
 			yourself);
 		yourself
 
@@ -686,7 +684,7 @@ TournamentPlannerView >> userSettingsTab [
 
 	| thePlayer |
 	"User muss noch ermittelt werden"
-	(self user = nil)
+	(self user isNil)
 		ifTrue: [
 			thePlayer:=Player firstName: 'Max' lastName: 'Muster'  email: 'max.muster@gmail.com'.
 			self user:thePlayer.] .

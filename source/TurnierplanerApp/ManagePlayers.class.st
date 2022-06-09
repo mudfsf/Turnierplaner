@@ -1,13 +1,11 @@
 Class {
 	#name : 'ManagePlayers',
-	#superclass : 'Object',
+	#superclass : 'Me5Div',
 	#instVars : [
 		'startUp',
 		'listGrid',
 		'data',
-		'placeholder',
-		'view',
-		'parent'
+		'placeholder'
 	],
 	#category : 'TurnierplanerApp'
 }
@@ -24,7 +22,13 @@ ManagePlayers >> addPlayerEvent [
 	
 	self listGrid resetEditedDataGridCells.
 
-	self parent showSuccessNotificationWithMessage: ('Added row to save Player...')
+	self view showSuccessNotificationWithMessage: ('Added row to save Player...')
+]
+
+{ #category : 'Initial-Events' }
+ManagePlayers >> afterCreateComponents [
+	
+	(self listGrid dataGridColumnDefinitionsAttribute at: 4) redraw
 ]
 
 { #category : 'Events' }
@@ -39,60 +43,62 @@ ManagePlayers >> clearEvent [
 	
 	self listGrid resetEditedDataGridCells.
 
-	self parent showSuccessNotificationWithMessage: ('Cleared Grid...')
+	self view showSuccessNotificationWithMessage: ('Cleared Grid...')
 ]
 
 { #category : 'Initial-Events' }
-ManagePlayers >> createView [
+ManagePlayers >> createComponents [
 
 	self startUp: StartUp new.
 	
-	self view: Me5Div new.
-	self view addChild: (Me5H1 new text: 'Admin-Tools').
-	self view addChild: Me5Hr new.
-	self view addChild: (Me5FormPortlet new
+	self listGrid: (Me5ListGrid new
 		addCssClassColMd12;
-			addChildToBody: (listGrid := Me5ListGrid new
-				addCssClassColMd12;
-				height: '55vh';
-				dataSourceBlock: [self data];
-				addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
-					title: 'Vorname';
-					getterSelector: #firstName;
-					setterSelector: #firstName:;
-					enableHeaderSort;
-					minWidth: 200;
-					maxWidth:  'vw 40';
+		height: '55vh';
+		dataSourceBlock: [self data];
+		addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
+			title: 'Vorname';
+			getterSelector: #firstName;
+			setterSelector: #firstName:;
+			enableHeaderSort;
+			minWidth: 200;
+			maxWidth:  'vw 40';
+			yourself);
+		addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
+			title: 'Nachname';
+			getterSelector: #lastName;
+			setterSelector: #lastName:;
+			enableHeaderSort;
+			enableInitialSort;
+			minWidth: 200;
+			yourself);
+		addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
+			title: 'E-Mail';
+			getterSelector: #email;
+			setterSelector: #email:;
+			enableHeaderSort;
+			minWidth: 200;
+			maxWidth:  'vw 40';
+			yourself);
+		addDataGridColumnDefinition: (Me5DataGridComponentsHolderColumnDefinition new
+			title: 'Action';
+			setHorizontalAlignmentToRight;
+			componentsHolderBlock: [ 
+				:theDataGridComponentsHolderCell :theDataGridComponentsHoldingParameters |
+				theDataGridComponentsHolderCell
+				addChild: (Me5Button newDanger
+					icon: Me5I newFarTrash; 
+					text: 'L&ouml;schen';
+					addClickEventSelector: #deletePlayerEvent: eventReceiver: self;
 					yourself);
-				addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
-					title: 'Nachname';
-					getterSelector: #lastName;
-					setterSelector: #lastName:;
-					enableHeaderSort;
-					enableInitialSort;
-					minWidth: 200;
-					yourself);
-				addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
-					title: 'E-Mail';
-					getterSelector: #email;
-					setterSelector: #email:;
-					enableHeaderSort;
-					minWidth: 200;
-					maxWidth:  'vw 40';
-					yourself);
-				addDataGridColumnDefinition: (Me5DataGridComponentsHolderColumnDefinition new
-						title: 'Action';
-						setHorizontalAlignmentToRight;
-						componentsHolderBlock: [ :theDataGridComponentsHolderCell :theDataGridComponentsHoldingParameters |
-							theDataGridComponentsHolderCell
-								addChild: (Me5Button newDanger
-								icon: Me5I newFarTrash; 
-								text: 'L&ouml;schen';
-								addClickEventSelector: #deletePlayerEvent: eventReceiver: self;
-								yourself);
-								yourself];
-						yourself);
-					yourself);
+				yourself];
+			yourself);
+		yourself).
+	
+	self addChild: (Me5H1 new text: 'Admin-Tools').
+	self addChild: Me5Hr new.
+	self addChild: (Me5FormPortlet new
+		addCssClassColMd12;
+			addChildToBody: self listGrid;
 			addChildToFootButtonGroup: (Me5Button newSuccess
 				icon: Me5I newFasSave; 
 				text: 'Speichern';
@@ -108,11 +114,7 @@ ManagePlayers >> createView [
 				text: 'Reinigen';
 				addClickEventSelector: #clearEvent eventReceiver: self;
 				yourself);
-		yourself).
-		
-		self listGrid resetSelectedObjects.
-
-
+		yourself)
 ]
 
 { #category : 'Accessing' }
@@ -151,10 +153,10 @@ ManagePlayers >> deletePlayerEvent: anEvent [
 
 	isSuccessful
 	ifTrue: [
-		self parent showSuccessNotificationWithMessage: ('Deleted Player %1 %2...' bindWith: (thePlayer firstName) with: (thePlayer lastName)).
+		self view showSuccessNotificationWithMessage: ('Deleted Player %1 %2...' bindWith: (thePlayer firstName) with: (thePlayer lastName)).
 	]
 	ifFalse: [
-		self parent showErrorNotificationWithMessage: ('Can not delete last Player...').
+		self view showErrorNotificationWithMessage: ('Can not delete last Player...').
 	]
 
 ]
@@ -169,18 +171,6 @@ ManagePlayers >> listGrid [
 ManagePlayers >> listGrid: anObject [
 
 	listGrid := anObject
-]
-
-{ #category : 'Accessing' }
-ManagePlayers >> parent [
-
-	^parent
-]
-
-{ #category : 'Accessing' }
-ManagePlayers >> parent: anObject [
-
-	parent := anObject
 ]
 
 { #category : 'Accessing' }
@@ -220,7 +210,7 @@ ManagePlayers >> saveEvent [
 		
 	self listGrid resetEditedDataGridCells.
 
-	self parent showSuccessNotificationWithMessage: ('Saved %1 edited row(s)...' bindWith: theNumberOfEditedDataGridRows)
+	self view showSuccessNotificationWithMessage: ('Saved %1 edited row(s)...' bindWith: theNumberOfEditedDataGridRows)
 ]
 
 { #category : 'Accessing' }
@@ -233,16 +223,4 @@ ManagePlayers >> startUp [
 ManagePlayers >> startUp: anObject [
 
 	startUp := anObject
-]
-
-{ #category : 'Accessing' }
-ManagePlayers >> view [
-
-	^view
-]
-
-{ #category : 'Accessing' }
-ManagePlayers >> view: anObject [
-
-	view := anObject
 ]
