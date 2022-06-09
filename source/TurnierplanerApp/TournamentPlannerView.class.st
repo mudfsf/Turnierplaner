@@ -2,14 +2,16 @@ Class {
 	#name : 'TournamentPlannerView',
 	#superclass : 'Me5BaseView',
 	#instVars : [
+		'startUp',
 		'user',
 		'collectionOfPlayers',
 		'collectionOfTournaments',
 		'tournamentRow',
-		'modalRadioGroupMode',
-		'modalRadioGroupGameType',
-		'modalMultiComboBoxRivals',
-		'modalTextFieldTournamentName'
+		'createTournamentRadioGroupGameMode',
+		'createTournamentRadioGroupTournamentType',
+		'createTournamentMultiComboBoxRivals',
+		'createTournamentTextFieldTournamentName',
+		'collapsiblePortlet'
 	],
 	#category : 'TurnierplanerApp'
 }
@@ -27,9 +29,7 @@ TournamentPlannerView >> adminToolsTab [
 { #category : 'Initials' }
 TournamentPlannerView >> beforeCreateComponents [
 
-	| theMemory theBlob|
-
-	theMemory := StartUp new.	
+	self startUp: StartUp new.	
 
 	"theBlob := OrderedCollection new.
 		
@@ -43,9 +43,8 @@ TournamentPlannerView >> beforeCreateComponents [
 		
 	theMemory saveObject: theBlob onPath: 'C:\TournamentPlanner\Memory\players.dat'."
 	
-	self collectionOfTournaments: (theMemory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat').
-	self collectionOfPlayers:  (theMemory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat').
-
+	self collectionOfTournaments: (self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat').
+	self collectionOfPlayers:  (self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat').
 
 	
 
@@ -53,74 +52,69 @@ TournamentPlannerView >> beforeCreateComponents [
 
 { #category : 'Not categorized' }
 TournamentPlannerView >> buttonNewTournament [
-	
-	"self openModal: (Me5Modal new
-		icon: Me5I newFasClone;
-		title: 'Modal title';
-		addChildToBody: (Me5Div new
-			text: Me5MetronicExamplesSupport loremIpsumString;
-			yourself);
-		addChildToFoot: (Me5Button newPrimary
-			text: 'Button';
-			addClickEventSelector: #buttonClicked;
-			yourself);
-		addChildToFoot: (Me5Button newWarning
-			text: 'Close';
-			addClickEventSelector: #closeClicked;
-			yourself);
-		yourself)."
 
-	| rivalsString |
+	| rivalsString currentTournament |
 	rivalsString := ''.
 	
-	1 to: (self modalMultiComboBoxRivals value size) do: [:index |
-		rivalsString := rivalsString,  (((self modalMultiComboBoxRivals value) at: index) asString), '     '.
+	1 to: (self createTournamentMultiComboBoxRivals value size) do: [:index |
+		rivalsString := rivalsString,  (((self createTournamentMultiComboBoxRivals value) at: index) asString), '     '.
 	].
-
-	self collectionOfTournaments add: (Tournament new 
-		games: 5;
-		yourself). 
 	
-	
+	currentTournament := (Tournament new
+		name: self createTournamentTextFieldTournamentName value;
+		tournamentType: self createTournamentRadioGroupTournamentType value;
+		gameMode: self createTournamentRadioGroupGameMode value;
+		numberOfGames: (self createTournamentMultiComboBoxRivals value size);
+		numberOfPlayedGames: 2;
+		yourself).
 	
 	
 	self tournamentRow addChild: (Me5Div new
 			addChild: (Me5Portlet newPrimary
-					title: (self modalTextFieldTournamentName value);
-					addChildToBody: (Me5P new 
-						text: ('Rivalen: ', rivalsString);
-						fontSize: 'large';
-						yourself);
-					addChildToBody: (Me5A newSuccess
-						setTargetBlank;
-						showForMdAndBiggerDevices;
-						leftIcon: Me5I newFasSave;
-						text: 'Save';
-						href: ('TurnierplanerView/specificTournament?tournamentName=dasErsteTurnier %1&team=true' bindWith: 'newCreatedTournament');
-						yourself);
-					
-					
-					
-					
-					addChildToFoot:  (Me5ProgressBar newPrimary
-						value: 65;
-						height: 20;
-						setPrimaryStyle;
-						yourself);
-					addChildToFoot: (Me5P new
-						text: '5 von 9';
-						textAlign: 'center';
-						fontSize: 'larger';
-						yourself);
-					setTargetBlank;
-
+				addChildToHeadTools: (Me5A newPortletNavLinkIcon
+					icon: Me5I newFasTrash;
+					"addClickEventSelector: #removeTournament:;"
 					yourself);
-					
-					padding: 15;
-					addCssClassColSm12;
-					addCssClassColMd6;
-					addCssClassColXl4;
-				yourself).
+				title: currentTournament name;
+				addChildToBody: (Me5P new
+					text: ((currentTournament tournamentType) asString, ' / ', (currentTournament gameMode) asString );
+					fontSize: 'medium';
+					yourself);
+				addChildToBody: (Me5P new 
+					text: ('Rivalen: ', '-' );
+					fontSize: 'large';
+					yourself);
+				addChildToBody: (Me5A newPrimary
+					setTargetBlank;
+					"showForMdAndBiggerDevices;"
+					rightIcon: Me5I newFasAngleRight;
+					text: 'Zum Turnier';
+					href: ('TurnierplanerView/specificTournament?tournamentName=dasErsteTurnier %1&team=true' bindWith: (currentTournament name));
+					yourself);
+				addChildToFoot:  (Me5ProgressBar newPrimary
+					value: ((currentTournament numberOfPlayedGames asInteger) / (currentTournament numberOfGames asInteger) * 100) asInteger;
+					height: 20;
+					setPrimaryStyle;
+					yourself);
+				addChildToFoot: (Me5P new
+					text: (currentTournament numberOfPlayedGames asString), ' von ', (currentTournament numberOfGames asString);
+					textAlign: 'center';
+					fontSize: 'larger';
+					yourself);
+				setTargetBlank;
+
+				yourself);
+				
+				padding: 15;
+				addCssClassColSm12;
+				addCssClassColMd6;
+				addCssClassColXl4;
+			yourself).
+				
+				
+		self collectionOfTournaments add: currentTournament.
+		
+		self startUp saveObject: (self collectionOfTournaments) onPath:  'C:\TournamentPlanner\Memory\tournaments.dat'.
 ]
 
 { #category : 'Accessing' }
@@ -173,6 +167,79 @@ TournamentPlannerView >> createModules [
 	self addModuleByModuleClass: Me5ComboBoxModuleBundle.
 	self addModuleByModuleClass: Me5DataGridModuleBundle.
 	self addModuleByModuleClass: Bs4TooltipsterTooltipModuleBundle.
+	self addModuleByModuleClass: Me5Select2SelectBoxModuleBundle.
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> createTournamentMultiComboBoxRivals [
+
+	"<^iOf Object>"
+	"Answer the createTournamentMultiComboBoxRivals of the receiver"
+
+	^createTournamentMultiComboBoxRivals
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> createTournamentMultiComboBoxRivals: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the createTournamentMultiComboBoxRivals of the receiver"
+
+	createTournamentMultiComboBoxRivals := anObject
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> createTournamentRadioGroupGameMode [
+
+	"<^iOf Object>"
+	"Answer the createTournamentRadioGroupGameMode of the receiver"
+
+	^createTournamentRadioGroupGameMode
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> createTournamentRadioGroupGameMode: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the createTournamentRadioGroupGameMode of the receiver"
+
+	createTournamentRadioGroupGameMode := anObject
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> createTournamentRadioGroupTournamentType [
+
+	"<^iOf Object>"
+	"Answer the createTournamentRadioGroupTournamentType of the receiver"
+
+	^createTournamentRadioGroupTournamentType
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> createTournamentRadioGroupTournamentType: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the createTournamentRadioGroupTournamentType of the receiver"
+
+	createTournamentRadioGroupTournamentType := anObject
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> createTournamentTextFieldTournamentName [
+
+	"<^iOf Object>"
+	"Answer the createTournamentTextFieldTournamentName of the receiver"
+
+	^createTournamentTextFieldTournamentName
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> createTournamentTextFieldTournamentName: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the createTournamentTextFieldTournamentName of the receiver"
+
+	createTournamentTextFieldTournamentName := anObject
 ]
 
 { #category : 'Not categorized' }
@@ -187,7 +254,7 @@ addChild:  (Me5H2 new
 	addChild: (Me5Portlet new
 				addChildToBody: (Me5Div new
 					addChild: (Me5H3 new
-						text: 'Nächstes Spiel für dich');
+						text: 'NÃƒÆ’Ã‚Â¤chstes Spiel fÃƒÆ’Ã‚Â¼r dich');
 					addChild: 
 						(Me5Hr new);
 					addChild: 
@@ -211,7 +278,7 @@ addChild:  (Me5H2 new
 				addChild: 
 						(Me5H5 new text: 'Turnier: Best Team Now');
 				addChild: 
-						(Me5H6 new text: '5 übrige Spiele');
+						(Me5H6 new text: '5 ÃƒÆ’Ã‚Â¼brige Spiele');
 				addChild: 
 					(Me5ProgressBar newPrimary
 										addCssClassMProgressLg;
@@ -222,7 +289,7 @@ addChild:  (Me5H2 new
 				addChild: 
 						(Me5H5 new text: 'Best Player Now');
 				addChild: 
-						(Me5H6 new text: '12 übrige Spiele');
+						(Me5H6 new text: '12 ÃƒÆ’Ã‚Â¼brige Spiele');
 				addChild: 
 					(Me5ProgressBar newPrimary
 										addCssClassMProgressLg;
@@ -238,13 +305,13 @@ addChild:  (Me5H2 new
 				addChild: 
 						(Me5Hr new);
 				addChild: 
-						(Me5H5 new text: '35€');
+						(Me5H5 new text: '35ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬');
 				addChild: 
 						(Me5Hr new);									
 				addChild: 
 						(Me5H5 new text: 'Laufende Wetten');
 				addChild: 
-						(Me5H5 new text: '5€');
+						(Me5H5 new text: '5ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬');
 				addChild: 
 						(Me5H6 new text: 'Team Yeah - 14.6.2022');
 						yourself);
@@ -263,82 +330,51 @@ yourself.
 	).
 ]
 
+{ #category : 'Not categorized' }
+TournamentPlannerView >> removeAllTournaments [
+
+	self collectionOfTournaments removeAll.
+	
+	self startUp saveObject: self collectionOfTournaments onPath: 'C:\TournamentPlanner\Memory\tournaments.dat'.
+]
+
+{ #category : 'Not categorized' }
+TournamentPlannerView >> removeTournament: aMe5Event [
+
+	aMe5Event formGroup removeComponent.
+]
+
+{ #category : 'Not categorized' }
+TournamentPlannerView >> removeTournament: symbol tournamentIndex: index [
+
+]
+
 { #category : 'Accessing' }
-TournamentPlannerView >> modalMultiComboBoxRivals [
+TournamentPlannerView >> startUp [
 
 	"<^iOf Object>"
-	"Answer the modalMultiComboBoxRivals of the receiver"
+	"Answer the startUp of the receiver"
 
-	^modalMultiComboBoxRivals
+	^startUp
 ]
 
 { #category : 'Accessing' }
-TournamentPlannerView >> modalMultiComboBoxRivals: anObject [
+TournamentPlannerView >> startUp: anObject [
 
 	"<anObject: iOf Object, ^self>"
-	"Set the modalMultiComboBoxRivals of the receiver"
+	"Set the startUp of the receiver"
 
-	modalMultiComboBoxRivals := anObject
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> modalRadioGroupGameType [
-
-	"<^iOf Object>"
-	"Answer the modalRadioGroupGameType of the receiver"
-
-	^modalRadioGroupGameType
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> modalRadioGroupGameType: anObject [
-
-	"<anObject: iOf Object, ^self>"
-	"Set the modalRadioGroupGameType of the receiver"
-
-	modalRadioGroupGameType := anObject
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> modalRadioGroupMode [
-
-	"<^iOf Object>"
-	"Answer the modalRadioGroupMode of the receiver"
-
-	^modalRadioGroupMode
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> modalRadioGroupMode: anObject [
-
-	"<anObject: iOf Object, ^self>"
-	"Set the modalRadioGroupMode of the receiver"
-
-	modalRadioGroupMode := anObject
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> modalTextFieldTournamentName [
-
-	"<^iOf Object>"
-	"Answer the modalTextFieldTournamentName of the receiver"
-
-	^modalTextFieldTournamentName
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> modalTextFieldTournamentName: anObject [
-
-	"<anObject: iOf Object, ^self>"
-	"Set the modalTextFieldTournamentName of the receiver"
-
-	modalTextFieldTournamentName := anObject
+	startUp := anObject
 ]
 
 { #category : 'Not categorized' }
 TournamentPlannerView >> tabsCollection [
 
-	| theUserSettings theManagedPlayerView|
+	| theUserSettings theManagedPlayerView theCreateTournamentModal |
+	
+	"theCreateTournamentModal := (CreateTournamentModal  new
+	yourself).
+	theCreateTournamentModal createView."
 	
 	theManagedPlayerView := (ManagePlayers new
 	data: self collectionOfPlayers;
@@ -367,7 +403,7 @@ TournamentPlannerView >> tabsCollection [
 		add: (Me5Tab new
 			text: 'Einstellungen';
 			icon: Me5FontAwesomeIconSolid newCog;
-			addChildToTabPane: self userSettingsTab;
+			addChildToTabPane: self userSettingsTab "theCreateTournamentModal view";
 			yourself);
 		add: (Me5Tab new
 			text: 'Admin-Tools';
@@ -407,7 +443,7 @@ TournamentPlannerView >> teamsTab [
 					title: (theTeamList at: index);
 					addChildToBody: theCurrentPlayerNameDiv;
 					addChildToFoot: (Me5Button newDanger
-						text: 'Löschen';
+						text: 'LÃƒÆ’Ã‚Â¶schen';
 						icon: Me5Flaticon newDelete1;
 						"addClickEventSelector: #deleteTeam;"
 						yourself);
@@ -478,48 +514,93 @@ TournamentPlannerView >> tournamentRow: anObject [
 { #category : 'Not categorized' }
 TournamentPlannerView >> tournamentTab [
 
-	| theResultDiv theRow theTournamentList textFieldTournamentName radioGroupGameType radioGroupMode multiComboBoxRivals |
+	| theResultDiv theRow textFieldTournamentName radioGroupTournamentType radioGroupGameMode multiComboBoxRivals createTournamentDiv collapsibleAccordion |
 
-		theTournamentList := #('Tournament 1' 'Tournament 2' 'Tournament 3' 'Tournament 4').
+		"theTournamentList := #('Tournament 1' 'Tournament 2' 'Tournament 3' 'Tournament 4')."
+			
+		createTournamentDiv := (Me5Div new		
+			addChild: (textFieldTournamentName := Me5TextField new
+				text: 'Tournier Name';
+				yourself);
+			addChild: (radioGroupTournamentType := Me5RadioGroup new
+				text: 'Turnierart';
+				addObjects: #('KO' 'Runden' 'Mixed');
+				yourself);
+			addChild: (radioGroupGameMode := Me5RadioGroup new
+				text: 'Spielmodus';
+				addObjects: #('Einzel' 'Team');
+				yourself);
+			addChild: (multiComboBoxRivals := Me5Select2MultiSelectBox new
+				text: 'Rivalen (muss noch dynamisch werden dass teams oder spieler angezeigt werden können)';
+				addObjects: #(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20);
+				yourself);
+			addChild: (Me5Button newPrimary
+					text: 'Turnier Erstellen';
+					addClickEventSelector: #buttonNewTournament;
+					yourself);
+			addCssClassCol6;
+			yourself).
 
+			
+		collapsibleAccordion := (Me5Accordion new
+				addChild: (Me5AccordionItem new
+					icon: Me5I newFasEdit;
+					title: 'Turnier erstellen';
+					addChildToContent: createTournamentDiv;
+					yourself);
+				yourself).
+			
 		theResultDiv := Me5Div new. 
 		theResultDiv addChild: (Me5H1 new text: 'Turniere').
 		theResultDiv addChild: (Me5Hr new).
+		"theResultDiv addChild: (self collapsiblePortlet)."
+		theResultDiv addChild: collapsibleAccordion.
 		theResultDiv addChild: (theRow := Me5Row new).
 		self tournamentRow: theRow.
 		
-		self tournamentRow addChild: (Me5Div new
+		"self tournamentRow addChild: (Me5Div new
 			addChild: (Me5Button newSuccess 
-				text: 'Turnier hinzufÃ¼gen';
+				text: 'Turnier hinzufügen';
 				icon: Me5I newFasPlus;
 				addClickEventSelector: #buttonNewTournament;
 				addCssClassCol2;
 				yourself);
 			addCssClassCol12;
-			yourself).
-
-		1 to: (theTournamentList size) do: [:index | 
+			yourself)."
+		
+		"load Tournaments"
+		1 to: (self collectionOfTournaments size) do: [:index | 
+			| currentTournament |
+			currentTournament := (self collectionOfTournaments at: index).
 			self tournamentRow addChild: (Me5Div new
 				addChild: (Me5Portlet newPrimary
-					title: (theTournamentList at: index);
+					title: currentTournament name;
+					addChildToHeadTools: (Me5A newPortletNavLinkIcon
+						icon: Me5I newFasTrash;
+						"addClickEventSelector: #removeTournament tournamentIndex: index;"
+						yourself);
+					addChildToBody: (Me5P new
+						text: ((currentTournament tournamentType) asString, ' / ', (currentTournament gameMode) asString );
+						fontSize: 'medium';
+						yourself);
 					addChildToBody: (Me5P new 
-						text: 'Gegner 1 VS Gegner 2';
+						text: ('Rivalen: ', '-' );
 						fontSize: 'large';
 						yourself);
-					addChildToBody: (Me5A newButtonIconOnly
+					addChildToBody: (Me5A newPrimary
 						setTargetBlank;
-						icon: Me5I newFalCheck;
-						text: 'Mein Text Test';
-						backgroundColor: 'grey';
-						href: ('TurnierplanerView/specificTournament?tournamentName=dasErsteTurnier %1&team=true' bindWith: index);
+						"showForMdAndBiggerDevices;"
+						rightIcon: Me5I newFasAngleRight;
+						text: 'Zum Turnier';
+						href: ('TurnierplanerView/specificTournament?tournamentName=dasErsteTurnier %1&team=true' bindWith: (currentTournament name));
 						yourself);
 					addChildToFoot:  (Me5ProgressBar newPrimary
-						value: 65;
+						value: ((currentTournament numberOfPlayedGames asInteger) / (currentTournament numberOfGames asInteger) * 100) asInteger;
 						height: 20;
 						setPrimaryStyle;
 						yourself);
 					addChildToFoot: (Me5P new
-						text: '5 von 9';
+						text: (currentTournament numberOfPlayedGames asString), ' von ', (currentTournament numberOfGames asString);
 						textAlign: 'center';
 						fontSize: 'larger';
 						yourself);
@@ -536,34 +617,12 @@ TournamentPlannerView >> tournamentTab [
 
 
 
-	theResultDiv addChild: (Me5Portlet new		
-		addChildToBody: (textFieldTournamentName := Me5TextField new
-			text: 'Tournier Name';
-			yourself);
-		addChildToBody: (radioGroupGameType := Me5RadioGroup new
-			text: 'Spielart';
-			addObjects: #('KO' 'Runden' 'Mixed');
-			yourself);
-		addChildToBody: (radioGroupMode := Me5RadioGroup new
-			text: 'Modus';
-			addObjects: #('Einzel' 'Team');
-			yourself);
-		addChildToBody: (multiComboBoxRivals := Me5MultiComboBox new
-			text: 'Rivalen (muss noch dynamisch werden dass teams oder spieler angezeigt werden können)';
-			addObjects: #(1 2 3 4);
-			yourself);
-		addChildToFootButtonGroup: (Me5Button newPrimary
-				text: 'Erstellen';
-				addClickEventSelector: #buttonNewTournament;
-				yourself);
-		addCssClassCol6;
-		yourself).
 
 
-	self modalTextFieldTournamentName: textFieldTournamentName.
-	self modalRadioGroupGameType: radioGroupGameType.
-	self modalRadioGroupMode: radioGroupMode.
-	self modalMultiComboBoxRivals: multiComboBoxRivals.
+	self createTournamentTextFieldTournamentName: textFieldTournamentName.
+	self createTournamentRadioGroupTournamentType: radioGroupTournamentType.
+	self createTournamentRadioGroupGameMode: radioGroupGameMode.
+	self createTournamentMultiComboBoxRivals: multiComboBoxRivals.
 	
 
 	^theResultDiv.
