@@ -1,4 +1,4 @@
 Package {
 	#name : 'TurnierplanerApp',
-	#vaPrerequisites : ['Kernel']
+	#vaPrerequisites : ['Me5MetronicApp']
 }
