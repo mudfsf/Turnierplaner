@@ -374,7 +374,13 @@ TournamentPlannerView >> removeAllTournaments [
 { #category : 'Not categorized' }
 TournamentPlannerView >> removeTournament: aMe5Event [
 
-	aMe5Event formGroup removeComponent.
+	self tournamentRow removeDependent: aMe5Event component.
+]
+
+{ #category : 'Not categorized' }
+TournamentPlannerView >> removeTournament: aMe5Event eventReceiver: aReceiver [
+
+	aMe5Event formGroup component.
 ]
 
 { #category : 'Not categorized' }
@@ -545,10 +551,14 @@ TournamentPlannerView >> tournamentRow: anObject [
 { #category : 'Not categorized' }
 TournamentPlannerView >> tournamentTab [
 
-	| theResultDiv theRow textFieldTournamentName radioGroupTournamentType radioGroupGameMode multiComboBoxRivals createTournamentDiv collapsibleAccordion |
-
-		"theTournamentList := #('Tournament 1' 'Tournament 2' 'Tournament 3' 'Tournament 4')."
-			
+	| theResultDiv theRow textFieldTournamentName radioGroupTournamentType radioGroupGameMode multiComboBoxRivals createTournamentDiv collapsibleAccordion playerNamesOrderedCollection |
+		
+		"create OrderedCollection with names from collectionOfPlayers"
+		playerNamesOrderedCollection := OrderedCollection new.
+		1 to: self collectionOfPlayers size do: [:index |
+			playerNamesOrderedCollection add: (self collectionOfPlayers at: index) firstName.
+		].
+		
 		createTournamentDiv := (Me5Div new
 			addChild: (Me5Form new
 				addChildToBody: (textFieldTournamentName := Me5TextField new
@@ -564,7 +574,7 @@ TournamentPlannerView >> tournamentTab [
 					yourself);
 				addChildToBody: (multiComboBoxRivals := Me5Select2MultiSelectBox new
 					text: 'Rivalen (muss noch dynamisch werden dass teams oder spieler angezeigt werden k&ouml;nnen)';
-					addObjects: #(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20);
+					addObjects: playerNamesOrderedCollection;
 					yourself);
 				addChildToBody: (Me5Button newPrimary
 						text: 'Turnier Erstellen';
@@ -609,7 +619,7 @@ TournamentPlannerView >> tournamentTab [
 					title: currentTournament name;
 					addChildToHeadTools: (Me5A newPortletNavLinkIcon
 						icon: Me5I newFasTrash;
-						"addClickEventSelector: #removeTournament tournamentIndex: index;"
+						addClickEventSelector: #removeTournament: eventReceiver: self;
 						yourself);
 					addChildToBody: (Me5P new
 						text: ((currentTournament tournamentType) asString, ' / ', (currentTournament gameMode) asString );
@@ -647,7 +657,10 @@ TournamentPlannerView >> tournamentTab [
 		].
 
 
-
+	theResultDiv addChild: (Me5Button newPrimary
+		text: 'Alle Turniere l&ouml;schen';
+		addClickEventSelector: #removeAllTournaments;
+		yourself).
 
 
 
