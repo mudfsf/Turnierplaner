@@ -5,6 +5,28 @@ Class {
 }
 
 { #category : 'API' }
+Laps >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
+
+	| theCollectionOfGames theOuterPlayer theGame |
+	theCollectionOfGames := OrderedCollection new.
+	1 to: (aCollectionOfPlayers size -1) do: [
+		:eachOuterIndex |
+		theOuterPlayer := aCollectionOfPlayers at: eachOuterIndex.
+		1 to:  (aCollectionOfPlayers size - eachOuterIndex) do: [
+			:eachInnerIndex |
+				theGame := Game new.
+				theGame layer: 0.
+				theGame teams: OrderedCollection new.
+				theGame teams add: theOuterPlayer.
+				theGame teams add: (aCollectionOfPlayers at: (eachOuterIndex + eachInnerIndex)).
+				theCollectionOfGames add: theGame.
+		].
+	].
+	
+	^theCollectionOfGames
+]
+
+{ #category : 'API' }
 Laps >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
 
 	|startUp players theCollectionOfGames theOuterTeam theGame |

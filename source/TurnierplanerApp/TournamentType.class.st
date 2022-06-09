@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : 'Event' }
+TournamentType >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
+
+	 ^self error: 'Method not implemented'
+]
+
+{ #category : 'Event' }
 TournamentType >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
 
 	 ^self error: 'Method not implemented'
