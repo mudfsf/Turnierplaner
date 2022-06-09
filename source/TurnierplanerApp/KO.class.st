@@ -68,11 +68,27 @@ KO >> layer: anObject [
   #vaVisibility : 'private' }
 KO >> recGetCollectionOfGamesWithPlayers: aCollectionOfPlayers [
 
-	| theCollectionSize theRecursiveParamListCollectionOfGames thePlayer theGame hasToContinue|
+	| theCollectionSize theRecursiveParamListCollectionOfGames theNumberOfGames thePlayer theGame hasToContinue thePowerOf2|
 
-	self layer: self layer + 1.
 	theRecursiveParamListCollectionOfGames := OrderedCollection new.
 	theCollectionSize := aCollectionOfPlayers size.
+	self layer = 0
+	ifTrue: [
+		thePowerOf2 := (theCollectionSize log: 2) asInteger.
+		theNumberOfGames := theCollectionSize - (thePowerOf2 power: 2).
+		1 to: (thePowerOf2 power: 2) - 1 do: [
+			:eachIndex |
+			thePlayer := aCollectionOfPlayers at: (theCollectionSize - eachIndex +1).
+			theRecursiveParamListCollectionOfGames add: (thePlayer).
+		].
+		aCollectionOfPlayers removeAll: theRecursiveParamListCollectionOfGames
+		ifAbsent: [].
+	]
+	ifFalse: [
+		theNumberOfGames := theCollectionSize / 2.
+	].
+	
+	self layer: self layer + 1.
 	theCollectionSize > 2
 	ifFalse: [
 		hasToContinue := false
@@ -80,17 +96,8 @@ KO >> recGetCollectionOfGamesWithPlayers: aCollectionOfPlayers [
 	ifTrue: [ 		
 		hasToContinue := true
 	].
-
-	theCollectionSize even
-	ifFalse: [
-		thePlayer := aCollectionOfPlayers last.
-		theRecursiveParamListCollectionOfGames add: thePlayer.
-		aCollectionOfPlayers remove: thePlayer
-		ifAbsent: [].
-		theCollectionSize := theCollectionSize - 1
-	].
 	
-	1 to: (theCollectionSize / 2) do: [
+	1 to: theNumberOfGames do: [
 		:eachIndex |
 		theGame := (Game new
 			layer: self layer;
@@ -100,17 +107,17 @@ KO >> recGetCollectionOfGamesWithPlayers: aCollectionOfPlayers [
 		thePlayer := aCollectionOfPlayers at: eachIndex.
 		theGame teams add: thePlayer.
 		theGame name: theGame name, thePlayer firstName, thePlayer lastName .
-		thePlayer :=aCollectionOfPlayers at: (theCollectionSize - eachIndex +1).
+		thePlayer :=aCollectionOfPlayers at: (aCollectionOfPlayers size - eachIndex +1).
 		theGame teams add: thePlayer.
 		theGame name: theGame name, ' vs ', thePlayer firstName, thePlayer lastName.
 		self gameCollection add: theGame.
-		theRecursiveParamListCollectionOfGames add: (Team new
-			teamName: 'Winner of game ', theGame name; 
+		theRecursiveParamListCollectionOfGames add: (Player new
+			firstName: 'Winner of game ', theGame name; 
 			yourself). 
 	].
 	
 	hasToContinue 
-	ifTrue: [ ^self getCollectionOfGamesWithTeams: theRecursiveParamListCollectionOfGames ]
+	ifTrue: [ ^self recGetCollectionOfGamesWithPlayers: theRecursiveParamListCollectionOfGames ]
 	ifFalse: [ ^self gameCollection ]
 
 	
@@ -120,11 +127,27 @@ KO >> recGetCollectionOfGamesWithPlayers: aCollectionOfPlayers [
   #vaVisibility : 'private' }
 KO >> recGetCollectionOfGamesWithTeams: aCollectionOfTeams [
 
-	| theCollectionSize theRecursiveParamListCollectionOfGames theTeam theGame hasToContinue|
+	| theCollectionSize theNumberOfGames theRecursiveParamListCollectionOfGames theTeam theGame hasToContinue thePowerOf2 theCurrentTeam|
 
-	self layer: self layer + 1.
 	theRecursiveParamListCollectionOfGames := OrderedCollection new.
 	theCollectionSize := aCollectionOfTeams size.
+	
+	self layer = 0
+	ifTrue: [
+		thePowerOf2 := (theCollectionSize log: 2) asInteger.
+		theNumberOfGames := theCollectionSize - (thePowerOf2 power: 2).
+		1 to: (thePowerOf2 power: 2) - 1 do: [
+			:eachIndex |
+			theCurrentTeam := aCollectionOfTeams at: (theCollectionSize - eachIndex +1).
+			theRecursiveParamListCollectionOfGames add: (theCurrentTeam).
+		].
+		aCollectionOfTeams removeAll: theRecursiveParamListCollectionOfGames
+		ifAbsent: [].
+	] 
+	ifFalse: [
+		theNumberOfGames := theCollectionSize / 2.
+	].
+	self layer: self layer + 1.
 	theCollectionSize > 2
 	ifFalse: [
 		hasToContinue := false
@@ -133,16 +156,16 @@ KO >> recGetCollectionOfGamesWithTeams: aCollectionOfTeams [
 		hasToContinue := true
 	].
 
-	theCollectionSize even
+	"theCollectionSize even
 	ifFalse: [
 		theTeam := aCollectionOfTeams last.
 		theRecursiveParamListCollectionOfGames add: theTeam.
 		aCollectionOfTeams remove: theTeam
 		ifAbsent: [].
 		theCollectionSize := theCollectionSize - 1
-	].
+	]."
 	
-	1 to: (theCollectionSize / 2) do: [
+	1 to: theNumberOfGames do: [
 		:eachIndex |
 		theGame := (Game new
 			layer: self layer;
@@ -152,7 +175,7 @@ KO >> recGetCollectionOfGamesWithTeams: aCollectionOfTeams [
 		theTeam := aCollectionOfTeams at: eachIndex.
 		theGame teams add: theTeam.
 		theGame name: theGame name, theTeam teamName.
-		theTeam :=aCollectionOfTeams at: (theCollectionSize - eachIndex +1).
+		theTeam :=aCollectionOfTeams at: (aCollectionOfTeams size - eachIndex +1).
 		theGame teams add: theTeam.
 		theGame name: theGame name, ' vs ', theTeam teamName.
 		self gameCollection add: theGame.
@@ -162,7 +185,7 @@ KO >> recGetCollectionOfGamesWithTeams: aCollectionOfTeams [
 	].
 	
 	hasToContinue 
-	ifTrue: [ ^self getCollectionOfGamesWithTeams: theRecursiveParamListCollectionOfGames ]
+	ifTrue: [ ^self recGetCollectionOfGamesWithTeams: theRecursiveParamListCollectionOfGames ]
 	ifFalse: [ ^self gameCollection ]
 
 	
