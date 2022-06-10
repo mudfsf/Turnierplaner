@@ -35,9 +35,6 @@ Me5SvgLine >> setAdditionalAttributesOfHtmlElement: aClwHtmlBaseElement [
 		height: self svgHeight;
 		yourself). 
 
-
-
-
 	theSvgElement addLine
 		x1: self x1;
 		x2: self x2;
@@ -45,29 +42,12 @@ Me5SvgLine >> setAdditionalAttributesOfHtmlElement: aClwHtmlBaseElement [
 		y2: self y2;
 		stroke: self stroke;
 		strokeWidth: self strokeWidth;
-		"svgStyleText: self svgStyleText;"
 		yourself.
 
 	aClwHtmlBaseElement 
 		attributeAt: 'style' put: 'text-align: center';
 		text: (theSvgElement asXmlString);
-		yourself
-
-
-		"text: ('<svg style='width: 500; height: 500'>%1</svg>' bindWith: theSvgElement asXmlString);"
-"    super setAdditionalAttributesOfHtmlElement: aClwHtmlBaseElement.
-	self x1 isNil
-		ifFalse: [aClwHtmlBaseElement x1: self x1].
-	self x2 isNil
-		ifFalse: [aClwHtmlBaseElement x2: self x2].
-	self y1 isNil
-		ifFalse: [aClwHtmlBaseElement y1: self y1].
-	self y2 isNil
-		ifFalse: [aClwHtmlBaseElement y2: self y2].
-	self stroke isNil
-		ifFalse: [aClwHtmlBaseElement stroke: self stroke].
-	self strokeWidth isNil
-		ifFalse: [aClwHtmlBaseElement strokeWidth: self strokeWidth]."
+		yourself.
 ]
 
 { #category : 'Accessing' }
