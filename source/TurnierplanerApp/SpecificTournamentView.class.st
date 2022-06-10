@@ -45,10 +45,10 @@ SpecificTournamentView >> gameID: aString [
 	gameID := aString
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 SpecificTournamentView >> specificTournament [
 
-| theSvgLine theResultDiv theScroller theNumberOfGames theGamesinColumn theOffsetX theOffsetY theGameWidth theGameHeight theRowsSpacing theColumnSpacing theGameHeightAndSpacing theCoordinatesLineArray theNumberOfColumn |
+| theResultDiv theScroller theNumberOfGames theGamesinColumn theOffsetX theOffsetY theGameWidth theGameHeight theRowsSpacing theColumnSpacing theGameHeightAndSpacing theCoordinatesLineArray theNumberOfColumn |
 
 	theNumberOfGames := 8.
 	theGamesinColumn := theNumberOfGames.
@@ -109,7 +109,7 @@ SpecificTournamentView >> specificTournament [
 	theCoordinatesLineArray do: [ :eachColumn |
 		eachColumn do: [ :eachRow | 
 		
-			| theMaxX theMaxY theCoordinatesXY |
+			| theMaxX theMaxY theCoordinatesXY theSvgLine |
 			
 			theCoordinatesXY := eachRow.
 			(theCoordinatesXY at: 3) = nil ifFalse: [
