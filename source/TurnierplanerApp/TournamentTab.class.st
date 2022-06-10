@@ -173,15 +173,15 @@ TournamentTab >> newTournamentClicked [
 	theTournamentTypeAsString := self radioGroupTournamentType value.
 	theTournamentTypeAsString = 'KO'
 	ifTrue: [
-		theTournamentType := KO new.
+		theTournamentType := KOTournamentType new.
 	].
 	theTournamentTypeAsString = 'Runden'
 	ifTrue: [
-		theTournamentType := Laps new.
+		theTournamentType := LapsTournamentType new.
 	].
 	theTournamentTypeAsString = 'Mixed'
 	ifTrue: [
-		theTournamentType := Mixed new.
+		theTournamentType := MixedTournamentType new.
 	].
 	self radioGroupGameMode value = 'Einzel'
 	ifTrue: [

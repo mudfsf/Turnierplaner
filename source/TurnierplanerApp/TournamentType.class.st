@@ -4,20 +4,20 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
-{ #category : 'Event' }
+{ #category : 'API' }
 TournamentType >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
 
+	"<aCollectionOfPlayers hOf Collection of: iOf Player ^self>"
+	"Answer the Collection of Game"
+	
 	 ^self error: 'Method not implemented'
 ]
 
-{ #category : 'Event' }
+{ #category : 'API' }
 TournamentType >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
 
+	"<aCollectionOfTeams hOf Collection of: iOf Team ^self>"
+	"Answer the Collection of Game"
+	
 	 ^self error: 'Method not implemented'
-]
-
-{ #category : 'Event' }
-TournamentType >> getNumberOfLaps: aNumber [
-
- ^self error: 'Method not implemented'
 ]
