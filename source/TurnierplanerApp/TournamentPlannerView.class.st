@@ -35,7 +35,7 @@ TournamentPlannerView >> adminToolsTab [
 { #category : 'Initials' }
 TournamentPlannerView >> beforeCreateComponents [
 
-	self startUp: StartUp new.	
+	self startUp: Memory new.	
 
 	"theBlob := OrderedCollection new.
 		

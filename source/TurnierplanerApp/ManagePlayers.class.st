@@ -43,7 +43,7 @@ ManagePlayers >> clearEvent [
 { #category : 'Initial-Events' }
 ManagePlayers >> createComponents [
 
-	self startUp: StartUp new.
+	self startUp: Memory new.
 	
 	self listGrid: (Me5ListGrid new
 		addCssClassColMd12;
