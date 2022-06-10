@@ -133,11 +133,14 @@ TournamentPlannerView >> collectionOfTournaments: aCollectionOfTournament [
 TournamentPlannerView >> createComponents [
 
 	self 
-		addChild: (Me5Portlet new
-			title: 'Turnierplaner';
+		addChild: (Me5H1 new
+			text: 'Turnierplaner';
+			yourself
+		);
+		addChild: (Me5Portlet new	
 			addChildToBody: (Me5Tabbable newFilled
 				addTabs: self tabsCollection;
-				yourself);
+				yourself);				
 			yourself);
 		yourself.
 ]
@@ -425,13 +428,18 @@ TournamentPlannerView >> tabsCollection [
 		tournaments: self collectionOfTournaments;
 		createComponents;
 		yourself).
+	"theCreateTournamentModal := (CreateTournamentModal  new
+	yourself).
+	theCreateTournamentModal createView."
 	
+	theUserSettings := UserSettingsView new.
+
 	^OrderedCollection new
 		add: (Me5Tab new
 			text: 'Dashboard';
 			icon: Me5I newFasHome;
 			addChildToTabPane: self dashboardTab;
-			activateTab;
+			activateTab; "Make sure that 'activateTab' is called after you added a child to tabPane."
 			yourself);
 		add: (Me5Tab new
 			text: 'Turniere';
@@ -446,19 +454,18 @@ TournamentPlannerView >> tabsCollection [
 		add: (Me5Tab new
 			text: 'Einstellungen';
 			icon: Me5FontAwesomeIconSolid newCog;
-			addChildToTabPane: self userSettingsTab;
+			addChildToTabPane: self userSettingsTab "theCreateTournamentModal view";
 			yourself);
 		add: (Me5Tab new
 			text: 'Admin-Tools';
 			icon: Me5I newFasUser;
-			addChildToTabPane: (Me5Portlet new
-				addChildToBody: (Me5Div new
-					addCssClassMt4;
-					addViewHolderHoldingView: ManagePlayers new;
-					yourself);
-				yourself);
+			addChildToTabPane: (ManagePlayers new
+				data: self collectionOfPlayers;
+				createComponents;
+				yourself)"self adminToolsTab";
 			yourself);
 		yourself
+
 ]
 
 { #category : 'Not categorized' }
