@@ -3,17 +3,12 @@ Class {
 	#superclass : 'Me5BaseView',
 	#instVars : [
 		'tournamentTab',
-		'multiComboBoxRivals',
 		'startUp',
 		'user',
 		'collectionOfPlayers',
 		'collectionOfTournaments',
 		'collectionOfTeams',
 		'tournamentRow',
-		'createTournamentRadioGroupGameMode',
-		'createTournamentRadioGroupTournamentType',
-		'createTournamentMultiComboBoxRivals',
-		'createTournamentTextFieldTournamentName',
 		'collapsiblePortlet',
 		'teamsRow',
 		'modalTextFieldTeamName',
@@ -22,32 +17,10 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
-{ #category : 'Not categorized' }
-TournamentPlannerView >> adminToolsTab [
-
-^(Me5A newButtonIconOnly
-						setTargetBlank;
-						text: 'Gehe zu ManagePlayerView';
-						href: ('TurnierplanerView/managePlayer');
-						yourself).
-]
-
 { #category : 'Initials' }
 TournamentPlannerView >> beforeCreateComponents [
 
 	self startUp: Memory new.	
-
-	"theBlob := OrderedCollection new.
-		
-	theMemory saveObject: theBlob onPath: 'C:\TournamentPlanner\Memory\tournaments.dat'.
-
-		theBlob add: (Player new
-		firstName: 'TestAdmin';
-		lastName:  '';
-		email: 'TestAdmin@Test.com';
-		yourself).
-		
-	theMemory saveObject: theBlob onPath: 'C:\TournamentPlanner\Memory\players.dat'."
 	
 	self collectionOfTournaments: (self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat').
 	self collectionOfPlayers:  (self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat').
@@ -57,7 +30,7 @@ TournamentPlannerView >> beforeCreateComponents [
 
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 TournamentPlannerView >> buttonNewTeam [
 
 	| theSingleTeamDiv |
@@ -156,79 +129,7 @@ TournamentPlannerView >> createModules [
 	self addModuleByModuleClass: Me5Select2SelectBoxModuleBundle.
 ]
 
-{ #category : 'Accessing' }
-TournamentPlannerView >> createTournamentMultiComboBoxRivals [
-
-	"<^iOf Object>"
-	"Answer the createTournamentMultiComboBoxRivals of the receiver"
-
-	^createTournamentMultiComboBoxRivals
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> createTournamentMultiComboBoxRivals: anObject [
-
-	"<anObject: iOf Object, ^self>"
-	"Set the createTournamentMultiComboBoxRivals of the receiver"
-
-	createTournamentMultiComboBoxRivals := anObject
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> createTournamentRadioGroupGameMode [
-
-	"<^iOf Object>"
-	"Answer the createTournamentRadioGroupGameMode of the receiver"
-
-	^createTournamentRadioGroupGameMode
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> createTournamentRadioGroupGameMode: anObject [
-
-	"<anObject: iOf Object, ^self>"
-	"Set the createTournamentRadioGroupGameMode of the receiver"
-
-	createTournamentRadioGroupGameMode := anObject
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> createTournamentRadioGroupTournamentType [
-
-	"<^iOf Object>"
-	"Answer the createTournamentRadioGroupTournamentType of the receiver"
-
-	^createTournamentRadioGroupTournamentType
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> createTournamentRadioGroupTournamentType: anObject [
-
-	"<anObject: iOf Object, ^self>"
-	"Set the createTournamentRadioGroupTournamentType of the receiver"
-
-	createTournamentRadioGroupTournamentType := anObject
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> createTournamentTextFieldTournamentName [
-
-	"<^iOf Object>"
-	"Answer the createTournamentTextFieldTournamentName of the receiver"
-
-	^createTournamentTextFieldTournamentName
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> createTournamentTextFieldTournamentName: anObject [
-
-	"<anObject: iOf Object, ^self>"
-	"Set the createTournamentTextFieldTournamentName of the receiver"
-
-	createTournamentTextFieldTournamentName := anObject
-]
-
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 TournamentPlannerView >> dashboardTab [
 
  | theDashboard theTextNextGame theTextActualTournament theTextActualMatch theTextDateForNextMatch 
@@ -324,14 +225,11 @@ yourself.
 	addChild: (Me5H1 new text: 'Dashboard');
 	addChild: Me5Hr new;
 	addChild: theDashboard;
-	addChild: Me5Hr new;
-	addChild: (Me5H4 new text: 'Shortcuts zu den Seiten');
-	addChild: self adminToolsTab;
 	yourself
 	).
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 TournamentPlannerView >> modalMultiComboBoxTeamMembers [
 
 	"<^iOf Object>"
@@ -340,7 +238,7 @@ TournamentPlannerView >> modalMultiComboBoxTeamMembers [
 	^modalMultiComboBoxTeamMembers
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 TournamentPlannerView >> modalMultiComboBoxTeamMembers: anObject [
 
 	"<anObject: iOf Object, ^self>"
@@ -349,7 +247,7 @@ TournamentPlannerView >> modalMultiComboBoxTeamMembers: anObject [
 	modalMultiComboBoxTeamMembers := anObject
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 TournamentPlannerView >> modalTextFieldTeamName [
 
 	"<^iOf Object>"
@@ -358,7 +256,7 @@ TournamentPlannerView >> modalTextFieldTeamName [
 	^modalTextFieldTeamName
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 TournamentPlannerView >> modalTextFieldTeamName: anObject [
 
 	"<anObject: iOf Object, ^self>"
@@ -367,19 +265,7 @@ TournamentPlannerView >> modalTextFieldTeamName: anObject [
 	modalTextFieldTeamName := anObject
 ]
 
-{ #category : 'Accessing' }
-TournamentPlannerView >> multiComboBoxRivals [
-
-	^multiComboBoxRivals
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> multiComboBoxRivals: anObject [
-
-	multiComboBoxRivals := anObject
-]
-
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 TournamentPlannerView >> removeAllTournaments [
 
 	self collectionOfTournaments removeAll.
@@ -387,13 +273,13 @@ TournamentPlannerView >> removeAllTournaments [
 	self startUp saveObject: self collectionOfTournaments onPath: 'C:\TournamentPlanner\Memory\tournaments.dat'.
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 TournamentPlannerView >> removeTournament [
 
 	self tournamentTab removeTournament.
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 TournamentPlannerView >> resetTournamentTabWithPlayers: aCollectionOfPlayers [
 
 	self tournamentTab resetPlayers: aCollectionOfPlayers
@@ -418,7 +304,7 @@ TournamentPlannerView >> startUp: anObject [
 	startUp := anObject
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 TournamentPlannerView >> tabsCollection [
 
 	| theUserSettings theCreateTournamentModal |
@@ -428,9 +314,6 @@ TournamentPlannerView >> tabsCollection [
 		tournaments: self collectionOfTournaments;
 		createComponents;
 		yourself).
-	"theCreateTournamentModal := (CreateTournamentModal  new
-	yourself).
-	theCreateTournamentModal createView."
 	
 	theUserSettings := UserSettingsView new.
 
@@ -470,7 +353,7 @@ TournamentPlannerView >> tabsCollection [
 
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 TournamentPlannerView >> teamsRow [
 
 	"<^iOf Object>"
@@ -479,7 +362,7 @@ TournamentPlannerView >> teamsRow [
 	^teamsRow
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 TournamentPlannerView >> teamsRow: anObject [
 
 	"<anObject: iOf Object, ^self>"
@@ -488,7 +371,7 @@ TournamentPlannerView >> teamsRow: anObject [
 	teamsRow := anObject
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 TournamentPlannerView >> teamsTab [
 
 	| theSingleTeamDiv theResultDiv theTeamList thePlayerLists thePersonen textFieldTeamName multiComboBoxTeamMembers |
@@ -583,24 +466,6 @@ TournamentPlannerView >> teamsTab [
 ]
 
 { #category : 'Accessing' }
-TournamentPlannerView >> tournamentRow [
-
-	"<^iOf Object>"
-	"Answer the tournamentRow of the receiver"
-
-	^tournamentRow
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> tournamentRow: anObject [
-
-	"<anObject: iOf Object, ^self>"
-	"Set the tournamentRow of the receiver"
-
-	tournamentRow := anObject
-]
-
-{ #category : 'Accessing' }
 TournamentPlannerView >> tournamentTab [
 
 	^tournamentTab
@@ -630,7 +495,7 @@ TournamentPlannerView >> user: anObject [
 	user := anObject
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 TournamentPlannerView >> userSettingsTab [
 
 	| thePlayer |
