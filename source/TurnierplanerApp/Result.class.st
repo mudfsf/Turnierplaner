@@ -9,18 +9,21 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
-{ #category : 'instance creation' }
-Result class >> player: aPlayer ranking: aRank points: aNumber [
+{ #category : 'API' }
+Result class >> newWithPlayer: aPlayer ranking: aRank points: aNumber [
 
-	^(self new)
-	player:aPlayer;
-	ranking:aRank;
-	points: aNumber;
-	yourself.
+	^self new
+		player:aPlayer;
+		ranking:aRank;
+		points: aNumber;
+		yourself.
 ]
 
 { #category : 'Accessing' }
 Result >> player [
+
+	"<^iOf Player>"
+	"Answer the player of the receiver"
 
 	^player
 ]
@@ -28,11 +31,17 @@ Result >> player [
 { #category : 'Accessing' }
 Result >> player: aPlayer [
 
+	"<aPlayer: iOf Player, ^self>"
+	"Set the player of the receiver"
+
 	player := aPlayer
 ]
 
 { #category : 'Accessing' }
 Result >> points [
+
+	"<^hOf Number>"
+	"Answer the points of the receiver"
 
 	^points
 ]
@@ -40,17 +49,26 @@ Result >> points [
 { #category : 'Accessing' }
 Result >> points: aNumber [
 
+	"<aNumber: hOf Number, ^self>"
+	"Set the points of the receiver"
+
 	points := aNumber
 ]
 
 { #category : 'Accessing' }
 Result >> ranking [
 
+	"<^hOf Number>"
+	"Answer the ranking of the receiver"
+
 	^ranking
 ]
 
 { #category : 'Accessing' }
 Result >> ranking: aNumber [
+
+	"<aNumber: hOf Number, ^self>"
+	"Set the ranking of the receiver"
 
 	ranking := aNumber
 ]
