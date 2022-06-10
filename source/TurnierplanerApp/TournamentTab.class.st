@@ -297,7 +297,7 @@ TournamentTab >> removeTournament [
 	theDivTournament parent removeChild:  theDivTournament
 	ifAbsent: [].
 "
-	self view showSuccessNotificationWithMessage: ('Turnier gelöscht')"
+	self view showSuccessNotificationWithMessage: ('Turnier gel&ouml;scht')"
 ]
 
 { #category : 'Accessing' }

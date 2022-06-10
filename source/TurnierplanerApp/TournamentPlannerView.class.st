@@ -432,7 +432,7 @@ TournamentPlannerView >> tabsCollection [
 	yourself).
 	theCreateTournamentModal createView."
 	
-	theUserSettings := UserSettings new.
+	theUserSettings := UserSettingsView new.
 
 	^OrderedCollection new
 		add: (Me5Tab new
