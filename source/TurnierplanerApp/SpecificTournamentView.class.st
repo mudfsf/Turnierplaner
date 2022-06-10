@@ -105,30 +105,30 @@ SpecificTournamentView >> specificTournament [
 		theGameHeightAndSpacing := theGameHeightAndSpacing * 2.
 	].
 
-	theCoordinatesLineArray size.
-
 	"draw Lines"
-	1 to: (theCoordinatesLineArray size - 1) do: [:eachColumn |
-		1 to: ((theCoordinatesLineArray at: eachColumn) size ) do: [:eachRow |
-
+	theCoordinatesLineArray do: [ :eachColumn |
+		eachColumn do: [ :eachRow | 
+		
 			| theMaxX theMaxY theCoordinatesXY |
-
-			theCoordinatesXY := (theCoordinatesLineArray at: eachColumn) at: eachRow.
-			((theCoordinatesXY at: 1) > (theCoordinatesXY at: 3)) ifTrue: [theMaxX := theCoordinatesXY at: 1] ifFalse: [theMaxX := theCoordinatesXY at: 3].
-			((theCoordinatesXY at: 2) > (theCoordinatesXY at: 4)) ifTrue: [theMaxY := theCoordinatesXY at: 2] ifFalse: [theMaxY := theCoordinatesXY at: 4].
-			theSvgLine := (Me5SvgLine new
-			x1: (theCoordinatesXY at: 1) + (theGameWidth * 0.75);
-			y1: (theCoordinatesXY at: 2) + (theGameHeight * 0.5);
-			x2: (theCoordinatesXY at: 3) + (theGameWidth * 0.25);
-			y2: (theCoordinatesXY at: 4) + (theGameHeight * 0.5);
-			strokeWidth: 5;
-			stroke: 'lightGrey';
-			svgHeight: theMaxY * 2;
-			svgWidth: theMaxX * 2;
-			svgTop: 0;
-			svgLeft: 0;
-			yourself).
-		theScroller addChild: (theSvgLine).
+			
+			theCoordinatesXY := eachRow.
+			(theCoordinatesXY at: 3) = nil ifFalse: [
+				((theCoordinatesXY at: 1) > (theCoordinatesXY at: 3)) ifTrue: [theMaxX := theCoordinatesXY at: 1] ifFalse: [theMaxX := theCoordinatesXY at: 3].
+				((theCoordinatesXY at: 2) > (theCoordinatesXY at: 4)) ifTrue: [theMaxY := theCoordinatesXY at: 2] ifFalse: [theMaxY := theCoordinatesXY at: 4].
+				theSvgLine := (Me5SvgLine new
+					x1: (theCoordinatesXY at: 1) + (theGameWidth * 0.75);
+					y1: (theCoordinatesXY at: 2) + (theGameHeight * 0.5);
+					x2: (theCoordinatesXY at: 3) + (theGameWidth * 0.25);
+					y2: (theCoordinatesXY at: 4) + (theGameHeight * 0.5);
+					strokeWidth: 5;
+					stroke: 'lightGrey';
+					svgHeight: theMaxY * 2;
+					svgWidth: theMaxX * 2;
+					svgTop: 0;
+					svgLeft: 0;
+					yourself).
+				theScroller addChild: (theSvgLine).
+			].
 		].
 	].
 
