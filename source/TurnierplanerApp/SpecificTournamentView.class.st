@@ -96,21 +96,18 @@ SpecificTournamentView >> specificTournament [
 			"set line coordinates (2er) x2 y2"
 			eachColumn > 1 
 				ifTrue: [
-				((theCoordinatesLineArray at: (eachColumn - 1)) at: ((eachRow * 2) - 1)) at: 3 put: theLeft; at: 4 put: theTop; yourself.
-				((theCoordinatesLineArray at: (eachColumn - 1)) at: (eachRow * 2)) at: 3 put: theLeft; at: 4 put: theTop; yourself.
-			].
+					((theCoordinatesLineArray at: (eachColumn - 1)) at: ((eachRow * 2) - 1)) at: 3 put: theLeft; at: 4 put: theTop; yourself.
+					((theCoordinatesLineArray at: (eachColumn - 1)) at: (eachRow * 2)) at: 3 put: theLeft; at: 4 put: theTop; yourself
+				].
 		].
 		theGamesinColumn := theGamesinColumn / 2.
 		theOffsetY := theOffsetY + (theGameHeightAndSpacing / 2).
 		theGameHeightAndSpacing := theGameHeightAndSpacing * 2.
-
 	].
 
 	theCoordinatesLineArray size.
 
-
 	"draw Lines"
-
 	1 to: (theCoordinatesLineArray size - 1) do: [:eachColumn |
 		1 to: ((theCoordinatesLineArray at: eachColumn) size ) do: [:eachRow |
 
@@ -131,9 +128,7 @@ SpecificTournamentView >> specificTournament [
 			svgTop: 0;
 			svgLeft: 0;
 			yourself).
-
 		theScroller addChild: (theSvgLine).
-
 		].
 	].
 
