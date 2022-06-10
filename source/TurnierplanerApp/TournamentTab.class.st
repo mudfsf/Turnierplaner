@@ -43,6 +43,7 @@ TournamentTab >> createComponents [
 	self multiComboBoxRivals: (Me5Select2MultiSelectBox new
 		text: 'Rivalen (muss noch dynamisch werden dass teams oder spieler angezeigt werden k&ouml;nnen)';
 		objects: thePlayers;
+		addFocusEventSelector: #resetPlayers:;
 		yourself).
 	self divTournamentCreation: (Me5Div new
 		addCssClassCol6;
@@ -297,7 +298,7 @@ TournamentTab >> removeTournament [
 	theDivTournament parent removeChild:  theDivTournament
 	ifAbsent: [].
 "
-	self view showSuccessNotificationWithMessage: ('Turnier gelöscht')"
+	self view showSuccessNotificationWithMessage: ('Turnier gelÃ¶scht')"
 ]
 
 { #category : 'Accessing' }
