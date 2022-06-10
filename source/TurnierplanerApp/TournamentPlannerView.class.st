@@ -75,7 +75,7 @@ TournamentPlannerView >> buttonNewTeam [
 					title: (self modalTextFieldTeamName value);
 					addChildToBody: theSingleTeamDiv;
 					addChildToFoot: (Me5Button newDanger
-						text: 'Löschen';
+						text: 'L&ouml;schen';
 						icon: Me5Flaticon newDelete1;
 						"addClickEventSelector: #buttonDeleteTeam;"
 						yourself);
@@ -234,7 +234,7 @@ TournamentPlannerView >> dashboardTab [
  | theDashboard theTextNextGame theTextActualTournament theTextActualMatch theTextDateForNextMatch 
  theTextRunningTournaments theTextBestTeamNowInTheTournament theTextTeamMatchesInTheTournament 
  theTextBestPlayerNowInTheTournament theTextPlayerMatchesInTheTournament theTextForBets 
- theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets theTextWithOutcome|
+ theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets theTextWithOutcome |
  
  theTextNextGame := Me5H3 new text: 'N&auml;chstes Spiel f&uuml;r dich'.
  theTextActualTournament := Me5H5 new text: 'Turnier: Bestes Team'.
@@ -525,7 +525,7 @@ TournamentPlannerView >> teamsTab [
 					title: (theTeamList at: index);
 					addChildToBody: theSingleTeamDiv;
 					addChildToFoot: (Me5Button newDanger
-						text: 'Löschen';
+						text: 'L&ouml;schen';
 						icon: Me5Flaticon newDelete1;
 						"addClickEventSelector: #buttonDeleteTeam;"
 						yourself);
