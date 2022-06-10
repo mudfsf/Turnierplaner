@@ -134,6 +134,6 @@ TurnierplanerApp class >> startUp [
 	
 	self httpServer: (Me5SstHttpServer startUpHttpServerOnPort: '9003' serverApplicationClass: self).
 	self httpServer addViewClass: TournamentPlannerView.
-	self httpServer addViewClass: ManagePlayers.
+	self httpServer addViewClass: ManagePlayersView.
 	self addRouteToHttpServer.
 ]

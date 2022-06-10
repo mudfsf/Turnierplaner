@@ -459,7 +459,7 @@ TournamentPlannerView >> tabsCollection [
 		add: (Me5Tab new
 			text: 'Admin-Tools';
 			icon: Me5I newFasUser;
-			addChildToTabPane: (ManagePlayers new
+			addChildToTabPane: (ManagePlayersView new
 				data: self collectionOfPlayers;
 				createComponents;
 				yourself)"self adminToolsTab";
