@@ -16,14 +16,14 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 Me5SvgLine >> htmlElementClass [
 
 	^ClwHtmlElementDiv
 	
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 Me5SvgLine >> setAdditionalAttributesOfHtmlElement: aClwHtmlBaseElement [
 
 | theSvgElement |
