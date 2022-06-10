@@ -459,10 +459,12 @@ TournamentPlannerView >> tabsCollection [
 		add: (Me5Tab new
 			text: 'Admin-Tools';
 			icon: Me5I newFasUser;
-			addChildToTabPane: (ManagePlayersView new
-				data: self collectionOfPlayers;
-				createComponents;
-				yourself)"self adminToolsTab";
+			addChildToTabPane: (Me5ViewHolder new
+				holdingView: (ManagePlayersView new
+					data: self collectionOfPlayers;
+					createComponents;
+					yourself);
+				yourself);
 			yourself);
 		yourself
 
@@ -635,7 +637,11 @@ TournamentPlannerView >> userSettingsTab [
 	"User muss noch ermittelt werden"
 	(self user isNil)
 		ifTrue: [
-			thePlayer:=Player firstName: 'Max' lastName: 'Muster'  email: 'max.muster@gmail.com'.
+			thePlayer:=(Player new 
+				firstName: 'Max'; 
+				lastName: 'Muster';  
+				email: 'max.muster@gmail.com'; 
+				yourself).
 			self user:thePlayer.] .
 
 
