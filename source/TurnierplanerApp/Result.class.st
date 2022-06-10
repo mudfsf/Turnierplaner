@@ -12,11 +12,14 @@ Class {
 { #category : 'API' }
 Result class >> newWithPlayer: aPlayer ranking: aRank points: aNumber [
 
+	"<aPlayer: iOf Player, aRank: hOf Number, aNumber: hOf Number ^self>"
+		"Create instance of Result with all attributes"
+
 	^self new
-		player:aPlayer;
-		ranking:aRank;
+		player: aPlayer;
+		ranking: aRank;
 		points: aNumber;
-		yourself.
+		yourself
 ]
 
 { #category : 'Accessing' }
