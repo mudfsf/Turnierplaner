@@ -75,7 +75,7 @@ TournamentPlannerView >> buttonNewTeam [
 					title: (self modalTextFieldTeamName value);
 					addChildToBody: theSingleTeamDiv;
 					addChildToFoot: (Me5Button newDanger
-						text: 'Löschen';
+						text: 'L&ouml;schen';
 						icon: Me5Flaticon newDelete1;
 						"addClickEventSelector: #buttonDeleteTeam;"
 						yourself);
@@ -234,7 +234,7 @@ TournamentPlannerView >> dashboardTab [
  | theDashboard theTextNextGame theTextActualTournament theTextActualMatch theTextDateForNextMatch 
  theTextRunningTournaments theTextBestTeamNowInTheTournament theTextTeamMatchesInTheTournament 
  theTextBestPlayerNowInTheTournament theTextPlayerMatchesInTheTournament theTextForBets 
- theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets theTextWithOutcome|
+ theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets theTextWithOutcome |
  
  theTextNextGame := Me5H3 new text: 'N&auml;chstes Spiel f&uuml;r dich'.
  theTextActualTournament := Me5H5 new text: 'Turnier: Bestes Team'.
@@ -490,15 +490,31 @@ TournamentPlannerView >> teamsRow: anObject [
 TournamentPlannerView >> teamsTab [
 
 	| theSingleTeamDiv theResultDiv theTeamList thePlayerLists thePersonen textFieldTeamName multiComboBoxTeamMembers |
-
-		theTeamList := #('Team Ameise' 'Team Baum' 'Team Cello' 'Team Durian').
-		thePlayerLists := #(
-			#('Anika' 'Arnold' 'Ali' 'Andreas')
-			#('Bernd' 'Bianca' 'Bob' 'Bettina')
-			#('Cevin' 'Cynthia' 'Cem' 'Charles')
-			#('Dorotea' 'Daniel' 'Dalia' 'Debora')
-		).
-		thePersonen := #('Anika' 'Arnold' 'Ali' 'Andreas' 'Bernd' 'Bianca' 'Bob' 'Bettina' 'Cevin' 'Cynthia' 'Cem' 'Charles' 'Dorotea' 'Daniel' 'Dalia' 'Debora').
+		
+		thePersonen := OrderedCollection new.
+		1 to: collectionOfPlayers size do: [:eachIndex |
+			| eachPlayer |
+			eachPlayer := collectionOfPlayers at: eachIndex.
+			thePersonen add: eachPlayer firstName, ' ', eachPlayer lastName.
+		].
+		
+		theTeamList := OrderedCollection new.
+		1 to: collectionOfTeams size do: [:eachIndex |
+			| eachTeam |
+			eachTeam := collectionOfTeams at: eachIndex.
+			theTeamList add: eachTeam teamName.
+		].
+		
+		thePlayerLists := OrderedCollection new.
+		1 to: collectionOfTeams size do: [:eachIndex |
+			| eachTeamPlayers eachPlayerList |
+			eachTeamPlayers := (collectionOfTeams at: eachIndex) players.
+			eachPlayerList := OrderedCollection new.
+			1 to: eachTeamPlayers size do: [:innerIndex |
+				eachPlayerList add: (eachTeamPlayers at: innerIndex).
+			].
+			thePlayerLists add: eachPlayerList.
+		].
 
 		teamsRow := ((Me5Div new) addChild: Me5Row new).
 		1 to: (theTeamList size) do: [:index | 
@@ -515,7 +531,7 @@ TournamentPlannerView >> teamsTab [
 					title: (theTeamList at: index);
 					addChildToBody: theSingleTeamDiv;
 					addChildToFoot: (Me5Button newDanger
-						text: 'Löschen';
+						text: 'L&ouml;schen';
 						icon: Me5Flaticon newDelete1;
 						"addClickEventSelector: #buttonDeleteTeam;"
 						yourself);
@@ -526,14 +542,14 @@ TournamentPlannerView >> teamsTab [
 				addCssClassColXl4;
 			yourself).
 		].
-		theResultDiv := ((Me5Div new) addChild: Me5Row new).
+		theResultDiv := Me5Div new.
 		theResultDiv addChild: teamsRow;
 			addChild: (Me5Div new
 				addChild: (Me5Portlet newSuccess
 					title: 'Neues Team erstellen';
-					addChildToBody: (Me5Form new
+					addChildToFoot: (Me5Form new
 						addChildToBody: (textFieldTeamName := Me5TextField new
-							text: 'Teamname:';
+							text: 'Neues Team';
 							"value: teamName;"
 							placeholder: 'Teamname';
 							addCssClassCol12;
