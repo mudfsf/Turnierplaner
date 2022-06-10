@@ -2,25 +2,31 @@ Class {
 	#name : 'Game',
 	#superclass : 'Object',
 	#instVars : [
-		'maximumTeamSize',
-		'teams',
 		'layer',
-		'name'
+		'name',
+		'members'
 	],
 	#category : 'TurnierplanerApp'
 }
 
-{ #category : 'instance creation' }
-Game class >> maximumTeamSize: aNumber teams: anObject [
+{ #category : 'API' }
+Game class >> newWithName: aString layer: aNumber members: aCollection [
 
-	^(self new)
-	maximumTeamSize: aNumber;
-	teams: anObject;	
-	yourself.
+	"<aString : hOfS String, aNumber: hOf Number, aCollection: hOf Collection of: {iOf Team/Players}, ^self>"
+	"Create instance of game with attributes"
+	
+	^self new
+		name: aString;
+		layer: aNumber;
+		members: aCollection;	
+		yourself
 ]
 
 { #category : 'Accessing' }
 Game >> layer [
+
+	"<^hOf Number>"
+	"Answer the layer of the receiver"
 
 	^layer
 ]
@@ -28,41 +34,44 @@ Game >> layer [
 { #category : 'Accessing' }
 Game >> layer: aNumber [
 
+	"<aNumber: hOf Number, ^self>"
+	"Set the layer of the receiver"
+
 	layer := aNumber
 ]
 
 { #category : 'Accessing' }
-Game >> maximumTeamSize [
+Game >> members [
 
-	^maximumTeamSize
+	"<^hOf Collection of: {iOf Team/Player}>"
+	"Answer the members of the receiver"
+
+	^members
 ]
 
 { #category : 'Accessing' }
-Game >> maximumTeamSize: anObject [
+Game >> members: aCollection [
 
-	maximumTeamSize := anObject
+	"<aCollection: hOf Collection of: {iOf Team/Player}, ^self>"
+	"Set the members of the receiver"
+
+	members := aCollection
 ]
 
 { #category : 'Accessing' }
 Game >> name [
 
+	"<^iOf String>"
+	"Answer the name of the receiver"
+
 	^name
 ]
 
 { #category : 'Accessing' }
-Game >> name: anObject [
+Game >> name: aString [
 
-	name := anObject
-]
+	"<aString: iOf String, ^self>"
+	"Set the name of the receiver"
 
-{ #category : 'Accessing' }
-Game >> teams [
-
-	^teams
-]
-
-{ #category : 'Accessing' }
-Game >> teams: anObject [
-
-	teams := anObject
+	name := aString
 ]

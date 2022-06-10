@@ -101,14 +101,14 @@ KO >> recGetCollectionOfGamesWithPlayers: aCollectionOfPlayers [
 		:eachIndex |
 		theGame := (Game new
 			layer: self layer;
-			teams: OrderedCollection new;
+			members: OrderedCollection new;
 			name: '';
 			yourself).
 		thePlayer := aCollectionOfPlayers at: eachIndex.
-		theGame teams add: thePlayer.
+		theGame members add: thePlayer.
 		theGame name: theGame name, thePlayer firstName, thePlayer lastName .
 		thePlayer :=aCollectionOfPlayers at: (aCollectionOfPlayers size - eachIndex +1).
-		theGame teams add: thePlayer.
+		theGame members add: thePlayer.
 		theGame name: theGame name, ' vs ', thePlayer firstName, thePlayer lastName.
 		self gameCollection add: theGame.
 		theRecursiveParamListCollectionOfGames add: (Player new
@@ -169,14 +169,14 @@ KO >> recGetCollectionOfGamesWithTeams: aCollectionOfTeams [
 		:eachIndex |
 		theGame := (Game new
 			layer: self layer;
-			teams: OrderedCollection new;
+			members: OrderedCollection new;
 			name: '';
 			yourself).
 		theTeam := aCollectionOfTeams at: eachIndex.
-		theGame teams add: theTeam.
+		theGame members add: theTeam.
 		theGame name: theGame name, theTeam teamName.
 		theTeam :=aCollectionOfTeams at: (aCollectionOfTeams size - eachIndex +1).
-		theGame teams add: theTeam.
+		theGame members add: theTeam.
 		theGame name: theGame name, ' vs ', theTeam teamName.
 		self gameCollection add: theGame.
 		theRecursiveParamListCollectionOfGames add: (Team new

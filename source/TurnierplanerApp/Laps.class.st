@@ -16,9 +16,9 @@ Laps >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
 			:eachInnerIndex |
 				theGame := Game new.
 				theGame layer: 0.
-				theGame teams: OrderedCollection new.
-				theGame teams add: theOuterPlayer.
-				theGame teams add: (aCollectionOfPlayers at: (eachOuterIndex + eachInnerIndex)).
+				theGame members: OrderedCollection new.
+				theGame members add: theOuterPlayer.
+				theGame members add: (aCollectionOfPlayers at: (eachOuterIndex + eachInnerIndex)).
 				theCollectionOfGames add: theGame.
 		].
 	].
@@ -38,9 +38,9 @@ Laps >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
 			:eachInnerIndex |
 				theGame := Game new.
 				theGame layer: 0.
-				theGame teams: OrderedCollection new.
-				theGame teams add: theOuterTeam.
-				theGame teams add: (aCollectionOfTeams at: (eachOuterIndex + eachInnerIndex)).
+				theGame members: OrderedCollection new.
+				theGame members add: theOuterTeam.
+				theGame members add: (aCollectionOfTeams at: (eachOuterIndex + eachInnerIndex)).
 				theCollectionOfGames add: theGame.
 		].
 	].
