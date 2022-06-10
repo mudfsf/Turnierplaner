@@ -14,7 +14,10 @@ Class {
 		'createTournamentRadioGroupTournamentType',
 		'createTournamentMultiComboBoxRivals',
 		'createTournamentTextFieldTournamentName',
-		'collapsiblePortlet'
+		'collapsiblePortlet',
+		'teamsRow',
+		'modalTextFieldTeamName',
+		'modalMultiComboBoxTeamMembers'
 	],
 	#category : 'TurnierplanerApp'
 }
@@ -52,6 +55,36 @@ TournamentPlannerView >> beforeCreateComponents [
 
 	
 
+]
+
+{ #category : 'Not categorized' }
+TournamentPlannerView >> buttonNewTeam [
+
+	| theSingleTeamDiv |
+	
+	theSingleTeamDiv := Me5Div new.
+			1 to: (self modalMultiComboBoxTeamMembers value size) do: [:index | 	
+				theSingleTeamDiv addChild: (Me5Div new
+				addChild: (Me5P new 
+						text: (self modalMultiComboBoxTeamMembers value at: index);
+						fontSize: 'large';
+						yourself)).
+			].
+			self teamsRow addChild: (Me5Div new
+				addChild: (Me5Portlet newPrimary
+					title: (self modalTextFieldTeamName value);
+					addChildToBody: theSingleTeamDiv;
+					addChildToFoot: (Me5Button newDanger
+						text: 'Löschen';
+						icon: Me5Flaticon newDelete1;
+						"addClickEventSelector: #buttonDeleteTeam;"
+						yourself);
+					yourself);
+				padding: 15;
+				addCssClassColSm12;
+				addCssClassColMd6;
+				addCssClassColXl4;
+			yourself).
 ]
 
 { #category : 'Accessing' }
@@ -298,6 +331,42 @@ yourself.
 	).
 ]
 
+{ #category : 'Not categorized' }
+TournamentPlannerView >> modalMultiComboBoxTeamMembers [
+
+	"<^iOf Object>"
+	"Answer the modalMultiComboBoxRivals of the receiver"
+
+	^modalMultiComboBoxTeamMembers
+]
+
+{ #category : 'Not categorized' }
+TournamentPlannerView >> modalMultiComboBoxTeamMembers: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the modalMultiComboBoxRivals of the receiver"
+
+	modalMultiComboBoxTeamMembers := anObject
+]
+
+{ #category : 'Not categorized' }
+TournamentPlannerView >> modalTextFieldTeamName [
+
+	"<^iOf Object>"
+	"Answer the modalTextFieldTournamentName of the receiver"
+
+	^modalTextFieldTeamName
+]
+
+{ #category : 'Not categorized' }
+TournamentPlannerView >> modalTextFieldTeamName: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the modalTextFieldTournamentName of the receiver"
+
+	modalTextFieldTeamName := anObject
+]
+
 { #category : 'Accessing' }
 TournamentPlannerView >> multiComboBoxRivals [
 
@@ -394,10 +463,28 @@ TournamentPlannerView >> tabsCollection [
 ]
 
 { #category : 'Not categorized' }
+TournamentPlannerView >> teamsRow [
+
+	"<^iOf Object>"
+	"Answer the tournamentRow of the receiver"
+
+	^teamsRow
+]
+
+{ #category : 'Not categorized' }
+TournamentPlannerView >> teamsRow: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the tournamentRow of the receiver"
+
+	teamsRow := anObject
+]
+
+{ #category : 'Not categorized' }
 TournamentPlannerView >> teamsTab [
 
-	| theCurrentPlayerNameDiv theResultDiv theRow theTeamList thePlayerLists thePersonen |
-		
+	| theSingleTeamDiv theResultDiv theTeamList thePlayerLists thePersonen textFieldTeamName multiComboBoxTeamMembers |
+
 		theTeamList := #('Team Ameise' 'Team Baum' 'Team Cello' 'Team Durian').
 		thePlayerLists := #(
 			#('Anika' 'Arnold' 'Ali' 'Andreas')
@@ -407,24 +494,24 @@ TournamentPlannerView >> teamsTab [
 		).
 		thePersonen := #('Anika' 'Arnold' 'Ali' 'Andreas' 'Bernd' 'Bianca' 'Bob' 'Bettina' 'Cevin' 'Cynthia' 'Cem' 'Charles' 'Dorotea' 'Daniel' 'Dalia' 'Debora').
 
-		theRow := Me5Row new.
+		teamsRow := ((Me5Div new) addChild: Me5Row new).
 		1 to: (theTeamList size) do: [:index | 
-			theCurrentPlayerNameDiv := Me5Div new.
+			theSingleTeamDiv := Me5Div new.
 			1 to: ((thePlayerLists at: index) size) do: [:innerIndex | 	
-				theCurrentPlayerNameDiv addChild: (Me5Div new
+				theSingleTeamDiv addChild: (Me5Div new
 				addChild: (Me5P new 
 						text: ((thePlayerLists at: index) at: innerIndex);
 						fontSize: 'large';
 						yourself)).
 			].
-			theRow addChild: (Me5Div new
+			teamsRow addChild: (Me5Div new
 				addChild: (Me5Portlet newPrimary
 					title: (theTeamList at: index);
-					addChildToBody: theCurrentPlayerNameDiv;
+					addChildToBody: theSingleTeamDiv;
 					addChildToFoot: (Me5Button newDanger
-						text: 'L&ouml;schen';
+						text: 'Löschen';
 						icon: Me5Flaticon newDelete1;
-						"addClickEventSelector: #deleteTeam;"
+						"addClickEventSelector: #buttonDeleteTeam;"
 						yourself);
 					yourself);
 				padding: 15;
@@ -433,40 +520,39 @@ TournamentPlannerView >> teamsTab [
 				addCssClassColXl4;
 			yourself).
 		].
-		theRow addChild: (Me5Div new
-				addChild: (Me5FormPortlet newSuccess
+		theResultDiv := ((Me5Div new) addChild: Me5Row new).
+		theResultDiv addChild: teamsRow;
+			addChild: (Me5Div new
+				addChild: (Me5Portlet newSuccess
 					title: 'Neues Team erstellen';
-					addChildToBody: (Me5TextField new
-						text: 'Teamname:';
-						"value: teamName;"
-						placeholder: 'Teamname';
-						addCssClassCol12;
-						addCssClassColLg6;
-					yourself);
-					addChildToBody: (Me5MultiComboBox new
-						text: 'Teammitglieder';
-						helpText: 'Im Team:';
-						objects: thePersonen;
-						placeholder: 'Personen';
+					addChildToBody: (Me5Form new
+						addChildToBody: (textFieldTeamName := Me5TextField new
+							text: 'Teamname:';
+							"value: teamName;"
+							placeholder: 'Teamname';
+							addCssClassCol12;
+							addCssClassColLg6;
 						yourself);
-					addChildToFoot: (Me5Button newSuccess
-						text: 'Speichern';
-						icon: Me5I newFasSave;
-						"addClickEventSelector: #saveTeam;"
-						yourself);
-					yourself);
+						addChildToBody: (multiComboBoxTeamMembers := Me5MultiComboBox new
+							text: 'Teammitglieder';
+							helpText: 'Im Team:';
+							objects: thePersonen;
+							placeholder: 'Personen';
+							yourself);
+						addChildToBody: (Me5Button newSuccess
+							text: 'Speichern';
+							icon: Me5I newFasSave;
+							addClickEventSelector: #buttonNewTeam;
+							yourself);
+					yourself));
 				padding: 15;
 				addCssClassColSm12;
 				addCssClassColMd6;
 				addCssClassColXl4;
 			yourself).
-
-
-	theResultDiv := (Me5Div new).
-	theResultDiv addChild: (Me5H1 new text: 'Teams').
-	theResultDiv addChild: Me5Hr new.
-	theResultDiv addChild: theRow.
-
+			
+		self modalTextFieldTeamName: textFieldTeamName.
+		self modalMultiComboBoxTeamMembers: multiComboBoxTeamMembers.
 
 	^theResultDiv.
 
