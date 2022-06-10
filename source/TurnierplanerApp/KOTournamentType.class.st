@@ -8,7 +8,7 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
-{ #category : 'Not categorized' }
+{ #category : 'API' }
 KOTournamentType class >> new [
 
 	super new initialize
@@ -17,7 +17,10 @@ KOTournamentType class >> new [
 { #category : 'Accessing',
   #vaVisibility : 'private' }
 KOTournamentType >> gameCollection [
-
+	
+	"<^hOf Collection of: Game>"
+	"Answer the gameCollection of the receiver"
+	
 	^gameCollection
 ]
 
@@ -25,13 +28,16 @@ KOTournamentType >> gameCollection [
   #vaVisibility : 'private' }
 KOTournamentType >> gameCollection: aGameCollection [
 
+	"<aGameCollection: hOf Collection of: iOf Game, ^self>"
+	"Set the gameCollection of the receiver"
+
 	gameCollection := aGameCollection
 ]
 
 { #category : 'API' }
 KOTournamentType >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
 
-	"<aCollectionOfPlayers hOf Collection of: iOf Player ^self>"
+	"<aCollectionOfPlayers hOf Collection of: iOf Player, ^self>"
 	"Answer the Collection of Game"
 	
 	| theCollectionSize theRecursiveParamListCollectionOfGames theNumberOfGames theHasToContinueBoolean thePowerOf2Number |
@@ -84,7 +90,7 @@ KOTournamentType >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
 { #category : 'API' }
 KOTournamentType >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
 
-	"<aCollectionOfTeams hOf Collection of: iOf Team ^self>"
+	"<aCollectionOfTeams hOf Collection of: iOf Team, ^self>"
 	"Answer the Collection of Game"
 
 	| theCollectionSize theNumberOfGames theRecursiveParamListCollectionOfGames theHasToContinueBoolean thePowerOf2Number |
@@ -141,6 +147,8 @@ KOTournamentType >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
   #vaVisibility : 'private' }
 KOTournamentType >> initialize [
 
+	"Initialize the operation"
+
 	self layer: 0.
 	self gameCollection: OrderedCollection new.
 ]
@@ -149,12 +157,18 @@ KOTournamentType >> initialize [
   #vaVisibility : 'private' }
 KOTournamentType >> layer [
 
+	"<^hOf Number>"
+	"Answer the layer of the receiver"
+	
 	^layer
 ]
 
 { #category : 'Accessing',
   #vaVisibility : 'private' }
-KOTournamentType >> layer: anObject [
+KOTournamentType >> layer: aNumber [
 
-	layer := anObject
+	"<aNumber: hOf Number, ^self>"
+	"Set the layer of the receiver"
+
+	layer := aNumber
 ]

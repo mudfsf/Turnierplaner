@@ -7,7 +7,7 @@ Class {
 { #category : 'API' }
 MixedTournamentType >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
 	
-	"<aCollectionOfPlayers hOf Collection of: iOf Player ^self>"
+	"<aCollectionOfPlayers hOf Collection of: iOf Player, ^self>"
 	"Answer the Collection of Game"
 	
 	|theLaps theKO theCollectionOfPlayers theCollectionOfGames|
@@ -46,7 +46,7 @@ MixedTournamentType >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
 { #category : 'API' }
 MixedTournamentType >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
 	
-	"<aCollectionOfTeams hOf Collection of: iOf Team ^self>"
+	"<aCollectionOfTeams hOf Collection of: iOf Team, ^self>"
 	"Answer the Collection of Game"
 	
 	|theLaps theKO theCollectionOfTeams theCollectionOfGames|

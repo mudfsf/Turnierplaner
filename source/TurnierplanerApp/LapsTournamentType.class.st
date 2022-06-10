@@ -7,7 +7,7 @@ Class {
 { #category : 'API' }
 LapsTournamentType >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
 
-	"<aCollectionOfPlayers hOf Collection of: iOf Player ^self>"
+	"<aCollectionOfPlayers hOf Collection of: iOf Player, ^self>"
 	"Answer the Collection of Game"
 	
 	| theCollectionOfGames |
@@ -32,7 +32,7 @@ LapsTournamentType >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
 { #category : 'API' }
 LapsTournamentType >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
 
-	"<aCollectionOfTeams hOf Collection of: iOf Team ^self>"
+	"<aCollectionOfTeams hOf Collection of: iOf Team, ^self>"
 	"Answer the Collection of Game"
 	
 	| theCollectionOfGames |
