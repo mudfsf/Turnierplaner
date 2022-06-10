@@ -9,18 +9,24 @@ Class {
 	#category : 'TurnierplanerApp'
 }
 
-{ #category : 'instance creation' }
-Bet class >> player: aPlayer guess: aMetaResult stake: anObject [
+{ #category : 'API' }
+Bet class >> newWithPlayer: aPlayer guess: aMetaResult stake: aDecimal [
 
-	^(self new)
-		player:aPlayer;
+	"<aPlayer: iOf Player, aMetaResult: iOf MetaResult, aDecimal: iOf Decimal, ^self>"
+	"Create instance of Bet with attributes"
+
+	^self new
+		player: aPlayer;
 		guess: aMetaResult;
-		stake:anObject;
+		stake: aDecimal;
 		yourself.
 ]
 
 { #category : 'Accessing' }
 Bet >> guess [
+
+	"<^iOf MetaResult>"
+	"Answer the guess of the receiver"
 
 	^guess
 ]
@@ -28,11 +34,17 @@ Bet >> guess [
 { #category : 'Accessing' }
 Bet >> guess: aMetaResult [
 
+	"<aMetaResult: iOf MetaResult, ^self>"
+	"Set the guess of the receiver"
+
 	guess := aMetaResult
 ]
 
 { #category : 'Accessing' }
 Bet >> player [
+
+	"<^iOf Player>"
+	"Answer the player of the receiver"
 
 	^player
 ]
@@ -40,17 +52,26 @@ Bet >> player [
 { #category : 'Accessing' }
 Bet >> player: aPlayer [
 
+	"<aPlayer: iOf Player, ^self>"
+	"Set the player of the receiver"
+
 	player := aPlayer
 ]
 
 { #category : 'Accessing' }
 Bet >> stake [
 
+	"<^hOf Decimal>"
+	"Answer the stake of the receiver"
+
 	^stake
 ]
 
 { #category : 'Accessing' }
-Bet >> stake: anObject [
+Bet >> stake: aDecimal [
 
-	stake := anObject
+	"<aDecimal: hOf Decimal, ^self>"
+	"Set the stake of the receiver"
+	
+	stake := aDecimal
 ]
