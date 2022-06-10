@@ -388,6 +388,12 @@ TournamentPlannerView >> removeAllTournaments [
 ]
 
 { #category : 'Not categorized' }
+TournamentPlannerView >> removeTournament [
+
+	self tournamentTab removeTournament.
+]
+
+{ #category : 'Not categorized' }
 TournamentPlannerView >> resetTournamentTabWithPlayers: aCollectionOfPlayers [
 
 	self tournamentTab resetPlayers: aCollectionOfPlayers

@@ -9,7 +9,8 @@ Class {
 		'multiComboBoxRivals',
 		'textFieldTournamentName',
 		'radioGroupTournamentType',
-		'radioGroupGameMode'
+		'radioGroupGameMode',
+		'removeTournamentEvent'
 	],
 	#category : 'TurnierplanerApp'
 }
@@ -84,7 +85,7 @@ TournamentTab >> createTournamentRows [
 				title: currentTournament name;
 				addChildToHeadTools: (Me5A newIconOnlyPrimary
 					icon: Me5I newFasTrash;
-					addClickEventSelector: #removeTournament: eventReceiver: self;
+					addClickEventSelector: #yesNoModalRemoveTournament: eventReceiver: self;
 					yourself);
 				addChildToBody: (Me5P new
 					text: ((currentTournament tournamentType) asString, ' / ', (currentTournament gameMode) asString );
@@ -204,7 +205,7 @@ TournamentTab >> newTournamentClicked [
 			addChild: (Me5Portlet newPrimary
 				addChildToHeadTools: (Me5A newIconOnlyPrimary
 					icon: Me5I newFasTrash;
-					addClickEventSelector: #removeTournament: eventReceiver: self;
+					addClickEventSelector: #yesNoModalRemoveTournament: eventReceiver: self;
 					yourself);
 				title: currentTournament name;
 				addChildToBody: (Me5P new
@@ -289,14 +290,32 @@ TournamentTab >> radioGroupTournamentType: anObject [
 ]
 
 { #category : 'Not categorized' }
-TournamentTab >> removeTournament: anEvent [
+TournamentTab >> removeTournament [
 	
 	| theDivTournament |
-	theDivTournament := anEvent component parent parent parent parent parent parent.
+	theDivTournament := self removeTournamentEvent component parent parent parent parent parent parent.
 	theDivTournament parent removeChild:  theDivTournament
-	ifAbsent: []
+	ifAbsent: [].
+"
+	self view showSuccessNotificationWithMessage: ('Turnier gelöscht')"
+]
 
+{ #category : 'Accessing' }
+TournamentTab >> removeTournamentEvent [
 
+	"<^iOf Object>"
+	"Answer the removeTournamentEvent of the receiver"
+
+	^removeTournamentEvent
+]
+
+{ #category : 'Accessing' }
+TournamentTab >> removeTournamentEvent: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the removeTournamentEvent of the receiver"
+
+	removeTournamentEvent := anObject
 ]
 
 { #category : 'Not categorized' }
@@ -367,4 +386,14 @@ TournamentTab >> tournaments [
 TournamentTab >> tournaments: anObject [
 
 	tournaments := anObject
+]
+
+{ #category : 'Not categorized' }
+TournamentTab >> yesNoModalRemoveTournament: aMe5Event [
+
+	
+	self removeTournamentEvent: aMe5Event.
+	self view showYesNoDialogWithTitle: 'Turnier l&ouml;schen?' message: '' yesSelector: #removeTournament
+
+	
 ]
