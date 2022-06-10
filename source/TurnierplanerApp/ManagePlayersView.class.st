@@ -1,5 +1,5 @@
 Class {
-	#name : 'ManagePlayers',
+	#name : 'ManagePlayersView',
 	#superclass : 'Me5BaseView',
 	#instVars : [
 		'listGrid',
@@ -10,14 +10,17 @@ Class {
 }
 
 { #category : 'Events' }
-ManagePlayers >> addPlayerEvent [
+ManagePlayersView >> addPlayerEvent [
 
-	(self data includes: (self placeholder))
-	ifFalse: [
-		self data add: self placeholder.
-	].
+	"<^self>"
+	"Adds empty row to listGrid"
+
+	(self data includes: self placeholder)
+		ifFalse: [
+			self data add: self placeholder.
+		].
 	
-	self listGrid dataSourceBlock: [ self data	].
+	self listGrid dataSourceBlock: [self data].
 	
 	self listGrid resetEditedDataGridCells.
 
@@ -25,18 +28,25 @@ ManagePlayers >> addPlayerEvent [
 ]
 
 { #category : 'Initial-Events' }
-ManagePlayers >> beforeCreateComponents [
+ManagePlayersView >> beforeCreateComponents [
+
+	"<^self>"
+	"This method is called before #createComponents.
+	 Sets data."
 
 	self data: TurnierplanerApp collectionOfPlayers
 ]
 
 { #category : 'Events' }
-ManagePlayers >> clearEvent [
+ManagePlayersView >> clearEvent [
 
-	(self data includes: (self placeholder))
-	ifTrue: [
-		self data remove: self placeholder.
-	].
+	"<^self>"
+	"Removes empty row from listGrid"
+
+	(self data includes: self placeholder)
+		ifTrue: [
+			self data remove: self placeholder.
+		].
 	
 	self listGrid dataSourceBlock: [ self data	].
 	
@@ -46,7 +56,11 @@ ManagePlayers >> clearEvent [
 ]
 
 { #category : 'Initial-Events' }
-ManagePlayers >> createComponents [
+ManagePlayersView >> createComponents [
+
+	"<^self>"
+	"Entry point for creating components.
+	 Sets listGrid"
 
 	self listGrid: (Me5ListGrid new
 		addCssClassColMd12;
@@ -75,21 +89,21 @@ ManagePlayers >> createComponents [
 			enableHeaderSort;
 			minWidth: 200;
 			yourself);
-	addDataGridColumnDefinition: (Me5DataGridComponentsHolderColumnDefinition new
-		title: 'Action';
-		setHorizontalAlignmentToRight;
-		componentsHolderBlock: [ 
-			:theDataGridComponentsHolderCell :theDataGridComponentsHoldingParameters |
-			theDataGridComponentsHolderCell
-			addChild: (Me5Button newDanger
-				text: 'L&ouml;schen';
-				addClickEventSelector: #deletePlayerEvent: eventReceiver: self;
-				yourself);
-			yourself];
-		yourself);
-	yourself).
-	self
-		addChild: (Me5FormPortlet new
+		addDataGridColumnDefinition: (Me5DataGridComponentsHolderColumnDefinition new
+			title: 'Action';
+			setHorizontalAlignmentToRight;
+			componentsHolderBlock: [ 
+				:theDataGridComponentsHolderCell :theDataGridComponentsHoldingParameters |
+				theDataGridComponentsHolderCell
+				addChild: (Me5Button newDanger
+					text: 'L&ouml;schen';
+					addClickEventSelector: #deletePlayerEvent: eventReceiver: self;
+					yourself);
+				yourself];
+			yourself);
+		yourself).
+	
+	self addChild: (Me5FormPortlet new
 		addCssClassColMd12;
 		addChildToBody: self listGrid;
 		addChildToFootButtonGroup: (Me5Button newSuccess
@@ -112,7 +126,10 @@ ManagePlayers >> createComponents [
 ]
 
 { #category : 'Initial-Events' }
-ManagePlayers >> createModules [
+ManagePlayersView >> createModules [
+
+	"<^self>"
+	"Creates and adds the modules which should be embedded for this view."
 
 	super createModules.
 	
@@ -121,71 +138,91 @@ ManagePlayers >> createModules [
 ]
 
 { #category : 'Accessing' }
-ManagePlayers >> data [
+ManagePlayersView >> data [
+
+	"<^hOf Collection of: iOf Player>"
+	"Answer the data of the receiver"
 
 	^data
 ]
 
 { #category : 'Accessing' }
-ManagePlayers >> data: aListOfPlayer [
+ManagePlayersView >> data: aPlayerCollection [
 
-	data := aListOfPlayer
+	"<aPlayerCollection: hOf Collection of: iOf Player, ^self>"
+	"Set the data of the receiver"
+
+	data := aPlayerCollection
 ]
 
 { #category : 'Events' }
-ManagePlayers >> deletePlayerEvent: anEvent [
+ManagePlayersView >> deletePlayerEvent: anEvent [
 
-	| thePlayer isSuccessful|
-	isSuccessful := false.
+	"<anEvent: hOf Event, ^self>"
+	"Deletes Player from listGrid and memory"
+
+	| thePlayer isSuccessfullBoolean |
+	
+	isSuccessfullBoolean := false.
 	thePlayer := anEvent dataGridComponentsHolderCellObject.
 	
-	(self data includes:thePlayer)
-	ifTrue: [
-		 (self data size > 1)
-		 ifTrue: [
-			self data remove: thePlayer.
-			isSuccessful := true.
-		 ].
-	].
+	(self data includes: thePlayer)
+		ifTrue: [
+			(self data size > 1)
+				ifTrue: [
+					self data remove: thePlayer.
+					isSuccessfullBoolean := true.
+				].
+		].
 	
 	self listGrid dataSourceBlock: [ self data	].
 		
 	self listGrid resetEditedDataGridCells.
 
-	isSuccessful
-	ifTrue: [
-		self showSuccessNotificationWithMessage: ('Deleted Player %1 %2...' bindWith: (thePlayer firstName) with: (thePlayer lastName)).
-	]
-	ifFalse: [
-		self showErrorNotificationWithMessage: ('Can not delete last Player...').
-	].
+	isSuccessfullBoolean
+		ifTrue: [self showSuccessNotificationWithMessage: ('Deleted Player %1 %2...' 
+			bindWith: thePlayer firstName with: thePlayer lastName).]
+		ifFalse: [self showErrorNotificationWithMessage: ('Can not delete last Player...').].
+		
 	TurnierplanerApp saveCollectionOfPlayers: self data.
 
 
 ]
 
 { #category : 'Accessing' }
-ManagePlayers >> listGrid [
+ManagePlayersView >> listGrid [
+
+	"<^hOf ListGrid>"
+	"Answer the listGrid of the receiver"
 
 	^listGrid
 ]
 
 { #category : 'Accessing' }
-ManagePlayers >> listGrid: anObject [
+ManagePlayersView >> listGrid: aListGrid [
 
-	listGrid := anObject
+	"<aListGrid: hOf ListGrid, ^self>"
+	"Set the listGrid of the receiver"
+
+	listGrid := aListGrid
 ]
 
 { #category : 'Accessing' }
-ManagePlayers >> placeholder [
+ManagePlayersView >> placeholder [
+	
+	"<^iOf Player>"
+	"Answer the placeholder of the receiver"
 
-	^Player firstName: '' lastName: '' email: ''
+	^Player newWithFirstName: ''  lastName: ''  email: '' 
 ]
 
 { #category : 'Events' }
-ManagePlayers >> saveEvent [
+ManagePlayersView >> saveEvent [
 
-	| theNumberOfEditedDataGridRows thePlayers|
+	"<^self>"
+	"Adds Player to listGrid and memory"
+
+	| theNumberOfEditedDataGridRows |
 
 	theNumberOfEditedDataGridRows := self listGrid numberOfEditedDataGridRows.
 
@@ -193,17 +230,17 @@ ManagePlayers >> saveEvent [
 		theFieldName := (self listGrid dataGridColumnDefinitions at: eachEditedDataGridCell field asNumber) title lowercaseFirstCharacter.
 		theValue := eachEditedDataGridCell value.
 		theValue isEmptyOrNil
-		ifTrue: [
-			(theFieldName at: 1) isVowel
-			ifFalse: [ eachEditedDataGridCell errorText: 'Please enter a ', theFieldName]
-			ifTrue: [ eachEditedDataGridCell errorText: 'Please enter an ', theFieldName ].
-		].
+			ifTrue: [
+				(theFieldName at: 1) isVowel
+					ifTrue: [eachEditedDataGridCell errorText: 'Please enter an ', theFieldName]
+					ifFalse: [eachEditedDataGridCell errorText: 'Please enter a ', theFieldName].
+			].
 	].
 
 	self listGrid hasValidationError
 		ifTrue: [^self showErrorNotificationWithMessage: 'Validation failed...'].
 	
-	self listGrid dataSourceBlock: [ self data	].
+	self listGrid dataSourceBlock: [self data].
 
 	self listGrid editedDataGridRows do: [ :eachEditedDataGridRow |
 		eachEditedDataGridRow editedDataGridCells do: [ :eachEditedDataGridCell |
@@ -211,7 +248,8 @@ ManagePlayers >> saveEvent [
 		
 	self listGrid resetEditedDataGridCells.
 	
-	self showSuccessNotificationWithMessage: ('Saved %1 edited row(s)...' bindWith: theNumberOfEditedDataGridRows).
+	self showSuccessNotificationWithMessage: ('Saved %1 edited row(s)...' 
+		bindWith: theNumberOfEditedDataGridRows).
 	
 	self parentView tournamentTab resetPlayers: self data.
 	TurnierplanerApp saveCollectionOfPlayers: self data
