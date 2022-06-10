@@ -12,7 +12,7 @@ Class {
 { #category : 'API' }
 Result class >> newWithPlayer: aPlayer ranking: aRank points: aNumber [
 
-	"<aPlayer: iOf Player, aRank: hOf Number, aNumber: hOf Number ^self>"
+	"<aPlayer: iOf Player, aRank: hOf Number, aNumber: hOf Number, ^self>"
 		"Create instance of Result with all attributes"
 
 	^self new
