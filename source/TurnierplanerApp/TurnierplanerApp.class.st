@@ -42,7 +42,8 @@ TurnierplanerApp class >> collectionOfPlayers: aCollectionOfPlayers [
 	"<aCollection: hOf Collection of: {iOf Player}, ^self>"
 	"Set the CollectionOfPlayers of the receiver"
 
-	CollectionOfPlayers := aCollectionOfPlayers
+	CollectionOfPlayers := aCollectionOfPlayers.
+	
 ]
 
 { #category : 'Accessing' }
@@ -102,6 +103,30 @@ self collectionOfTeams: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memo
 self collectionOfTournaments: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat').
 ]
 
+{ #category : 'API' }
+TurnierplanerApp class >> saveCollectionOfPlayers: aCollectionOfPlayers [
+
+	TurnierplanerApp collectionOfPlayers: aCollectionOfPlayers.
+	Memory saveObject: aCollectionOfPlayers onPath: 'C:\TournamentPlanner\Memory\players.dat'
+	
+]
+
+{ #category : 'API' }
+TurnierplanerApp class >> saveCollectionOfTeams: aCollectionOfTeams [
+
+	TurnierplanerApp collectionOfPlayers: aCollectionOfTeams.
+	Memory saveObject: aCollectionOfTeams onPath: 'C:\TournamentPlanner\Memory\teams.dat'
+	
+]
+
+{ #category : 'API' }
+TurnierplanerApp class >> saveCollectionOfTournaments: aCollectionOfTournaments [
+
+	TurnierplanerApp collectionOfPlayers: aCollectionOfTournaments.
+	Memory saveObject: aCollectionOfTournaments onPath: 'C:\TournamentPlanner\Memory\tournaments.dat'
+	
+]
+
 { #category : 'Tonel-Metadata' }
 TurnierplanerApp class >> startUp [
 	"comment"
@@ -109,5 +134,6 @@ TurnierplanerApp class >> startUp [
 	
 	self httpServer: (Me5SstHttpServer startUpHttpServerOnPort: '9003' serverApplicationClass: self).
 	self httpServer addViewClass: TournamentPlannerView.
+	self httpServer addViewClass: ManagePlayers.
 	self addRouteToHttpServer.
 ]

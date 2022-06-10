@@ -1,8 +1,7 @@
 Class {
 	#name : 'ManagePlayers',
-	#superclass : 'Me5Div',
+	#superclass : 'Me5BaseView',
 	#instVars : [
-		'startUp',
 		'listGrid',
 		'data',
 		'placeholder'
@@ -22,7 +21,13 @@ ManagePlayers >> addPlayerEvent [
 	
 	self listGrid resetEditedDataGridCells.
 
-	self view showSuccessNotificationWithMessage: ('Added row to save Player...')
+	self showSuccessNotificationWithMessage: ('Added row to save Player...')
+]
+
+{ #category : 'Initial-Events' }
+ManagePlayers >> beforeCreateComponents [
+
+	self data: TurnierplanerApp collectionOfPlayers
 ]
 
 { #category : 'Events' }
@@ -37,20 +42,18 @@ ManagePlayers >> clearEvent [
 	
 	self listGrid resetEditedDataGridCells.
 
-	self view showSuccessNotificationWithMessage: ('Cleared Grid...')
+	self showSuccessNotificationWithMessage: ('Cleared Grid...')
 ]
 
 { #category : 'Initial-Events' }
 ManagePlayers >> createComponents [
 
-	self startUp: Memory new.
-	
 	self listGrid: (Me5ListGrid new
 		addCssClassColMd12;
-		height: '55vh';
+		height: '60vh';
 		dataSourceBlock: [self data];
 		addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
-			title: 'Vorname';
+			title: 'First name';
 			getterSelector: #firstName;
 			setterSelector: #firstName:;
 			enableHeaderSort;
@@ -58,7 +61,7 @@ ManagePlayers >> createComponents [
 			maxWidth:  'vw 40';
 			yourself);
 		addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
-			title: 'Nachname';
+			title: 'Last name';
 			getterSelector: #lastName;
 			setterSelector: #lastName:;
 			enableHeaderSort;
@@ -66,55 +69,55 @@ ManagePlayers >> createComponents [
 			minWidth: 200;
 			yourself);
 		addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
-			title: 'E-Mail';
+			title: 'Email';
 			getterSelector: #email;
 			setterSelector: #email:;
 			enableHeaderSort;
 			minWidth: 200;
-			maxWidth:  'vw 40';
 			yourself);
-		addDataGridColumnDefinition: (Me5DataGridComponentsHolderColumnDefinition new
-			title: 'Action';
-			setHorizontalAlignmentToRight;
-			componentsHolderBlock: [ 
-				:theDataGridComponentsHolderCell :theDataGridComponentsHoldingParameters |
-				theDataGridComponentsHolderCell
-				addChild: (Me5Button newDanger
-					addCssClassBtnSm;
-					icon: Me5I newFarTrash; 
-					text: 'L&ouml;schen';
-					addClickEventSelector: #deletePlayerEvent: eventReceiver: self;
-					yourself);
-				yourself];
-			yourself);
-		yourself).
-	
-	self addChild: (Me5H1 new text: 'Admin-Tools').
-	self addChild: Me5Hr new.
-	self addChild: (Me5FormPortlet new
+	addDataGridColumnDefinition: (Me5DataGridComponentsHolderColumnDefinition new
+		title: 'Action';
+		setHorizontalAlignmentToRight;
+		componentsHolderBlock: [ 
+			:theDataGridComponentsHolderCell :theDataGridComponentsHoldingParameters |
+			theDataGridComponentsHolderCell
+			addChild: (Me5Button newDanger
+				text: 'L&ouml;schen';
+				addClickEventSelector: #deletePlayerEvent: eventReceiver: self;
+				yourself);
+			yourself];
+		yourself);
+	yourself).
+	self
+		addChild: (Me5FormPortlet new
 		addCssClassColMd12;
-		addChildToBody: (Me5Div new
-			addChild: self listGrid;
-			yourself); 
+		addChildToBody: self listGrid;
 		addChildToFootButtonGroup: (Me5Button newSuccess
-				icon: Me5I newFasSave; 
-				text: 'Speichern';
-				addClickEventSelector: #saveEvent eventReceiver: self;
-				yourself);
-				addChildToFootButtonGroup: (Me5Button newInfo
-				icon: Me5I newFasPlus; 
-				text: 'Spieler hinzuf&uuml;gen';
-				addClickEventSelector: #addPlayerEvent eventReceiver: self;
-				yourself);
-			addChildToFootButtonGroup: (Me5Button newWarning
-				icon: Me5I newFasUndo;
-				text: 'Reinigen';
-				addClickEventSelector: #clearEvent eventReceiver: self;
-				yourself);
-		yourself).
-		
-		self listGrid resetEditedDataGridCells.
-		self listGrid resetSortingCache
+			icon: Me5I newFasSave; 
+			text: 'Speichern';
+			addClickEventSelector: #saveEvent eventReceiver: self;
+			yourself);
+		addChildToFootButtonGroup: (Me5Button newInfo
+			icon: Me5I newFasPlus; 
+			text: 'Spieler hinzuf&uuml;gen';
+			addClickEventSelector: #addPlayerEvent eventReceiver: self;
+			yourself);
+		addChildToFootButtonGroup: (Me5Button newWarning
+			icon: Me5I newFasUndo;
+			text: 'Reinigen';
+			addClickEventSelector: #clearEvent eventReceiver: self;
+			yourself);
+		yourself);
+	yourself
+]
+
+{ #category : 'Initial-Events' }
+ManagePlayers >> createModules [
+
+	super createModules.
+	
+	self addModuleByModuleClass: Me5DataGridModuleBundle.
+	self addModuleByModuleClass: Bs4TooltipsterTooltipModuleBundle.
 ]
 
 { #category : 'Accessing' }
@@ -146,19 +149,18 @@ ManagePlayers >> deletePlayerEvent: anEvent [
 	].
 	
 	self listGrid dataSourceBlock: [ self data	].
-	
-	self startUp saveObject: self data onPath: 'C:\TournamentPlanner\Memory\players.dat'.
-	
+		
 	self listGrid resetEditedDataGridCells.
 
 	isSuccessful
 	ifTrue: [
-		self view showSuccessNotificationWithMessage: ('Deleted Player %1 %2...' bindWith: (thePlayer firstName) with: (thePlayer lastName)).
+		self showSuccessNotificationWithMessage: ('Deleted Player %1 %2...' bindWith: (thePlayer firstName) with: (thePlayer lastName)).
 	]
 	ifFalse: [
-		self view showErrorNotificationWithMessage: ('Can not delete last Player...').
+		self showErrorNotificationWithMessage: ('Can not delete last Player...').
 	].
-	self view resetTournamentTabWithPlayers: self data
+	TurnierplanerApp saveCollectionOfPlayers: self data.
+
 
 ]
 
@@ -199,34 +201,19 @@ ManagePlayers >> saveEvent [
 	].
 
 	self listGrid hasValidationError
-		ifTrue: [^self view showErrorNotificationWithMessage: 'Validation failed...'].
+		ifTrue: [^self showErrorNotificationWithMessage: 'Validation failed...'].
 	
 	self listGrid dataSourceBlock: [ self data	].
 
 	self listGrid editedDataGridRows do: [ :eachEditedDataGridRow |
 		eachEditedDataGridRow editedDataGridCells do: [ :eachEditedDataGridCell |
 			eachEditedDataGridCell writeValueToObject]].
-
-	self view collectionOfPlayers: self data.
-	self startUp saveObject: self data onPath: 'C:\TournamentPlanner\Memory\players.dat'.
 		
 	self listGrid resetEditedDataGridCells.
 	
-	self view showSuccessNotificationWithMessage: ('Saved %1 edited row(s)...' bindWith: theNumberOfEditedDataGridRows).
+	self showSuccessNotificationWithMessage: ('Saved %1 edited row(s)...' bindWith: theNumberOfEditedDataGridRows).
 	
-	self view collectionOfPlayers: self data.
+	self parentView tournamentTab resetPlayers: self data.
+	TurnierplanerApp saveCollectionOfPlayers: self data
 
-	self view resetTournamentTabWithPlayers: self data
-]
-
-{ #category : 'Accessing' }
-ManagePlayers >> startUp [
-
-	^startUp
-]
-
-{ #category : 'Accessing' }
-ManagePlayers >> startUp: anObject [
-
-	startUp := anObject
 ]
