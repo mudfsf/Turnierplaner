@@ -1,0 +1,157 @@
+Class {
+	#name : 'TournamentPlannerApp',
+	#superclass : 'Application',
+	#classVars : [
+		'CollectionOfTournaments',
+		'CollectionOfTeams',
+		'CollectionOfPlayers',
+		'HttpServer'
+	],
+	#category : 'TournamentPlannerApp'
+}
+
+{ #category : 'Initials' }
+TournamentPlannerApp class >> addRouteToHttpServer [
+
+	| theRootPathDefinition |
+
+	theRootPathDefinition := ClwGroupRouteDefinition forPath: ''.
+
+	theRootPathDefinition addRouteDefinitionForPath: 'SpecificTournament' name: '/specificTournament' viewClass: SpecificTournamentView.
+
+	self httpServer
+		addRoutesForDefinition: theRootPathDefinition configuration: (ClwRouteCalculatorConfiguration new
+			viewUrlHandlerClass: Bs4ViewUrlHandler;
+			redirectUrlHandlerClass: Bs4RedirectUrlHandler;
+			yourself);
+		yourself.
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerApp class >> collectionOfPlayers [
+
+	"<^hOf Collection of: {iOf Player}>"
+	"Answer the CollectionOfPlayers of the receiver"
+
+	^CollectionOfPlayers
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerApp class >> collectionOfPlayers: aCollectionOfPlayers [
+
+	"<aCollection: hOf Collection of: {iOf Player}, ^self>"
+	"Set the CollectionOfPlayers of the receiver"
+
+	CollectionOfPlayers := aCollectionOfPlayers.
+	
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerApp class >> collectionOfTeams [
+
+	"<^hOf Collection of: {iOf Team}>"
+	"Answer the CollectionOfTeams of the receiver"
+
+	^CollectionOfTeams
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerApp class >> collectionOfTeams: aCollectionOfTeams [
+
+	"<aCollection: hOf Collection of: {iOf Team}, ^self>"
+	"Set the CollectionOfTeams of the receiver"
+
+	CollectionOfTeams := aCollectionOfTeams
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerApp class >> collectionOfTournaments [
+
+	"<^hOf Collection of: {iOf Tournament}>"
+	"Answer the CollectionOfTournaments of the receiver"
+
+	^CollectionOfTournaments
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerApp class >> collectionOfTournaments: aCollectionOfTournaments [
+
+	"<aCollection: hOf Collection of: {iOf Tournament}, ^self>"
+	"Set the CollectionOfTournaments of the receiver"
+
+	CollectionOfTournaments := aCollectionOfTournaments
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerApp class >> httpServer [
+
+	"<^iOf HttpServer>"
+	"Answer the httpServer of the receiver"
+
+	^HttpServer
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerApp class >> httpServer: aHttpServer [
+
+	"<aHttpServer: iOf httpServer, ^self>"
+	"Set the HttpServer of the receiver"
+
+	HttpServer := aHttpServer
+]
+
+{ #category : 'Initials',
+  #vaVisibility : 'private' }
+TournamentPlannerApp class >> loadAll [
+
+self collectionOfPlayers: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat').
+self collectionOfTeams: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\teams.dat').
+self collectionOfTournaments: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat').
+]
+
+{ #category : 'API' }
+TournamentPlannerApp class >> saveCollectionOfPlayers: aCollectionOfPlayers [
+
+	"<aCollectionOfTeams: hOf Collection of: iOf Player, ^self>"
+	"Saves the collectionOfPlayers of the receiver"
+
+	TournamentPlannerApp collectionOfPlayers: aCollectionOfPlayers.
+	Memory saveObject: aCollectionOfPlayers onPath: 'C:\TournamentPlanner\Memory\players.dat'
+	
+]
+
+{ #category : 'API' }
+TournamentPlannerApp class >> saveCollectionOfTeams: aCollectionOfTeams [
+
+	"<aCollectionOfTeams: hOf Collection of: iOf Team, ^self>"
+	"Saves the collectionOfTeams of the receiver"
+
+	TournamentPlannerApp collectionOfTeams:  aCollectionOfTeams.
+	Memory saveObject: aCollectionOfTeams onPath: 'C:\TournamentPlanner\Memory\teams.dat'
+	
+]
+
+{ #category : 'API' }
+TournamentPlannerApp class >> saveCollectionOfTournaments: aCollectionOfTournaments [
+
+	"<aCollectionOfTournaments: hOf Collection of: iOf Tournament, ^self>"
+	"Saves the collectionOfTournaments of the receiver"
+
+	TournamentPlannerApp collectionOfTournaments: aCollectionOfTournaments.
+	Memory saveObject: aCollectionOfTournaments onPath: 'C:\TournamentPlanner\Memory\tournaments.dat'
+	
+]
+
+{ #category : 'Initials' }
+TournamentPlannerApp class >> startUp [
+	
+	"<^self>"
+	"Starts server, loads data and adds views."
+	
+	self loadAll.
+	
+	self httpServer: (Me5SstHttpServer startUpHttpServerOnPort: '9003' serverApplicationClass: self).
+	self httpServer addViewClass: TournamentPlannerView.
+	self httpServer addViewClass: ManagePlayersView.
+	self addRouteToHttpServer.
+]
