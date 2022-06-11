@@ -320,7 +320,6 @@ ManageTournamentsView >> removeTournament [
 	
 	| theDivTournament |
 	theDivTournament := self removeTournamentEvent component parent parent parent parent parent parent.
-	theDivTournament title.
 	theDivTournament parent removeChild: theDivTournament ifAbsent: [].
 	
 	

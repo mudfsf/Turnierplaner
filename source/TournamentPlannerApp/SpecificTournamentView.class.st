@@ -89,7 +89,7 @@ SpecificTournamentView >> specificTournament [
 				yourself).
 			"set line coordinates (1er) x1 y1"
 			(theCoordinatesLineArray at: eachColumn)
-				at: eachRow put: (Array new: 4;
+				at: eachRow put: ((Array new: 4)
 					at: 1 put: theLeft; 
 					at: 2 put: theTop; 
 					yourself).
