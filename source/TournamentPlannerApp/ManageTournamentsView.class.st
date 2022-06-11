@@ -86,6 +86,19 @@ ManageTournamentsView >> createTournamentRows [
 	
 	self rowTournaments: Me5Row new.
 	self tournaments do: [	:eachTournament | 
+		| theMembers theTournamentType |
+		
+		(eachTournament tournamentType isKindOf: KOTournamentType)
+			ifTrue: [theTournamentType := 'KO'].
+		(eachTournament tournamentType isKindOf: LapsTournamentType)
+			ifTrue: [theTournamentType := 'Runden'].
+		(eachTournament tournamentType isKindOf: MixedTournamentType)
+			ifTrue: [theTournamentType := 'Mixed'].
+			
+		theMembers := OrderedCollection new.
+		eachTournament membercollection do: [ :eachMember |
+			theMembers add: eachMember asString].
+			
 		self rowTournaments addChild: (Me5Div new
 			addChild: (Me5Portlet newPrimary
 				title: eachTournament name;
@@ -94,11 +107,11 @@ ManageTournamentsView >> createTournamentRows [
 					addClickEventSelector: #yesNoModalRemoveTournament: eventReceiver: self;
 					yourself);
 				addChildToBody: (Me5P new
-					text: ((eachTournament tournamentType) asString, ' / ', (eachTournament gameMode) asString );
+					text: (theTournamentType, ' / ', (eachTournament gameMode) asString );
 					fontSize: 'medium';
 					yourself);
 				addChildToBody: (Me5P new 
-					text: ('Rivalen: ', '-' );
+					text: ('Rivalen: ', (theMembers joinUsing: ', '));
 					fontSize: 'large';
 					yourself);
 				addChildToBody: (Me5A newPrimary
@@ -206,6 +219,7 @@ ManageTournamentsView >> newTournamentClicked [
 				numberOfGames: theGames size;
 				numberOfPlayedGames: 0;
 				games: theGames;
+				membercollection: theSelectedCollection;
 				yourself).
 	
 			self rowTournaments addChild: (Me5Div new
@@ -306,48 +320,33 @@ ManageTournamentsView >> radioGroupTournamentType [
 
 { #category : 'Accessing',
   #vaVisibility : 'private' }
-ManageTournamentsView >> radioGroupTournamentType: aRadioGroup [
+ManageTournamentsView >> radioGroupTournamentType: aMe5RadioGroup [
 
-	"<aRadioGroup: hOf Me5RadioGroup, ^self>"
+	"<aMe5RadioGroup: hOf Me5RadioGroup, ^self>"
 	"Set the radioGroupTournamentType of the receiver"
 
-	radioGroupTournamentType := aRadioGroup
+	radioGroupTournamentType := aMe5RadioGroup
 ]
 
-{ #category : 'Not categorized' }
-ManageTournamentsView >> removeTournament [
+{ #category : 'Events' }
+ManageTournamentsView >> removeTournament: aMe5DialogEvent [
 	
-	| theDivTournament |
-	theDivTournament := self removeTournamentEvent component parent parent parent parent parent parent.
+	| theDivTournament theTournament |
+	
+	theDivTournament := aMe5DialogEvent originalEvent component parent parent parent parent parent parent.
+	
 	theDivTournament parent removeChild: theDivTournament ifAbsent: [].
+	theTournament := self tournaments detect: [ :eachTournament |
+		eachTournament name = theDivTournament children first title.
+	] ifNone: [].
+	self tournaments remove: theTournament ifAbsent: [].
 	
-	
-	TournamentPlannerApp saveCollectionOfTournaments: self tournaments
-"
-	self view showSuccessNotificationWithMessage: ('Turnier gel&ouml;scht')"
+	TournamentPlannerApp saveCollectionOfTournaments: self tournaments.
+	self showSuccessNotificationWithMessage: ('Turnier mit dem Namen %1 gel&ouml;scht' 
+		bindWith: theTournament name)
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
-ManageTournamentsView >> removeTournamentEvent [
-
-	"<^hOf Me5Event>"
-	"Answer the removeTournamentEvent of the receiver"
-
-	^removeTournamentEvent
-]
-
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
-ManageTournamentsView >> removeTournamentEvent: aMe5Event [
-
-	"<aMe5Event: hOf Me5Event, ^self>"
-	"Set the removeTournamentEvent of the receiver"
-
-	removeTournamentEvent := aMe5Event
-]
-
-{ #category : 'Not categorized' }
+{ #category : 'API' }
 ManageTournamentsView >> resetPlayers: aCollectionOfPlayers [
 
 	| thePlayers |
@@ -384,12 +383,12 @@ ManageTournamentsView >> rowTournaments [
 
 { #category : 'Accessing',
   #vaVisibility : 'private' }
-ManageTournamentsView >> rowTournaments: aRow [
+ManageTournamentsView >> rowTournaments: aMe5Row [
 
-	"<aRow: hOf Me5Row, ^self>"
+	"<aMe5Row: hOf Me5Row, ^self>"
 	"Set the rowTournaments of the receiver"
 
-	rowTournaments := aRow
+	rowTournaments := aMe5Row
 ]
 
 { #category : 'Accessing',
@@ -404,12 +403,12 @@ ManageTournamentsView >> textFieldTournamentName [
 
 { #category : 'Accessing',
   #vaVisibility : 'private' }
-ManageTournamentsView >> textFieldTournamentName: aTextField [
+ManageTournamentsView >> textFieldTournamentName: aMe5TextField [
 
-	"<aTextField: hOf Me5TextField, ^self>"
+	"<aMe5TextField: hOf Me5TextField, ^self>"
 	"Set the textFieldTournamentName of the receiver"
 
-	textFieldTournamentName := aTextField
+	textFieldTournamentName := aMe5TextField
 ]
 
 { #category : 'Accessing' }
@@ -430,11 +429,10 @@ ManageTournamentsView >> tournaments: aCollection [
 	tournaments := aCollection
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Events' }
 ManageTournamentsView >> yesNoModalRemoveTournament: aMe5Event [
 
-	self removeTournamentEvent: aMe5Event.
-	self showYesNoDialogWithTitle: 'Turnier l&ouml;schen?' message: '' yesSelector: #removeTournament
+	self showYesNoDialogWithTitle: 'Turnier l&ouml;schen?' message: '' yesSelector: #removeTournament:
 
 	
 ]
