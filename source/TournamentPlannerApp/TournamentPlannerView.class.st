@@ -17,7 +17,8 @@ Class {
 		'collapsiblePortlet',
 		'teamsRow',
 		'modalTextFieldTeamName',
-		'modalMultiComboBoxTeamMembers'
+		'modalMultiComboBoxTeamMembers',
+		'removeTeamEvent'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -58,33 +59,49 @@ TournamentPlannerView >> beforeCreateComponents [
 ]
 
 { #category : 'Not categorized' }
+TournamentPlannerView >> buttonDeleteTeam [
+
+	| theTeam |
+	
+]
+
+{ #category : 'Not categorized' }
 TournamentPlannerView >> buttonNewTeam [
 
-	| theSingleTeamDiv |
+	| theSingleTeamDiv theTeamMembers theTeam|
+	
+	theTeamMembers := OrderedCollection new.
 	
 	theSingleTeamDiv := Me5Div new.
-			1 to: (self modalMultiComboBoxTeamMembers value size) do: [:index | 	
-				theSingleTeamDiv addChild: (Me5Div new
-				addChild: (Me5P new 
-						text: (self modalMultiComboBoxTeamMembers value at: index);
-						fontSize: 'large';
-						yourself)).
-			].
-			self teamsRow addChild: (Me5Div new
-				addChild: (Me5Portlet newPrimary
-					title: (self modalTextFieldTeamName value);
-					addChildToBody: theSingleTeamDiv;
-					addChildToFoot: (Me5Button newDanger
-						text: 'L&ouml;schen';
-						icon: Me5Flaticon newDelete1;
-						"addClickEventSelector: #buttonDeleteTeam;"
-						yourself);
-					yourself);
-				padding: 15;
-				addCssClassColSm12;
-				addCssClassColMd6;
-				addCssClassColXl4;
-			yourself).
+	self modalMultiComboBoxTeamMembers value do: [ :eachValue | 	
+		theTeamMembers add: eachValue.
+		theSingleTeamDiv addChild: (Me5Div new
+		addChild: (Me5P new 
+				text: eachValue;
+				fontSize: 'large';
+				yourself)).
+	].
+	self teamsRow addChild: (Me5Div new
+		addChild: (Me5Portlet newPrimary
+			title: (self modalTextFieldTeamName value);
+			addChildToBody: theSingleTeamDiv;
+			addChildToFoot: (Me5Button newDanger
+				text: 'L&ouml;schen';
+				icon: Me5Flaticon newDelete1;
+				addClickEventSelector: #buttonDeleteTeam;
+				yourself);
+			yourself);
+		padding: 15;
+		addCssClassColSm12;
+		addCssClassColMd6;
+		addCssClassColXl4;
+	yourself).
+	
+	theTeam := Team newWithTeamName: (self modalTextFieldTeamName value ) players: theTeamMembers.
+	TournamentPlannerApp collectionOfTeams add: theTeam.
+		
+	TournamentPlannerApp saveCollectionOfTeams: (TournamentPlannerApp collectionOfTeams)
+	
 ]
 
 { #category : 'Accessing' }
@@ -387,6 +404,37 @@ TournamentPlannerView >> removeAllTournaments [
 	self startUp saveObject: self collectionOfTournaments onPath: 'C:\TournamentPlanner\Memory\tournaments.dat'.
 ]
 
+{ #category : 'Internal' }
+TournamentPlannerView >> removeTeam [
+
+	| theDivTeam |
+	theDivTeam := self removeTeamEvent component parent parent parent.
+	theDivTeam parent removeChild: theDivTeam ifAbsent: [].
+	
+	
+	"TournamentPlannerApp saveCollectionOfTeams: self teams"
+
+	self showSuccessNotificationWithMessage: ('Team gel&ouml;scht')
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> removeTeamEvent [
+
+	"<^hOf Event>"
+	"Answer the removeTeamEvent of the receiver"
+
+	^removeTeamEvent
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> removeTeamEvent: anEvent [
+
+	"<anEvent: hOf Event, ^self>"
+	"Set the removeTeamEvent of the receiver"
+
+	removeTeamEvent := anEvent
+]
+
 { #category : 'Not categorized' }
 TournamentPlannerView >> removeTournament [
 
@@ -421,7 +469,7 @@ TournamentPlannerView >> startUp: anObject [
 { #category : 'Not categorized' }
 TournamentPlannerView >> tabsCollection [
 
-	| theUserSettings theCreateTournamentModal |
+	| theCreateTournamentModal |
 	
 	self tournamentTab: ManageTournamentsView new.
 
@@ -429,8 +477,6 @@ TournamentPlannerView >> tabsCollection [
 	yourself).
 	theCreateTournamentModal createView."
 	
-	theUserSettings := UserSettingsView new.
-
 	^OrderedCollection new
 		add: (Me5Tab new
 			text: 'Dashboard';
@@ -487,61 +533,58 @@ TournamentPlannerView >> teamsRow: anObject [
 { #category : 'Not categorized' }
 TournamentPlannerView >> teamsTab [
 
-	| theSingleTeamDiv theResultDiv theTeamList thePlayerLists thePersonen textFieldTeamName multiComboBoxTeamMembers |
+	| theTeamMemberDiv theResultDiv theTeamList theCollectionOfTeamMemberCollections thePersons textFieldTeamName multiComboBoxTeamMembers |
 		
-		thePersonen := OrderedCollection new.
-		1 to: collectionOfPlayers size do: [:eachIndex |
-			| eachPlayer |
-			eachPlayer := collectionOfPlayers at: eachIndex.
-			thePersonen add: eachPlayer firstName, ' ', eachPlayer lastName.
+		thePersons := OrderedCollection new.
+		TournamentPlannerApp collectionOfPlayers do: [ :eachPerson |
+			thePersons add: ('%1 %2' bindWith: eachPerson firstName with: eachPerson lastName).
 		].
 		
 		theTeamList := OrderedCollection new.
-		1 to: collectionOfTeams size do: [:eachIndex |
-			| eachTeam |
-			eachTeam := collectionOfTeams at: eachIndex.
-			theTeamList add: eachTeam teamName.
+		theCollectionOfTeamMemberCollections := OrderedCollection new.
+		
+		TournamentPlannerApp collectionOfTeams do: [ :eachTeam |
+			| eachPlayerList |
+			
+			theTeamList add: eachTeam teamName.			
+			eachPlayerList := OrderedCollection new.
+			eachTeam players do: [ :eachPlayer |
+				eachPlayerList add: eachPlayer.
+			].
+			theCollectionOfTeamMemberCollections add: eachPlayerList.
 		].
 		
-		thePlayerLists := OrderedCollection new.
-		1 to: collectionOfTeams size do: [:eachIndex |
-			| eachTeamPlayers eachPlayerList |
-			eachTeamPlayers := (collectionOfTeams at: eachIndex) players.
-			eachPlayerList := OrderedCollection new.
-			1 to: eachTeamPlayers size do: [:innerIndex |
-				eachPlayerList add: (eachTeamPlayers at: innerIndex).
-			].
-			thePlayerLists add: eachPlayerList.
-		].
-
-		teamsRow := ((Me5Div new) addChild: Me5Row new).
-		1 to: (theTeamList size) do: [:index | 
-			theSingleTeamDiv := Me5Div new.
-			1 to: ((thePlayerLists at: index) size) do: [:innerIndex | 	
-				theSingleTeamDiv addChild: (Me5Div new
-				addChild: (Me5P new 
-						text: ((thePlayerLists at: index) at: innerIndex);
+		teamsRow := Me5Row new.		
+		
+		TournamentPlannerApp collectionOfTeams do: [ :eachTeam | 
+			theTeamMemberDiv := Me5Div new.
+			eachTeam players do: [ :eachPlayer |
+				theTeamMemberDiv addChild: (Me5Div new
+					addChild: (Me5P new
+						text: eachPlayer asString;
 						fontSize: 'large';
-						yourself)).
-			].
+						yourself))].
+		
 			teamsRow addChild: (Me5Div new
 				addChild: (Me5Portlet newPrimary
-					title: (theTeamList at: index);
-					addChildToBody: theSingleTeamDiv;
+					title: (eachTeam teamName);
+					addChildToBody: theTeamMemberDiv;
 					addChildToFoot: (Me5Button newDanger
 						text: 'L&ouml;schen';
 						icon: Me5Flaticon newDelete1;
-						"addClickEventSelector: #buttonDeleteTeam;"
+						addClickEventSelector: #yesNoModalRemoveTeam: eventReceiver: self;
 						yourself);
 					yourself);
 				padding: 15;
 				addCssClassColSm12;
 				addCssClassColMd6;
 				addCssClassColXl4;
-			yourself).
+				yourself).
 		].
+																	
 		theResultDiv := Me5Div new.
-		theResultDiv addChild: teamsRow;
+		theResultDiv 
+			addChild: teamsRow;
 			addChild: (Me5Div new
 				addChild: (Me5Portlet newSuccess
 					title: 'Neues Team erstellen';
@@ -556,7 +599,7 @@ TournamentPlannerView >> teamsTab [
 						addChildToBody: (multiComboBoxTeamMembers := Me5MultiComboBox new
 							text: 'Teammitglieder';
 							helpText: 'Im Team:';
-							objects: thePersonen;
+							objects: thePersons;
 							placeholder: 'Personen';
 							yourself);
 						addChildToBody: (Me5Button newSuccess
@@ -574,7 +617,7 @@ TournamentPlannerView >> teamsTab [
 		self modalTextFieldTeamName: textFieldTeamName.
 		self modalMultiComboBoxTeamMembers: multiComboBoxTeamMembers.
 
-	^theResultDiv.
+	^theResultDiv
 
 ]
 
@@ -684,4 +727,11 @@ TournamentPlannerView >> userSettingsTab [
 					yourself);
 				yourself);
 			yourself).
+]
+
+{ #category : 'Not categorized' }
+TournamentPlannerView >> yesNoModalRemoveTeam: aMe5Event [
+
+	self removeTeamEvent: aMe5Event.
+	self showYesNoDialogWithTitle: 'Team l&ouml;schen?' message: '' yesSelector: #removeTeam
 ]
