@@ -117,7 +117,6 @@ ManageTournamentsView >> createTournamentRows [
 					textAlign: 'center';
 					fontSize: 'larger';
 					yourself);
-				setTargetBlank;
 				yourself);
 			padding: 15;
 			addCssClassColSm12;
