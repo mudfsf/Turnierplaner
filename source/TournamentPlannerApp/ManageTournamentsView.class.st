@@ -22,8 +22,10 @@ ManageTournamentsView >> beforeCreateComponents [
 	"This method is called before #createComponents.
 	 Sets players and tournaments."
 
-	self players: TournamentPlannerApp collectionOfPlayers.
-	self tournaments: TournamentPlannerApp collectionOfTournaments
+	TournamentPlannerApp collectionOfPlayers observerCollection add: self.
+	TournamentPlannerApp collectionOfTeams observerCollection add: self.
+	self players: TournamentPlannerApp collectionOfPlayers data.
+	self tournaments: TournamentPlannerApp collectionOfTournaments data
 ]
 
 { #category : 'Initial-Events' }
@@ -47,7 +49,7 @@ ManageTournamentsView >> createComponents [
 	self radioGroupGameMode: (Me5RadioGroup new
 		text: 'Spielmodus';
 		addObjects: #('Einzel' 'Team');
-		addChangeEventSelector: #createRivalsMultiComboBox: eventReceiver: self;
+		addChangeEventSelector: #createRivalsMultiComboBox eventReceiver: self;
 		yourself).
 	self multiComboBoxRivals: (Me5Select2MultiSelectBox new
 		text: 'Rivalen';
@@ -81,7 +83,7 @@ ManageTournamentsView >> createComponents [
 ]
 
 { #category : 'Events' }
-ManageTournamentsView >> createRivalsMultiComboBox: anEvent [
+ManageTournamentsView >> createRivalsMultiComboBox [
 
 	| theGameMode theMembers |
 	
@@ -90,7 +92,7 @@ ManageTournamentsView >> createRivalsMultiComboBox: anEvent [
 	self multiComboBoxRivals: (Me5Select2MultiSelectBox new 
 		text: 'Rivalen').
 	theMembers := OrderedCollection new.
-	theGameMode := anEvent component value.
+	theGameMode := self radioGroupGameMode value.
 	
 	theGameMode = 'Einzel'
 		ifTrue: [
@@ -382,12 +384,19 @@ ManageTournamentsView >> removeTournament: aMe5DialogEvent [
 ]
 
 { #category : 'API' }
-ManageTournamentsView >> resetPlayers: aCollectionOfPlayers [
+ManageTournamentsView >> resetData [
+	
+	self players: TournamentPlannerApp collectionOfPlayers.
+	self tournaments: TournamentPlannerApp collectionOfTournaments.
+	
+	self createRivalsMultiComboBox
+]
+
+{ #category : 'API' }
+ManageTournamentsView >> resetPlayers [
 
 	| thePlayers |
-	
-	self players: aCollectionOfPlayers.
-	
+		
 	self divTournamentCreation children first children first removeChild: (self multiComboBoxRivals) ifAbsent: [].
 	
 	thePlayers := OrderedCollection new.
@@ -395,7 +404,7 @@ ManageTournamentsView >> resetPlayers: aCollectionOfPlayers [
 		thePlayers add: eachPlayer asString.].
 	
 	self multiComboBoxRivals: (Me5Select2MultiSelectBox new
-		text: 'Rivalen (muss noch dynamisch werden dass teams oder spieler angezeigt werden k&ouml;nnen)';
+		text: 'Rivalen';
 		objects: thePlayers;
 		yourself).
 		

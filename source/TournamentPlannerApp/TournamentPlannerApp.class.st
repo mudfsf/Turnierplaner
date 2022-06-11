@@ -107,9 +107,18 @@ TournamentPlannerApp class >> loadAll [
 	"^self"
 	"Sets collectionOfPlayers, collectionOfTeams, collectionOfTournaments"
 	
-	self collectionOfPlayers: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat').
-	self collectionOfTeams: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\teams.dat').
-	self collectionOfTournaments: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat')
+	self collectionOfPlayers: (MemoryData new
+		data: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat');
+		observerCollection: OrderedCollection new;
+		yourself).
+	self collectionOfTeams: (MemoryData new
+		data: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\teams.dat');
+		observerCollection: OrderedCollection new;
+		yourself).
+	self collectionOfTournaments: (MemoryData new
+		data: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat');
+		observerCollection: OrderedCollection new;
+		yourself)
 ]
 
 { #category : 'API' }
@@ -118,8 +127,10 @@ TournamentPlannerApp class >> saveCollectionOfPlayers: aCollectionOfPlayers [
 	"<aCollectionOfTeams: hOf Collection of: iOf Player, ^self>"
 	"Saves the collectionOfPlayers of the receiver"
 
-	TournamentPlannerApp collectionOfPlayers: aCollectionOfPlayers.
-	Memory saveObject: aCollectionOfPlayers onPath: 'C:\TournamentPlanner\Memory\players.dat'
+	TournamentPlannerApp collectionOfPlayers data: aCollectionOfPlayers.
+	Memory saveObject: aCollectionOfPlayers onPath: 'C:\TournamentPlanner\Memory\players.dat'.
+	TournamentPlannerApp collectionOfPlayers observerCollection do: [ :eachObserver |
+		eachObserver resetData.]
 	
 ]
 
@@ -129,8 +140,10 @@ TournamentPlannerApp class >> saveCollectionOfTeams: aCollectionOfTeams [
 	"<aCollectionOfTeams: hOf Collection of: iOf Team, ^self>"
 	"Saves the collectionOfTeams of the receiver"
 
-	TournamentPlannerApp collectionOfTeams:  aCollectionOfTeams.
-	Memory saveObject: aCollectionOfTeams onPath: 'C:\TournamentPlanner\Memory\teams.dat'
+	TournamentPlannerApp collectionOfTeams data: aCollectionOfTeams.
+	Memory saveObject: aCollectionOfTeams onPath: 'C:\TournamentPlanner\Memory\teams.dat'.
+	TournamentPlannerApp collectionOfTeams observerCollection do: [ :eachObserver |
+		eachObserver resetData.]
 	
 ]
 
@@ -139,9 +152,11 @@ TournamentPlannerApp class >> saveCollectionOfTournaments: aCollectionOfTourname
 
 	"<aCollectionOfTournaments: hOf Collection of: iOf Tournament, ^self>"
 	"Saves the collectionOfTournaments of the receiver"
-
-	TournamentPlannerApp collectionOfTournaments: aCollectionOfTournaments.
-	Memory saveObject: aCollectionOfTournaments onPath: 'C:\TournamentPlanner\Memory\tournaments.dat'
+	
+	TournamentPlannerApp collectionOfTournaments data: aCollectionOfTournaments.
+	Memory saveObject: aCollectionOfTournaments onPath: 'C:\TournamentPlanner\Memory\tournaments.dat'.
+	TournamentPlannerApp collectionOfTournaments observerCollection do: [ :eachObserver |
+		eachObserver resetData.]
 	
 ]
 

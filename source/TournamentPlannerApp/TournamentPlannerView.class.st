@@ -519,14 +519,14 @@ TournamentPlannerView >> teamsTab [
 	| theTeamMemberDiv theResultDiv theTeamList theCollectionOfTeamMemberCollections thePersons textFieldTeamName multiComboBoxTeamMembers |
 		
 		thePersons := OrderedCollection new.
-		TournamentPlannerApp collectionOfPlayers do: [ :eachPerson |
+		TournamentPlannerApp collectionOfPlayers data do: [ :eachPerson |
 			thePersons add: ('%1 %2' bindWith: eachPerson firstName with: eachPerson lastName).
 		].
 		
 		theTeamList := OrderedCollection new.
 		theCollectionOfTeamMemberCollections := OrderedCollection new.
 		
-		TournamentPlannerApp collectionOfTeams do: [ :eachTeam |
+		TournamentPlannerApp collectionOfTeams data do: [ :eachTeam |
 			| eachPlayerList |
 			
 			theTeamList add: eachTeam teamName.			
@@ -539,7 +539,7 @@ TournamentPlannerView >> teamsTab [
 		
 		teamsRow := Me5Row new.		
 		
-		TournamentPlannerApp collectionOfTeams do: [ :eachTeam | 
+		TournamentPlannerApp collectionOfTeams data do: [ :eachTeam | 
 			theTeamMemberDiv := Me5Div new.
 			eachTeam players do: [ :eachPlayer |
 				theTeamMemberDiv addChild: (Me5Div new

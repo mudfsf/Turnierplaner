@@ -32,8 +32,7 @@ ManagePlayersView >> beforeCreateComponents [
 	"<^self>"
 	"This method is called before #createComponents.
 	 Sets data."
-
-	self data: TournamentPlannerApp collectionOfPlayers
+	self data: TournamentPlannerApp collectionOfPlayers data
 ]
 
 { #category : 'Events' }
@@ -242,7 +241,6 @@ ManagePlayersView >> saveEvent [
 	self showSuccessNotificationWithMessage: ('Saved %1 edited row(s)...' 
 		bindWith: theNumberOfEditedDataGridRows).
 	
-	self parentView tournamentTab resetPlayers: self data.
 	TournamentPlannerApp saveCollectionOfPlayers: self data
 
 ]
