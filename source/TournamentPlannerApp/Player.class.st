@@ -37,7 +37,7 @@ Player >> asString [
 
 	"Answer the receiver as a string"
 
-	^self firstName, ' ', self lastName
+	^'%1 %2' bindWith: self firstName with: self lastName
 ]
 
 { #category : 'Accessing' }

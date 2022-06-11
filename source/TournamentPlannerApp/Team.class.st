@@ -8,13 +8,16 @@ Class {
 	#category : 'TournamentPlannerApp'
 }
 
-{ #category : 'instance creation' }
-Team class >> teamName: aName players: anObject [
+{ #category : 'API' }
+Team class >> newWithTeamName: aName players: aPlayerCollection [
 
-	^(self new)
-	teamName: aName;
-	players: anObject;
-	yourself.
+	"<aName hOf String,  aPlayer hOf Collection: {iOf Player}, ^self>"
+	"Create new Instance with all attributes"
+
+	^self new
+		teamName: aName;
+		players: aPlayerCollection;
+		yourself
 ]
 
 { #category : 'API' }
