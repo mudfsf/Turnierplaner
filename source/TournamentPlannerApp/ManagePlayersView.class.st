@@ -65,7 +65,7 @@ ManagePlayersView >> createComponents [
 		height: '60vh';
 		dataSourceBlock: [self data];
 		addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
-			title: 'First name';
+			title: 'Vorname';
 			getterSelector: #firstName;
 			setterSelector: #firstName:;
 			enableHeaderSort;
@@ -73,7 +73,7 @@ ManagePlayersView >> createComponents [
 			maxWidth:  'vw 40';
 			yourself);
 		addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
-			title: 'Last name';
+			title: 'Nachname';
 			getterSelector: #lastName;
 			setterSelector: #lastName:;
 			enableHeaderSort;
@@ -81,14 +81,14 @@ ManagePlayersView >> createComponents [
 			minWidth: 200;
 			yourself);
 		addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
-			title: 'Email';
+			title: 'E-Mail';
 			getterSelector: #email;
 			setterSelector: #email:;
 			enableHeaderSort;
 			minWidth: 200;
 			yourself);
 		addDataGridColumnDefinition: (Me5DataGridComponentsHolderColumnDefinition new
-			title: 'Action';
+			title: 'Aktion';
 			setHorizontalAlignmentToRight;
 			componentsHolderBlock: [ 
 				:theDataGridComponentsHolderCell :theDataGridComponentsHoldingParameters |
