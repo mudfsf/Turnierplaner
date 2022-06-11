@@ -23,16 +23,6 @@ Class {
 	#category : 'TournamentPlannerApp'
 }
 
-{ #category : 'Not categorized' }
-TournamentPlannerView >> adminToolsTab [
-
-^(Me5A newButtonIconOnly
-						setTargetBlank;
-						text: 'Gehe zu ManagePlayerView';
-						href: ('TurnierplanerView/managePlayer');
-						yourself).
-]
-
 { #category : 'Initials' }
 TournamentPlannerView >> beforeCreateComponents [
 
@@ -331,9 +321,6 @@ yourself.
 	addChild: (Me5H1 new text: 'Dashboard');
 	addChild: Me5Hr new;
 	addChild: theDashboard;
-	addChild: Me5Hr new;
-	addChild: (Me5H4 new text: 'Shortcuts zu den Seiten');
-	addChild: self adminToolsTab;
 	yourself
 	).
 ]
