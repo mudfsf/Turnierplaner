@@ -47,10 +47,11 @@ ManageTournamentsView >> createComponents [
 	self radioGroupGameMode: (Me5RadioGroup new
 		text: 'Spielmodus';
 		addObjects: #('Einzel' 'Team');
+		addChangeEventSelector: #createRivalsMultiComboBox: eventReceiver: self;
 		yourself).
 	self multiComboBoxRivals: (Me5Select2MultiSelectBox new
-		text: 'Rivalen (muss noch dynamisch werden dass teams oder spieler angezeigt werden k&ouml;nnen)';
-		objects: thePlayers;
+		text: 'Rivalen';
+		objects: OrderedCollection new;
 		yourself).
 	self divTournamentCreation: (Me5Div new
 		addCssClassCol6;
@@ -61,7 +62,7 @@ ManageTournamentsView >> createComponents [
 			addChildToBody: self multiComboBoxRivals;
 			addChildToBody: (Me5Button newPrimary
 				text: 'erstellen';
-				addClickEventSelector: #newTournamentClicked eventReceiver: self;
+				addClickEventSelector: #createTournament eventReceiver: self;
 				yourself);
 			yourself);
 		yourself).
@@ -77,6 +78,128 @@ ManageTournamentsView >> createComponents [
 			yourself);
 		addChild: self rowTournaments;
 		yourself
+]
+
+{ #category : 'Events' }
+ManageTournamentsView >> createRivalsMultiComboBox: anEvent [
+
+	| theGameMode theMembers |
+	
+	self divTournamentCreation children first children first removeChild: (self multiComboBoxRivals) ifAbsent: [].
+	
+	self multiComboBoxRivals: (Me5Select2MultiSelectBox new 
+		text: 'Rivalen').
+	theMembers := OrderedCollection new.
+	theGameMode := anEvent component value.
+	
+	theGameMode = 'Einzel'
+		ifTrue: [
+			TournamentPlannerApp collectionOfPlayers do: [ :eachPlayer | 
+				theMembers add: eachPlayer asString].
+			self multiComboBoxRivals objects: theMembers.
+		].
+	theGameMode = 'Team'
+		ifTrue: [
+			TournamentPlannerApp collectionOfTeams do: [ :eachTeam | 
+				theMembers add: eachTeam asString].
+			self multiComboBoxRivals objects: theMembers.
+		].
+		
+	self divTournamentCreation children first 
+		children first addChild: self multiComboBoxRivals 
+			after: self radioGroupGameMode
+		
+]
+
+{ #category : 'Events' }
+ManageTournamentsView >> createTournament [
+
+	| theSelectedCollection theExistingTournament theSelectedAsStringCollection theCurrentTournament theTournamentType theTournamentTypeAsString theGames |
+	
+	theSelectedAsStringCollection := OrderedCollection new..
+	theSelectedCollection := OrderedCollection new.
+	
+	theExistingTournament := self tournaments detect: [ :eachTournament |
+		eachTournament name = self textFieldTournamentName value
+	] ifNone: [nil].
+	
+	theExistingTournament 
+		ifNil: [
+			self multiComboBoxRivals value do: [ :eachSelectable |
+				| theSelected |
+				theSelected := self players detect: [ :player |
+					player firstName, ' ', player lastName = eachSelectable] ifNone: [].
+				theSelectedCollection add: theSelected.
+				theSelectedAsStringCollection add: theSelected asString.].
+	
+			theTournamentTypeAsString := self radioGroupTournamentType value.
+			theTournamentTypeAsString = 'KO'
+				ifTrue: [theTournamentType := KOTournamentType new.].
+			theTournamentTypeAsString = 'Runden'
+				ifTrue: [theTournamentType := LapsTournamentType new.].
+			theTournamentTypeAsString = 'Mixed'
+				ifTrue: [theTournamentType := MixedTournamentType new.].
+	
+			theSelectedCollection size > 1
+				ifTrue: [
+					theGames := theTournamentType getCollectionOfGamesWithMembers: theSelectedCollection.
+					theCurrentTournament := (Tournament new
+						name: self textFieldTournamentName value;
+						tournamentType: theTournamentType;
+						gameMode: self radioGroupGameMode value;
+						numberOfGames: theGames size;
+						numberOfPlayedGames: 0;
+						games: theGames;
+						membercollection: theSelectedCollection;
+						yourself).
+	
+					self rowTournaments addChild: (Me5Div new
+						padding: 15;
+						addCssClassColSm12;
+						addCssClassColMd6;
+						addCssClassColXl4;
+						addChild: (Me5Portlet newPrimary
+							title: theCurrentTournament name;
+							addChildToHeadTools: (Me5A newIconOnlyPrimary
+								icon: Me5I newFasTrash;
+								addClickEventSelector: #yesNoModalRemoveTournament: eventReceiver: self;
+								yourself);
+							addChildToBody: (Me5P new
+								text: theTournamentTypeAsString, ' / ', theCurrentTournament gameMode;
+								fontSize: 'medium';
+								yourself);
+							addChildToBody: (Me5P new 
+								text: 'Rivalen: ', (theSelectedAsStringCollection joinUsing:  ', ');
+								fontSize: 'large';
+								yourself);
+							addChildToBody: (Me5A newPrimary
+								setTargetBlank;
+								rightIcon: Me5I newFasAngleRight;
+								text: 'Zum Turnier';
+								href: ('TurnierplanerView/specificTournament?tournamentName=dasErsteTurnier%1&team=true', 
+									theCurrentTournament name);
+								yourself);
+							addChildToFoot:  (Me5ProgressBar newPrimary
+								value: (theCurrentTournament numberOfPlayedGames 
+									/ theCurrentTournament numberOfGames * 100) asInteger;
+								height: 20;
+								setPrimaryStyle;
+								yourself);
+							addChildToFoot: (Me5P new
+								text: theCurrentTournament numberOfPlayedGames asString, ' von ', theCurrentTournament numberOfGames asString;
+								textAlign: 'center';
+								fontSize: 'larger';
+								yourself);
+							setTargetBlank;
+							yourself);
+						yourself).	
+				
+					self tournaments add: theCurrentTournament.
+					TournamentPlannerApp saveCollectionOfTournaments: self tournaments]
+				ifFalse: [self showErrorNotificationWithMessage: ('Turnier hat zu wenig Mitspieler').].] 
+		ifNotNil: [
+			self showErrorNotificationWithMessage: ('Das Turnier mit dem Namen %1 exisistiert bereits...'
+				bindWith: theExistingTournament name)]
 ]
 
 { #category : 'Initial-Events' }
@@ -176,98 +299,6 @@ ManageTournamentsView >> multiComboBoxRivals: aMultiComboBox [
 	"Set the multiComboBoxRivals of the receiver"
 
 	multiComboBoxRivals := aMultiComboBox
-]
-
-{ #category : 'Events' }
-ManageTournamentsView >> newTournamentClicked [
-
-	| theSelectedCollection theExistingTournament theSelectedAsStringCollection theCurrentTournament theTournamentType theTournamentTypeAsString theGames |
-	
-	theSelectedAsStringCollection := OrderedCollection new..
-	theSelectedCollection := OrderedCollection new.
-	
-	theExistingTournament := self tournaments detect: [ :eachTournament |
-		eachTournament name = self textFieldTournamentName value
-	] ifNone: [nil].
-	
-	theExistingTournament 
-		ifNil: [
-			self multiComboBoxRivals value do: [ :eachSelectable |
-				| theSelected |
-				theSelected := self players detect: [ :player |
-					player firstName, ' ', player lastName = eachSelectable] ifNone: [].
-				theSelectedCollection add: theSelected.
-				theSelectedAsStringCollection add: theSelected asString.].
-	
-			theTournamentTypeAsString := self radioGroupTournamentType value.
-			theTournamentTypeAsString = 'KO'
-				ifTrue: [theTournamentType := KOTournamentType new.].
-			theTournamentTypeAsString = 'Runden'
-				ifTrue: [theTournamentType := LapsTournamentType new.].
-			theTournamentTypeAsString = 'Mixed'
-				ifTrue: [theTournamentType := MixedTournamentType new.].
-	
-			self radioGroupGameMode value = 'Einzel'
-				ifTrue: [theGames := theTournamentType getCollectionOfGamesWithMembers: theSelectedCollection.]
-				ifFalse: [theGames := theTournamentType getCollectionOfGamesWithMembers: theSelectedCollection.].
-	
-	
-			theCurrentTournament := (Tournament new
-				name: self textFieldTournamentName value;
-				tournamentType: theTournamentType;
-				gameMode: self radioGroupGameMode value;
-				numberOfGames: theGames size;
-				numberOfPlayedGames: 0;
-				games: theGames;
-				membercollection: theSelectedCollection;
-				yourself).
-	
-			self rowTournaments addChild: (Me5Div new
-				addChild: (Me5Portlet newPrimary
-					addChildToHeadTools: (Me5A newIconOnlyPrimary
-						icon: Me5I newFasTrash;
-						addClickEventSelector: #yesNoModalRemoveTournament: eventReceiver: self;
-						yourself);
-					title: theCurrentTournament name;
-					addChildToBody: (Me5P new
-						text: theTournamentTypeAsString, ' / ', theCurrentTournament gameMode;
-						fontSize: 'medium';
-						yourself);
-					addChildToBody: (Me5P new 
-						text: 'Rivalen: ', (theSelectedAsStringCollection joinUsing:  ', ');
-						fontSize: 'large';
-						yourself);
-					addChildToBody: (Me5A newPrimary
-						setTargetBlank;
-						rightIcon: Me5I newFasAngleRight;
-						text: 'Zum Turnier';
-						href: ('TurnierplanerView/specificTournament?tournamentName=dasErsteTurnier%1&team=true', 
-							theCurrentTournament name);
-						yourself);
-					addChildToFoot:  (Me5ProgressBar newPrimary
-						value: (theCurrentTournament numberOfPlayedGames 
-							/ theCurrentTournament numberOfGames * 100) asInteger;
-						height: 20;
-						setPrimaryStyle;
-						yourself);
-					addChildToFoot: (Me5P new
-						text: theCurrentTournament numberOfPlayedGames asString, ' von ', theCurrentTournament numberOfGames asString;
-						textAlign: 'center';
-						fontSize: 'larger';
-						yourself);
-					setTargetBlank;
-					yourself);
-				padding: 15;
-				addCssClassColSm12;
-				addCssClassColMd6;
-				addCssClassColXl4;
-				yourself).	
-				
-			self tournaments add: theCurrentTournament.
-			TournamentPlannerApp saveCollectionOfTournaments: self tournaments] 
-		ifNotNil: [
-			self showErrorNotificationWithMessage: ('Das Turnier mit dem Namen %1 exisistiert bereits...'
-				bindWith: theExistingTournament name)]
 ]
 
 { #category : 'Accessing' }
