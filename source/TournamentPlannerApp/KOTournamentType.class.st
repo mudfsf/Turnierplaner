@@ -21,7 +21,7 @@ KOTournamentType class >> new [
   #vaVisibility : 'private' }
 KOTournamentType >> gameCollection [
 	
-	"<^hOf Collection of: Game>"
+	"<^hOf Collection of: {iOf Game}>"
 	"Answer the gameCollection of the receiver"
 	
 	^gameCollection
@@ -31,7 +31,7 @@ KOTournamentType >> gameCollection [
   #vaVisibility : 'private' }
 KOTournamentType >> gameCollection: aGameCollection [
 
-	"<aGameCollection: hOf Collection of: iOf Game, ^self>"
+	"<aGameCollection: hOf Collection of: {iOf Game}, ^self>"
 	"Set the gameCollection of the receiver"
 
 	gameCollection := aGameCollection
@@ -40,7 +40,7 @@ KOTournamentType >> gameCollection: aGameCollection [
 { #category : 'API' }
 KOTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 
-	"<aCollectionOfMembers hOf Collection of: iOf Member, ^self>"
+	"<aCollectionOfMembers hOf Collection of: iOf Member>"
 	"Answer the Collection of Game"
 
 	| theCollectionSize theNumberOfBuys theRecursiveParamListCollectionOfGames theHasToContinueBoolean thePowerOf2Number |

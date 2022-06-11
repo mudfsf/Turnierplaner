@@ -17,7 +17,7 @@ LapsTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 
 	1 to: aCollectionOfMembers size - 1 do: [ :eachIndexForFirstPlayer |
 		1 to:  (aCollectionOfMembers size - eachIndexForFirstPlayer) do: [ :eachIndexForSecondPlayer |
-				| theCurrentPlayer theCurrentGame |
+			| theCurrentPlayer theCurrentGame |
 			theCurrentGame := Game new
 				layer: 0;
 				members: OrderedCollection new;

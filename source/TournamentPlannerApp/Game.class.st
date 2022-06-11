@@ -43,7 +43,7 @@ Game >> layer: aNumber [
 { #category : 'Accessing' }
 Game >> members [
 
-	"<^hOf Collection of: {iOf Team/Player}>"
+	"<^hOf Collection of: {iOf Member}>"
 	"Answer the members of the receiver"
 
 	^members
@@ -52,7 +52,7 @@ Game >> members [
 { #category : 'Accessing' }
 Game >> members: aCollection [
 
-	"<aCollection: hOf Collection of: {iOf Team/Player}, ^self>"
+	"<aCollection: hOf Collection of: {iOf Member}, ^self>"
 	"Set the members of the receiver"
 
 	members := aCollection

@@ -49,35 +49,35 @@ Team >> asString [
 { #category : 'Accessing' }
 Team >> players [
 
-	"<^hOf Collection of: iOf Player>"
+	"<^hOf Collection of: {iOf Player}>"
 	"Answer the players of the receiver"
 
 	^players
 ]
 
 { #category : 'Accessing' }
-Team >> players: aPlayerCollection [
+Team >> players: aCollection [
 
-	"<aPlayerCollection: hOf Collection of: iOf Player, ^self>"
+	"<aCollection: hOf Collection of: {iOf Player}, ^self>"
 	"Set the players of the receiver"
 
-	players := aPlayerCollection
+	players := aCollection
 ]
 
 { #category : 'Accessing' }
 Team >> teamName [
 
-	"<^hOf String>"
+	"<^iOf String>"
 	"Answer the teamName of the receiver"
 
 	^teamName
 ]
 
 { #category : 'Accessing' }
-Team >> teamName: aTeamName [
+Team >> teamName: aString [
 
-	"<aTeamName: hOf String, ^self>"
+	"<aString: iOf String, ^self>"
 	"Set the teamName of the receiver"
 
-	teamName := aTeamName
+	teamName := aString
 ]

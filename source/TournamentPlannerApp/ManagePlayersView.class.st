@@ -12,7 +12,6 @@ Class {
 { #category : 'Events' }
 ManagePlayersView >> addPlayerEvent [
 
-	"<^self>"
 	"Adds empty row to listGrid"
 
 	(self data includes: self placeholder)
@@ -29,16 +28,15 @@ ManagePlayersView >> addPlayerEvent [
 { #category : 'Initial-Events' }
 ManagePlayersView >> beforeCreateComponents [
 
-	"<^self>"
 	"This method is called before #createComponents.
 	 Sets data."
+	
 	self data: TournamentPlannerApp collectionOfPlayers data
 ]
 
 { #category : 'Events' }
 ManagePlayersView >> clearEvent [
 
-	"<^self>"
 	"Removes empty row from listGrid"
 
 	(self data includes: self placeholder)
@@ -55,7 +53,6 @@ ManagePlayersView >> clearEvent [
 { #category : 'Initial-Events' }
 ManagePlayersView >> createComponents [
 
-	"<^self>"
 	"Entry point for creating components."
 	 "Sets listGrid"
 
@@ -125,7 +122,6 @@ ManagePlayersView >> createComponents [
 { #category : 'Initial-Events' }
 ManagePlayersView >> createModules [
 
-	"<^self>"
 	"Creates and adds the modules which should be embedded for this view."
 
 	super createModules.
@@ -137,7 +133,7 @@ ManagePlayersView >> createModules [
 { #category : 'Accessing' }
 ManagePlayersView >> data [
 
-	"<^hOf Collection of: iOf Player>"
+	"<^hOf Collection of: {iOf Player}>"
 	"Answer the data of the receiver"
 
 	^data
@@ -146,7 +142,7 @@ ManagePlayersView >> data [
 { #category : 'Accessing' }
 ManagePlayersView >> data: aPlayerCollection [
 
-	"<aPlayerCollection: hOf Collection of: iOf Player, ^self>"
+	"<aPlayerCollection: hOf Collection of: {iOf Player}, ^self>"
 	"Set the data of the receiver"
 
 	data := aPlayerCollection
@@ -155,7 +151,7 @@ ManagePlayersView >> data: aPlayerCollection [
 { #category : 'Events' }
 ManagePlayersView >> deletePlayerEvent: anEvent [
 
-	"<anEvent: hOf Event, ^self>"
+	"<anEvent: hOf Me5Event>"
 	"Deletes Player from listGrid and memory"
 
 	| thePlayer isSuccessfullBoolean |
@@ -210,7 +206,6 @@ ManagePlayersView >> placeholder [
 { #category : 'Events' }
 ManagePlayersView >> saveEvent [
 
-	"<^self>"
 	"Adds Player to listGrid and memory"
 
 	| theNumberOfEditedDataGridRows |

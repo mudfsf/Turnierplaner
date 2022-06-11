@@ -7,7 +7,7 @@ Class {
 { #category : 'API' }
 MixedTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 	
-	"<aCollectionOfPlayers hOf Collection of: iOf Member, ^self>"
+	"<aCollectionOfPlayers hOf Collection of: iOf Member>"
 	"Answer the Collection of Game"
 	"Combines Games of KOTournamenttype and LapsTournamentType"
 	

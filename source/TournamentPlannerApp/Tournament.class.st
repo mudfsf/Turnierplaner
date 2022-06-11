@@ -43,7 +43,7 @@ Tournament >> gameMode: aString [
 { #category : 'Accessing' }
 Tournament >> games [
 
-	"<^hOf Collection of: {hOf Game}>"
+	"<^hOf Collection of: {iOf Game}>"
 	"Answer the games of the receiver"
 
 	^games
@@ -52,7 +52,7 @@ Tournament >> games [
 { #category : 'Accessing' }
 Tournament >> games: aCollection [
 
-	"<aCollection: hOf Collection of: {hOf Game}, ^self>"
+	"<aCollection: hOf Collection of: {iOf Game}, ^self>"
 	"Set the games of the receiver"
 
 	games := aCollection
