@@ -96,13 +96,13 @@ ManageTournamentsView >> createRivalsMultiComboBox [
 	
 	theGameMode = 'Einzel'
 		ifTrue: [
-			TournamentPlannerApp collectionOfPlayers do: [ :eachPlayer | 
+			TournamentPlannerApp collectionOfPlayers data do: [ :eachPlayer | 
 				theMembers add: eachPlayer asString].
 			self multiComboBoxRivals objects: theMembers.
 		].
 	theGameMode = 'Team'
 		ifTrue: [
-			TournamentPlannerApp collectionOfTeams do: [ :eachTeam | 
+			TournamentPlannerApp collectionOfTeams data do: [ :eachTeam | 
 				theMembers add: eachTeam asString].
 			self multiComboBoxRivals objects: theMembers.
 		].
@@ -127,20 +127,27 @@ ManageTournamentsView >> createTournament [
 	
 	theExistingTournament 
 		ifNil: [
-			self multiComboBoxRivals value do: [ :eachSelectable |
-				| theSelected |
-				theSelected := self players detect: [ :player |
-					player firstName, ' ', player lastName = eachSelectable] ifNone: [].
-				theSelectedCollection add: theSelected.
-				theSelectedAsStringCollection add: theSelected asString.].
-	
+			| theCollection |
+			
+			self radioGroupGameMode value = 'Einzel'
+				ifTrue: [theCollection := TournamentPlannerApp collectionOfPlayers data].
+			self radioGroupGameMode value = 'Team'
+				ifTrue: [theCollection := TournamentPlannerApp collectionOfTeams data].
+			
 			theTournamentTypeAsString := self radioGroupTournamentType value.
 			theTournamentTypeAsString = 'KO'
 				ifTrue: [theTournamentType := KOTournamentType new.].
 			theTournamentTypeAsString = 'Runden'
 				ifTrue: [theTournamentType := LapsTournamentType new.].
 			theTournamentTypeAsString = 'Mixed'
-				ifTrue: [theTournamentType := MixedTournamentType new.].
+				ifTrue: [theTournamentType := MixedTournamentType new.].			
+			
+			self multiComboBoxRivals value do: [ :eachSelectable |
+				| theSelected |
+				theSelected := theCollection detect: [ :member |
+					member asString = eachSelectable] ifNone: [].
+				theSelectedCollection add: theSelected.
+				theSelectedAsStringCollection add: theSelected asString.].
 	
 			theSelectedCollection size > 1
 				ifTrue: [
@@ -198,7 +205,7 @@ ManageTournamentsView >> createTournament [
 				
 					self tournaments add: theCurrentTournament.
 					TournamentPlannerApp saveCollectionOfTournaments: self tournaments]
-				ifFalse: [self showErrorNotificationWithMessage: ('Turnier hat zu wenig Mitspieler').].] 
+				ifFalse: [self showErrorNotificationWithMessage: ('Turnier hat zu wenig Mitspieler').].]
 		ifNotNil: [
 			self showErrorNotificationWithMessage: ('Das Turnier mit dem Namen %1 exisistiert bereits...'
 				bindWith: theExistingTournament name)]
@@ -386,8 +393,8 @@ ManageTournamentsView >> removeTournament: aMe5DialogEvent [
 { #category : 'API' }
 ManageTournamentsView >> resetData [
 	
-	self players: TournamentPlannerApp collectionOfPlayers.
-	self tournaments: TournamentPlannerApp collectionOfTournaments.
+	self players: TournamentPlannerApp collectionOfPlayers data.
+	self tournaments: TournamentPlannerApp collectionOfTournaments data.
 	
 	self createRivalsMultiComboBox
 ]

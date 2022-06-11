@@ -14,7 +14,7 @@ Team class >> newWithName: aString [
 	"<aString : hOF String, ^self>"
 	"Create instance of game with teamName @aString"
 
-	^self new teamName:  aString
+	^self new teamName: aString
 ]
 
 { #category : 'API' }

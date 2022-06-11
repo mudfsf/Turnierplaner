@@ -53,31 +53,27 @@ KOTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 		ifTrue: [
 			thePowerOf2Number := (theCollectionSize log: 2) asInteger power: 2.
 			theNumberOfBuys := (theCollectionSize - thePowerOf2Number) abs.
-			1 to: theNumberOfBuys do: [ :eachIndex |
-				| theCurrentTeam |
-				theCurrentTeam := aCollectionOfMembers at: theCollectionSize - eachIndex +1.
-				theRecursiveParamListCollectionOfGames add: theCurrentTeam.].
+			theRecursiveParamListCollectionOfGames addAll: (aCollectionOfMembers first: theNumberOfBuys).
 			aCollectionOfMembers removeAll: theRecursiveParamListCollectionOfGames ifAbsent: [].].
 
 	self layer: self layer + 1.
 	theHasToContinueBoolean := theCollectionSize > 2.
 	
-	1 to: theCollectionSize / 2 - theNumberOfBuys do: [ :eachIndex |
+	1 to: aCollectionOfMembers size / 2 do: [ :eachIndex |
 		| theCurrentMember theCurrentGame |
 		theCurrentGame := Game new
 			layer: self layer;
 			members: OrderedCollection new;
 			name: '';
-			yourself.
-			
+			yourself.	
 		theCurrentMember := aCollectionOfMembers at: eachIndex.
 		theCurrentGame members add: theCurrentMember.
-		theCurrentGame name: theCurrentGame name, theCurrentMember.
-			
-		theCurrentMember := aCollectionOfMembers at: (aCollectionOfMembers size - eachIndex +1).
-		theCurrentGame members add: theCurrentMember.
-		theCurrentGame	name: theCurrentGame name, ' vs ', theCurrentMember asString.
+		theCurrentGame name: ('%1' bindWith: theCurrentMember asString).
 		
+		theCurrentMember := aCollectionOfMembers at: aCollectionOfMembers size +1 - eachIndex.
+		theCurrentGame members add: theCurrentMember.
+		theCurrentGame	name: ('%1 vs %2' bindWith: theCurrentGame name with: theCurrentMember asString).
+			
 		self gameCollection add: theCurrentGame.
 		theRecursiveParamListCollectionOfGames add: (theCurrentMember class 
 			newWithName: 'Winner of game ', theCurrentGame name).].

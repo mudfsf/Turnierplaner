@@ -79,9 +79,9 @@ TournamentPlannerView >> buttonNewTeam [
 	yourself).
 	
 	theTeam := Team newWithTeamName: (self modalTextFieldTeamName value ) players: theTeamMembers.
-	TournamentPlannerApp collectionOfTeams add: theTeam.
+	TournamentPlannerApp collectionOfTeams data add: theTeam.
 		
-	TournamentPlannerApp saveCollectionOfTeams: (TournamentPlannerApp collectionOfTeams)
+	TournamentPlannerApp saveCollectionOfTeams: (TournamentPlannerApp collectionOfTeams data)
 ]
 
 { #category : 'Accessing' }
@@ -388,12 +388,12 @@ TournamentPlannerView >> removeTeam: aMe5DialogEvent [
 	theDivTeam := self removeTeamEvent component parent parent parent.
 	theDivTeam parent removeChild: theDivTeam ifAbsent: [].
 		
-	theTeam := TournamentPlannerApp collectionOfTeams detect: [ :eachTeam |
+	theTeam := TournamentPlannerApp collectionOfTeams data detect: [ :eachTeam |
 		eachTeam teamName = theDivTeam children first title.
 	] ifNone: [].
-	 TournamentPlannerApp collectionOfTeams remove: theTeam ifAbsent: [].
+	 TournamentPlannerApp collectionOfTeams data remove: theTeam ifAbsent: [].
 	
-	TournamentPlannerApp saveCollectionOfTeams: TournamentPlannerApp collectionOfTeams.
+	TournamentPlannerApp saveCollectionOfTeams: TournamentPlannerApp collectionOfTeams data.
 
 	self showSuccessNotificationWithMessage: ('Team %1 gel&ouml;scht' bindWith: theTeam teamName)
 ]
@@ -420,13 +420,6 @@ TournamentPlannerView >> removeTeamEvent: aMe5Event [
 TournamentPlannerView >> removeTournament [
 
 	self tournamentTab removeTournament.
-]
-
-{ #category : 'Not categorized' }
-TournamentPlannerView >> resetTournamentTabWithPlayers: aCollectionOfPlayers [
-
-	self tournamentTab resetPlayers: aCollectionOfPlayers
-
 ]
 
 { #category : 'Accessing' }
