@@ -5,18 +5,18 @@ Class {
 }
 
 { #category : 'API' }
-LapsTournamentType >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
+LapsTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 
-	"<aCollectionOfPlayers hOf Collection of: iOf Player, ^self>"
+	"<aCollectionOfMembers hOf Collection of: iOf Member, ^self>"
 	"Answer the Collection of Game"
-	"Creates Games where every Player plays against every other Player"
+	"Creates Games where every Member plays against every other Member"
 	
 	| theCollectionOfGames |
 	
 	theCollectionOfGames := OrderedCollection new.
 
-	1 to: aCollectionOfPlayers size - 1 do: [ :eachIndexForFirstPlayer |
-		1 to:  (aCollectionOfPlayers size - eachIndexForFirstPlayer) do: [ :eachIndexForSecondPlayer |
+	1 to: aCollectionOfMembers size - 1 do: [ :eachIndexForFirstPlayer |
+		1 to:  (aCollectionOfMembers size - eachIndexForFirstPlayer) do: [ :eachIndexForSecondPlayer |
 				| theCurrentPlayer theCurrentGame |
 			theCurrentGame := Game new
 				layer: 0;
@@ -24,46 +24,13 @@ LapsTournamentType >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
 				name: '';
 				yourself.
 				
-			theCurrentPlayer := aCollectionOfPlayers at: eachIndexForFirstPlayer.
+			theCurrentPlayer := aCollectionOfMembers at: eachIndexForFirstPlayer.
 			theCurrentGame	name: theCurrentGame name, theCurrentPlayer asString.
 			theCurrentGame	members add: theCurrentPlayer.
 				
-			theCurrentPlayer := aCollectionOfPlayers at: (eachIndexForFirstPlayer + eachIndexForSecondPlayer).
+			theCurrentPlayer := aCollectionOfMembers at: (eachIndexForFirstPlayer + eachIndexForSecondPlayer).
 			theCurrentGame name: theCurrentGame name, ' vs ', theCurrentPlayer asString.
 			theCurrentGame members add: theCurrentPlayer.
-				
-			theCollectionOfGames add: theCurrentGame.].].
-	
-	^theCollectionOfGames
-]
-
-{ #category : 'API' }
-LapsTournamentType >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
-
-	"<aCollectionOfTeams hOf Collection of: iOf Team, ^self>"
-	"Answer the Collection of Game"
-	"Creates Games where every Team plays against every other Team"
-	
-	| theCollectionOfGames |
-	
-	theCollectionOfGames := OrderedCollection new.
-	
-	1 to: aCollectionOfTeams size - 1 do: [ :eachIndexForFirstTeam |
-		1 to: aCollectionOfTeams size - eachIndexForFirstTeam do: [	:eachIndexForSecondTeam |
-			| theCurrentTeam theCurrentGame |
-			theCurrentGame := Game new
-				layer: 0;
-				members: OrderedCollection new;
-				name: '';
-				yourself.
-				
-			theCurrentTeam := aCollectionOfTeams at: eachIndexForFirstTeam.
-			theCurrentGame members add: theCurrentTeam.
-			theCurrentGame	name: theCurrentGame name, theCurrentTeam asString.
-			
-			theCurrentTeam := aCollectionOfTeams at: (eachIndexForFirstTeam + eachIndexForSecondTeam).
-			theCurrentGame members add: theCurrentTeam.
-			theCurrentGame name: theCurrentGame name, ' vs ', theCurrentTeam asString.
 				
 			theCollectionOfGames add: theCurrentGame.].].
 	

@@ -18,5 +18,5 @@ Member >> asString [
 
 	"Answer the receiver as a string"
 	
-	self subclassResponsibility
+	^self subclassResponsibility
 ]

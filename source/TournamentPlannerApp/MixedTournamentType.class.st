@@ -5,80 +5,29 @@ Class {
 }
 
 { #category : 'API' }
-MixedTournamentType >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
+MixedTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 	
-	"<aCollectionOfPlayers hOf Collection of: iOf Player, ^self>"
+	"<aCollectionOfPlayers hOf Collection of: iOf Member, ^self>"
 	"Answer the Collection of Game"
 	"Combines Games of KOTournamenttype and LapsTournamentType"
 	
-	|theLaps theKO theCollectionOfPlayers theCollectionOfGames|
+	|theLaps theKO theMemberType theCollectionOfPlayers theCollectionOfGames|
 
-	theCollectionOfPlayers := OrderedCollection withAll: aCollectionOfPlayers.
+	theCollectionOfPlayers := OrderedCollection withAll: aCollectionOfMembers.
 	theCollectionOfGames := OrderedCollection new.
 	theLaps := LapsTournamentType new.
 	theKO := KOTournamentType new.
-	aCollectionOfPlayers size > 4
+	aCollectionOfMembers size > 4
 		ifTrue: [
-			theCollectionOfGames addAll: (theLaps getCollectionOfGamesWithTeams: aCollectionOfPlayers).
+			theMemberType := aCollectionOfMembers first class.
+			theCollectionOfGames addAll: (theLaps getCollectionOfGamesWithMembers: aCollectionOfMembers).
 			theCollectionOfPlayers := OrderedCollection new
-				add: (Team new
-					teamName: 'first';
-					players: OrderedCollection new;
-					yourself);
-				add: (Team new
-					teamName: 'second';
-					players: OrderedCollection new;
-					yourself);
-				add: (Team new
-					teamName: 'third';
-					players: OrderedCollection new;
-					yourself);
-				add: (Team new
-					teamName: 'fourtht';
-					players: OrderedCollection new;
-					yourself);
+				add: (theMemberType newWithName: 'Erster');
+				add: (theMemberType newWithName: 'Zweiter');
+				add: (theMemberType newWithName: 'Dritter');
+				add: (theMemberType newWithName: 'Vierter');
 				yourself.].
-	theCollectionOfGames addAll: (theKO getCollectionOfGamesWithTeams: theCollectionOfPlayers).
-	
-	^theCollectionOfGames
-]
-
-{ #category : 'API' }
-MixedTournamentType >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
-	
-	"<aCollectionOfTeams hOf Collection of: iOf Team, ^self>"
-	"Answer the Collection of Game"
-	"Combines Games of KOTournamenttype and LapsTournamentType"
-	
-	|theLaps theKO theCollectionOfTeams theCollectionOfGames|
-
-	theCollectionOfTeams := OrderedCollection withAll: aCollectionOfTeams.
-	theCollectionOfGames := OrderedCollection new.
-	theLaps := LapsTournamentType new.
-	theKO := KOTournamentType new.
-	aCollectionOfTeams size > 4
-		ifTrue: [
-			theCollectionOfGames addAll: (theLaps getCollectionOfGamesWithTeams: aCollectionOfTeams).
-			theCollectionOfTeams := OrderedCollection new
-				add: (Team new
-					teamName: 'first';
-					players: OrderedCollection new;
-					yourself);
-				add: (Team new
-					teamName: 'second';
-					players: OrderedCollection new;
-					yourself);
-				add: (Team new
-					teamName: 'third';
-					players: OrderedCollection new;
-					yourself);
-				add: (Team new
-					teamName: 'fourtht';
-					players: OrderedCollection new;
-					yourself);
-				yourself.].
-
-	theCollectionOfGames addAll: (theKO getCollectionOfGamesWithTeams: theCollectionOfTeams).
+	theCollectionOfGames addAll: (theKO getCollectionOfGamesWithMembers: theCollectionOfPlayers).
 	
 	^theCollectionOfGames
 ]

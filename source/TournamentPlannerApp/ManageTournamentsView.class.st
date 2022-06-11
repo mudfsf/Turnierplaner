@@ -208,8 +208,8 @@ ManageTournamentsView >> newTournamentClicked [
 				ifTrue: [theTournamentType := MixedTournamentType new.].
 	
 			self radioGroupGameMode value = 'Einzel'
-				ifTrue: [theGames := theTournamentType getCollectionOfGamesWithPlayers: theSelectedCollection.]
-				ifFalse: [theGames := theTournamentType getCollectionOfGamesWithPlayers: theSelectedCollection.].
+				ifTrue: [theGames := theTournamentType getCollectionOfGamesWithMembers: theSelectedCollection.]
+				ifFalse: [theGames := theTournamentType getCollectionOfGamesWithMembers: theSelectedCollection.].
 	
 	
 			theCurrentTournament := (Tournament new
@@ -331,19 +331,23 @@ ManageTournamentsView >> radioGroupTournamentType: aMe5RadioGroup [
 { #category : 'Events' }
 ManageTournamentsView >> removeTournament: aMe5DialogEvent [
 	
-	| theDivTournament theTournament |
+	| theDivTournament theTournament theTournamentExistsBoolean|
 	
+	theTournamentExistsBoolean := true.
 	theDivTournament := aMe5DialogEvent originalEvent component parent parent parent parent parent parent.
 	
 	theDivTournament parent removeChild: theDivTournament ifAbsent: [].
 	theTournament := self tournaments detect: [ :eachTournament |
 		eachTournament name = theDivTournament children first title.
-	] ifNone: [].
-	self tournaments remove: theTournament ifAbsent: [].
-	
-	TournamentPlannerApp saveCollectionOfTournaments: self tournaments.
-	self showSuccessNotificationWithMessage: ('Turnier mit dem Namen %1 gel&ouml;scht' 
-		bindWith: theTournament name)
+	] ifNone: [self showErrorNotificationWithMessage: 'Turnier exisistiert nicht mehr...'.
+		theTournamentExistsBoolean := false.].
+		
+	theTournamentExistsBoolean
+		ifTrue: [self tournaments remove: theTournament ifAbsent: [].
+			TournamentPlannerApp saveCollectionOfTournaments: self tournaments.
+			self showSuccessNotificationWithMessage: ('Turnier mit dem Namen %1 gel&ouml;scht' 
+				bindWith: theTournament name)]
+
 ]
 
 { #category : 'API' }

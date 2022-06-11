@@ -61,7 +61,7 @@ Tournament >> games: aCollection [
 { #category : 'Accessing' }
 Tournament >> membercollection [
 
-	"<^hOf Collection of: {hOf PlayerOrTeam}>"
+	"<^hOf Collection of: {hOf Member}>"
 	"Answer the membercollection of the receiver"
 
 	^membercollection
@@ -70,7 +70,7 @@ Tournament >> membercollection [
 { #category : 'Accessing' }
 Tournament >> membercollection: aCollection [
 
-	"<aCollection: hOf Collection of: {hOf PlayerOrTeam}, ^self>"
+	"<aCollection: hOf Collection of: {iOf Member}, ^self>"
 	"Set the membercollection of the receiver"
 
 	membercollection := aCollection

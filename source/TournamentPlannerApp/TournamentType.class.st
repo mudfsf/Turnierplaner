@@ -5,19 +5,10 @@ Class {
 }
 
 { #category : 'API' }
-TournamentType >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
+TournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 
-	"<aCollectionOfPlayers hOf Collection of: iOf Player ^self>"
+	"<aCollectionOfTeams hOf Collection of: iOf Member, ^self>"
 	"Answer the Collection of Game"
 	
-	 ^self subclassResponsibility
-]
-
-{ #category : 'API' }
-TournamentType >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
-
-	"<aCollectionOfTeams hOf Collection of: iOf Team ^self>"
-	"Answer the Collection of Game"
-	
-	 ^self subclassResponsibility
+	^self subclassResponsibility
 ]
