@@ -1,12 +1,21 @@
 Class {
 	#name : 'Team',
-	#superclass : 'Object',
+	#superclass : 'Member',
 	#instVars : [
 		'teamName',
 		'players'
 	],
 	#category : 'TournamentPlannerApp'
 }
+
+{ #category : 'API' }
+Team class >> newWithName: aString [
+
+	"<aString : hOF String, ^self>"
+	"Create instance of game with teamName @aString"
+
+	^self new teamName:  aString
+]
 
 { #category : 'API' }
 Team class >> newWithTeamName: aName players: aPlayerCollection [

@@ -1,6 +1,6 @@
 Class {
 	#name : 'Player',
-	#superclass : 'Object',
+	#superclass : 'Member',
 	#instVars : [
 		'firstName',
 		'lastName',
@@ -21,6 +21,15 @@ Player class >> newWithFirstName: aFirstNameString lastName: aLastNameString ema
 		lastName: aLastNameString;
 		email: anEmailString;
 		yourself
+]
+
+{ #category : 'API' }
+Player class >> newWithName: aString [
+
+	"<aString : hOF String, ^self>"
+	"Create instance of game with firstName @aString"
+
+	^self new firstName: aString
 ]
 
 { #category : 'API' }
