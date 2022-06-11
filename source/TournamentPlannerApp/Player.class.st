@@ -29,7 +29,15 @@ Player >> = anObject [
 	"<anObject : hOf Object, ^self>"
 	"Answer if @anObject is equal to the receiver."
 
-	^ (((self firstName = anObject firstName and: [self lastName = anObject lastName]) and: [self email = anObject email]) and: [self symbol = anObject symbol])
+	^(((self firstName = anObject firstName and: [self lastName = anObject lastName]) and: [self email = anObject email]) and: [self symbol = anObject symbol])
+]
+
+{ #category : 'API' }
+Player >> asString [
+
+	"Answer the receiver as a string"
+
+	^self firstName, ' ', self lastName
 ]
 
 { #category : 'Accessing' }
@@ -44,7 +52,7 @@ Player >> email [
 { #category : 'Accessing' }
 Player >> email: anEmail [
 
-	"<anEmail hOf String, ^self>"
+	"<anEmail: hOf String, ^self>"
 	"Set the email of the receiver"
 
 	email := anEmail
@@ -62,7 +70,7 @@ Player >> firstName [
 { #category : 'Accessing' }
 Player >> firstName: aFirstName [
 
-	"<aFirstName hOf String, ^self>"
+	"<aFirstName: hOf String, ^self>"
 	"Set the firstName of the receiver"
 
 	firstName := aFirstName
@@ -80,7 +88,7 @@ Player >> lastName [
 { #category : 'Accessing' }
 Player >> lastName: aLastName [
 
-	"<aLastName hOf String, ^self>"
+	"<aLastName: hOf String, ^self>"
 	"Set the lastName of the receiver"
 	
 	lastName := aLastName
@@ -98,7 +106,7 @@ Player >> symbol [
 { #category : 'Accessing' }
 Player >> symbol: aSymbol [
 
-	"<aSymbol hOf Symbol, ^self>"
+	"<aSymbol: hOf Symbol, ^self>"
 	"Set the symbol of the receiver"
 	
 	symbol := aSymbol

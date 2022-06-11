@@ -16,17 +16,19 @@ Class {
 	#category : 'TournamentPlannerApp'
 }
 
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 Me5SvgLine >> htmlElementClass [
+
+	"^ClwHtmlElementDiv"
 
 	^ClwHtmlElementDiv
 	
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 Me5SvgLine >> setAdditionalAttributesOfHtmlElement: aClwHtmlBaseElement [
 
-| theSvgElement |
+	| theSvgElement |
 
 	super setAdditionalAttributesOfHtmlElement: aClwHtmlBaseElement.
 	theSvgElement := (ClwHtmlSvg new 

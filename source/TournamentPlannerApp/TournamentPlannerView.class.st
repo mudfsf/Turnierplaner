@@ -49,9 +49,9 @@ TournamentPlannerView >> beforeCreateComponents [
 		
 	theMemory saveObject: theBlob onPath: 'C:\TournamentPlanner\Memory\players.dat'."
 	
-	self collectionOfTournaments: (self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat').
+	"self collectionOfTournaments: (self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat').
 	self collectionOfPlayers:  (self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat').
-	self collectionOfTeams:  (self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\teams.dat').
+	self collectionOfTeams:  (self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\teams.dat')."
 
 	
 
@@ -423,11 +423,8 @@ TournamentPlannerView >> tabsCollection [
 
 	| theUserSettings theCreateTournamentModal |
 	
-	self tournamentTab: (TournamentTab new
-		players: self collectionOfPlayers;
-		tournaments: self collectionOfTournaments;
-		createComponents;
-		yourself).
+	self tournamentTab: ManageTournamentsView new.
+
 	"theCreateTournamentModal := (CreateTournamentModal  new
 	yourself).
 	theCreateTournamentModal createView."
@@ -444,7 +441,9 @@ TournamentPlannerView >> tabsCollection [
 		add: (Me5Tab new
 			text: 'Turniere';
 			icon: Me5I newFasUser;
-			addChildToTabPane: self tournamentTab;
+			addChildToTabPane: (Me5ViewHolder new
+				holdingView: self tournamentTab;
+				yourself);
 			yourself);
 	add: (Me5Tab new
 			text: 'Teams';
@@ -459,10 +458,9 @@ TournamentPlannerView >> tabsCollection [
 		add: (Me5Tab new
 			text: 'Admin-Tools';
 			icon: Me5I newFasUser;
-			addChildToTabPane: (ManagePlayersView new
-				data: self collectionOfPlayers;
-				createComponents;
-				yourself)"self adminToolsTab";
+			addChildToTabPane: (Me5ViewHolder new
+				holdingView: ManagePlayersView new
+				yourself);
 			yourself);
 		yourself
 
@@ -635,7 +633,7 @@ TournamentPlannerView >> userSettingsTab [
 	"User muss noch ermittelt werden"
 	(self user isNil)
 		ifTrue: [
-			thePlayer:=Player firstName: 'Max' lastName: 'Muster'  email: 'max.muster@gmail.com'.
+			thePlayer:=Player newWithFirstName: 'Max' lastName: 'Muster'  email: 'max.muster@gmail.com'.
 			self user:thePlayer.] .
 
 

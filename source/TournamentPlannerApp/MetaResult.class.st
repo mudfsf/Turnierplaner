@@ -23,19 +23,19 @@ MetaResult class >> newWithContext: aResultable results: aCollectionOfResults [
 { #category : 'Accessing' }
 MetaResult >> context [
 
-	"<^iOf Resultable>"
+	"<^iOf Tournament>"
 	"Answer the context of the receiver"
 
 	^context
 ]
 
 { #category : 'Accessing' }
-MetaResult >> context: aResultable [
+MetaResult >> context: aTournament [
 
-	"<aResultable: iOf Resultable, ^self>"
+	"<aTournament: iOf Tournament, ^self>"
 	"Set the context of the receiver"
 
-	context := aResultable
+	context := aTournament
 ]
 
 { #category : 'Accessing' }

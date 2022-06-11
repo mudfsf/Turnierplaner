@@ -9,6 +9,7 @@ MixedTournamentType >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
 	
 	"<aCollectionOfPlayers hOf Collection of: iOf Player, ^self>"
 	"Answer the Collection of Game"
+	"Combines Games of KOTournamenttype and LapsTournamentType"
 	
 	|theLaps theKO theCollectionOfPlayers theCollectionOfGames|
 
@@ -19,7 +20,7 @@ MixedTournamentType >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
 	aCollectionOfPlayers size > 4
 		ifTrue: [
 			theCollectionOfGames addAll: (theLaps getCollectionOfGamesWithTeams: aCollectionOfPlayers).
-			theCollectionOfPlayers := (OrderedCollection new
+			theCollectionOfPlayers := OrderedCollection new
 				add: (Team new
 					teamName: 'first';
 					players: OrderedCollection new;
@@ -36,8 +37,7 @@ MixedTournamentType >> getCollectionOfGamesWithPlayers: aCollectionOfPlayers [
 					teamName: 'fourtht';
 					players: OrderedCollection new;
 					yourself);
-				yourself).
-		].
+				yourself.].
 	theCollectionOfGames addAll: (theKO getCollectionOfGamesWithTeams: theCollectionOfPlayers).
 	
 	^theCollectionOfGames
@@ -48,6 +48,7 @@ MixedTournamentType >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
 	
 	"<aCollectionOfTeams hOf Collection of: iOf Team, ^self>"
 	"Answer the Collection of Game"
+	"Combines Games of KOTournamenttype and LapsTournamentType"
 	
 	|theLaps theKO theCollectionOfTeams theCollectionOfGames|
 
@@ -58,7 +59,7 @@ MixedTournamentType >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
 	aCollectionOfTeams size > 4
 		ifTrue: [
 			theCollectionOfGames addAll: (theLaps getCollectionOfGamesWithTeams: aCollectionOfTeams).
-			theCollectionOfTeams := (OrderedCollection new
+			theCollectionOfTeams := OrderedCollection new
 				add: (Team new
 					teamName: 'first';
 					players: OrderedCollection new;
@@ -75,9 +76,9 @@ MixedTournamentType >> getCollectionOfGamesWithTeams: aCollectionOfTeams [
 					teamName: 'fourtht';
 					players: OrderedCollection new;
 					yourself);
-				yourself).
-		].
+				yourself.].
 
 	theCollectionOfGames addAll: (theKO getCollectionOfGamesWithTeams: theCollectionOfTeams).
+	
 	^theCollectionOfGames
 ]

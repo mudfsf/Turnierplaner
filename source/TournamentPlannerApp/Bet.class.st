@@ -19,7 +19,7 @@ Bet class >> newWithPlayer: aPlayer guess: aMetaResult stake: aDecimal [
 		player: aPlayer;
 		guess: aMetaResult;
 		stake: aDecimal;
-		yourself.
+		yourself
 ]
 
 { #category : 'Accessing' }

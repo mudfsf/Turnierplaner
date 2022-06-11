@@ -17,8 +17,7 @@ ManagePlayersView >> addPlayerEvent [
 
 	(self data includes: self placeholder)
 		ifFalse: [
-			self data add: self placeholder.
-		].
+			self data add: self placeholder.].
 	
 	self listGrid dataSourceBlock: [self data].
 	
@@ -34,7 +33,7 @@ ManagePlayersView >> beforeCreateComponents [
 	"This method is called before #createComponents.
 	 Sets data."
 
-	self data: TurnierplanerApp collectionOfPlayers
+	self data: TournamentPlannerApp collectionOfPlayers
 ]
 
 { #category : 'Events' }
@@ -45,10 +44,9 @@ ManagePlayersView >> clearEvent [
 
 	(self data includes: self placeholder)
 		ifTrue: [
-			self data remove: self placeholder.
-		].
+			self data remove: self placeholder.].
 	
-	self listGrid dataSourceBlock: [ self data	].
+	self listGrid dataSourceBlock: [self data].
 	
 	self listGrid resetEditedDataGridCells.
 
@@ -59,8 +57,8 @@ ManagePlayersView >> clearEvent [
 ManagePlayersView >> createComponents [
 
 	"<^self>"
-	"Entry point for creating components.
-	 Sets listGrid"
+	"Entry point for creating components."
+	 "Sets listGrid"
 
 	self listGrid: (Me5ListGrid new
 		addCssClassColMd12;
@@ -134,7 +132,7 @@ ManagePlayersView >> createModules [
 	super createModules.
 	
 	self addModuleByModuleClass: Me5DataGridModuleBundle.
-	self addModuleByModuleClass: Bs4TooltipsterTooltipModuleBundle.
+	self addModuleByModuleClass: Bs4TooltipsterTooltipModuleBundle
 ]
 
 { #category : 'Accessing' }
@@ -166,16 +164,12 @@ ManagePlayersView >> deletePlayerEvent: anEvent [
 	isSuccessfullBoolean := false.
 	thePlayer := anEvent dataGridComponentsHolderCellObject.
 	
-	(self data includes: thePlayer)
+	((self data includes: thePlayer) and: [self data size > 1])
 		ifTrue: [
-			(self data size > 1)
-				ifTrue: [
-					self data remove: thePlayer.
-					isSuccessfullBoolean := true.
-				].
-		].
+			self data remove: thePlayer.
+			isSuccessfullBoolean := true.].
 	
-	self listGrid dataSourceBlock: [ self data	].
+	self listGrid dataSourceBlock: [self data].
 		
 	self listGrid resetEditedDataGridCells.
 
@@ -184,9 +178,7 @@ ManagePlayersView >> deletePlayerEvent: anEvent [
 			bindWith: thePlayer firstName with: thePlayer lastName).]
 		ifFalse: [self showErrorNotificationWithMessage: ('Can not delete last Player...').].
 		
-	TurnierplanerApp saveCollectionOfPlayers: self data.
-
-
+	TournamentPlannerApp saveCollectionOfPlayers: self data
 ]
 
 { #category : 'Accessing' }
@@ -227,15 +219,14 @@ ManagePlayersView >> saveEvent [
 	theNumberOfEditedDataGridRows := self listGrid numberOfEditedDataGridRows.
 
 	self listGrid validateEditedDataGridCellsForBlock: [ :eachEditedDataGridCell | | theFieldName theValue |
-		theFieldName := (self listGrid dataGridColumnDefinitions at: eachEditedDataGridCell field asNumber) title lowercaseFirstCharacter.
+		theFieldName := (self listGrid dataGridColumnDefinitions at: eachEditedDataGridCell field asNumber) 
+			title lowercaseFirstCharacter.
 		theValue := eachEditedDataGridCell value.
 		theValue isEmptyOrNil
 			ifTrue: [
 				(theFieldName at: 1) isVowel
 					ifTrue: [eachEditedDataGridCell errorText: 'Please enter an ', theFieldName]
-					ifFalse: [eachEditedDataGridCell errorText: 'Please enter a ', theFieldName].
-			].
-	].
+					ifFalse: [eachEditedDataGridCell errorText: 'Please enter a ', theFieldName].].].
 
 	self listGrid hasValidationError
 		ifTrue: [^self showErrorNotificationWithMessage: 'Validation failed...'].
@@ -252,6 +243,6 @@ ManagePlayersView >> saveEvent [
 		bindWith: theNumberOfEditedDataGridRows).
 	
 	self parentView tournamentTab resetPlayers: self data.
-	TurnierplanerApp saveCollectionOfPlayers: self data
+	TournamentPlannerApp saveCollectionOfPlayers: self data
 
 ]

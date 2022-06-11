@@ -1,6 +1,6 @@
 Class {
 	#name : 'Tournament',
-	#superclass : 'Resultable',
+	#superclass : 'Object',
 	#instVars : [
 		'tournamentType',
 		'games',

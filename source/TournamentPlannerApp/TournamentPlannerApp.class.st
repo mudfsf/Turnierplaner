@@ -104,9 +104,12 @@ TournamentPlannerApp class >> httpServer: aHttpServer [
   #vaVisibility : 'private' }
 TournamentPlannerApp class >> loadAll [
 
-self collectionOfPlayers: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat').
-self collectionOfTeams: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\teams.dat').
-self collectionOfTournaments: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat').
+	"^self"
+	"Sets collectionOfPlayers, collectionOfTeams, collectionOfTournaments"
+	
+	self collectionOfPlayers: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat').
+	self collectionOfTeams: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\teams.dat').
+	self collectionOfTournaments: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat')
 ]
 
 { #category : 'API' }
@@ -150,7 +153,7 @@ TournamentPlannerApp class >> startUp [
 	
 	self loadAll.
 	
-	self httpServer: (Me5SstHttpServer startUpHttpServerOnPort: '9003' serverApplicationClass: self).
+	self httpServer: (Me5SstHttpServer startUpHttpServerOnPort: '9004' serverApplicationClass: self).
 	self httpServer addViewClass: TournamentPlannerView.
 	self httpServer addViewClass: ManagePlayersView.
 	self addRouteToHttpServer.
