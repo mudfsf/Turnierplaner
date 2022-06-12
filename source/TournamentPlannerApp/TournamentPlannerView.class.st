@@ -557,33 +557,34 @@ TournamentPlannerView >> teamsTab [
 			addCssClassTextCenter;
 			yourself);
 		addChild: Me5Hr new;
+		addChild: (Me5Accordion new
+			addChild: (Me5AccordionItem new
+				icon: Me5I newFasEdit;
+				title: 'Team erstellen';
+				addChildToContent: (Me5Form new
+						addChildToBody: (textFieldTeamName := Me5TextField new
+							text: 'Neues Team';
+							placeholder: 'Teamname';
+							yourself);
+						addChildToBody: (multiComboBoxTeamMembers := Me5Select2MultiSelectBox new
+							text: 'Teammitglieder';
+							objects: thePersons;
+							placeholder: 'Personen';
+							yourself);
+						addChildToActions: (Me5Button newSuccess
+							text: 'Speichern';
+							icon: Me5I newFasSave;
+							addClickEventSelector: #buttonNewTeam;
+							yourself);
+						yourself);
+				yourself);
+			yourself);
 		addChild: teamsRow;
 		addChild: (Me5Div new
 			padding: 15;
 			addCssClassColSm12;
 			addCssClassColMd6;
 			addCssClassColXl4;
-			addChild: (Me5Portlet newSuccess
-				title: 'Neues Team erstellen';
-				addChildToFoot: (Me5Form new
-					addChildToBody: (textFieldTeamName := Me5TextField new
-						text: 'Neues Team';
-						placeholder: 'Teamname';
-						addCssClassCol12;
-						addCssClassColLg6;
-						yourself);
-					addChildToBody: (multiComboBoxTeamMembers := Me5MultiComboBox new
-						text: 'Teammitglieder';
-						helpText: 'Im Team:';
-						objects: thePersons;
-						placeholder: 'Personen';
-						yourself);
-					addChildToBody: (Me5Button newSuccess
-						text: 'Speichern';
-						icon: Me5I newFasSave;
-						addClickEventSelector: #buttonNewTeam;
-						yourself);
-					yourself));
 				yourself);
 			yourself.
 
