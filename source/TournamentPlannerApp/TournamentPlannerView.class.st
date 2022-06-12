@@ -51,37 +51,58 @@ TournamentPlannerView >> beforeCreateComponents [
 { #category : 'Not categorized' }
 TournamentPlannerView >> buttonNewTeam [
 
-	| theSingleTeamDiv theTeamMembers theTeam|
+	| theSingleTeamDiv theTeamMembers theTeam theExistingTeam|
 	
 	theTeamMembers := OrderedCollection new.
 	theSingleTeamDiv := Me5Div new.
-	self modalMultiComboBoxTeamMembers value do: [ :eachValue | 	
-		theTeamMembers add: eachValue.
-		theSingleTeamDiv addChild: (Me5Div new
-		addChild: (Me5P new 
-				text: eachValue;
-				fontSize: 'large';
-				yourself)).].
-	self teamsRow addChild: (Me5Div new
-		addChild: (Me5Portlet newPrimary
-			title: (self modalTextFieldTeamName value);
-			addChildToBody: theSingleTeamDiv;
-			addChildToFoot: (Me5Button newDanger
-				text: 'L&ouml;schen';
-				icon: Me5Flaticon newDelete1;
-				addClickEventSelector: #yesNoModalRemoveTeam: eventReceiver: self;
-				yourself);
-			yourself);
-		padding: 15;
-		addCssClassColSm12;
-		addCssClassColMd6;
-		addCssClassColXl4;
-	yourself).
 	
-	theTeam := Team newWithTeamName: (self modalTextFieldTeamName value ) players: theTeamMembers.
-	TournamentPlannerApp collectionOfTeams data add: theTeam.
-		
-	TournamentPlannerApp saveCollectionOfTeams: (TournamentPlannerApp collectionOfTeams data)
+	self modalTextFieldTeamName value = ''
+		ifTrue: [
+			self showErrorNotificationWithMessage: 'Team hat keinen Namen'.
+			^self].
+	
+	theExistingTeam := TournamentPlannerApp collectionOfTeams data detect: [ :eachTeam |
+		eachTeam teamName = self modalTextFieldTeamName value
+	] ifNone: [nil].
+	
+	theExistingTeam
+		ifNil: [
+			self modalMultiComboBoxTeamMembers value size>0
+			ifTrue: [
+				self modalMultiComboBoxTeamMembers value do: [ :eachValue | 	
+					theTeamMembers add: eachValue.
+					theSingleTeamDiv addChild: (Me5Div new
+					addChild: (Me5P new 
+							text: eachValue;
+							fontSize: 'large';
+							yourself)).].
+				self teamsRow addChild: (Me5Div new
+					addChild: (Me5Portlet newPrimary
+						title: (self modalTextFieldTeamName value);
+						addChildToHeadTools: (Me5A newIconOnlyPrimary
+								icon: Me5I newFasTrash;
+								addClickEventSelector: #yesNoModalRemoveTeam: eventReceiver: self;
+								yourself);
+						addChildToBody: theSingleTeamDiv;
+						yourself);
+					padding: 15;
+					addCssClassColSm12;
+					addCssClassColMd6;
+					addCssClassColXl4;
+				yourself).
+				
+				theTeam := Team newWithTeamName: (self modalTextFieldTeamName value ) players: theTeamMembers.
+				TournamentPlannerApp collectionOfTeams data add: theTeam.
+					
+				TournamentPlannerApp saveCollectionOfTeams: (TournamentPlannerApp collectionOfTeams data)
+			]
+			ifFalse: [
+				self showErrorNotificationWithMessage: 'Team hat zu wenig Mitglieder']]
+		ifNotNil: [
+			self showErrorNotificationWithMessage: ('Das Team mit dem Namen %1 exisistiert bereits'
+				bindWith: theExistingTeam teamName)]
+	
+	
 ]
 
 { #category : 'Accessing' }
@@ -387,7 +408,7 @@ TournamentPlannerView >> removeAllTournaments [
 TournamentPlannerView >> removeTeam: aMe5DialogEvent [
 
 	| theDivTeam theTeam|
-	theDivTeam := self removeTeamEvent component parent parent parent.
+	theDivTeam := self removeTeamEvent component parent parent parent parent parent parent.
 	theDivTeam parent removeChild: theDivTeam ifAbsent: [].
 		
 	theTeam := TournamentPlannerApp collectionOfTeams data detect: [ :eachTeam |
@@ -543,12 +564,11 @@ TournamentPlannerView >> teamsTab [
 			addCssClassColXl4;
 			addChild: (Me5Portlet newPrimary
 				title: (eachTeam teamName);
-				addChildToBody: theTeamMemberDiv;
-				addChildToFoot: (Me5Button newDanger
-					text: 'L&ouml;schen';
-					icon: Me5Flaticon newDelete1;
+				addChildToHeadTools: (Me5A newIconOnlyPrimary
+					icon: Me5I newFasTrash;
 					addClickEventSelector: #yesNoModalRemoveTeam: eventReceiver: self;
 					yourself);
+				addChildToBody: theTeamMemberDiv;
 				yourself);
 			yourself)].
 	theResultDiv := Me5Div new 
