@@ -97,26 +97,31 @@ ManagePlayersView >> createComponents [
 			yourself);
 		yourself).
 	
-	self addChild: (Me5FormPortlet new
-		addCssClassColMd12;
-		addChildToBody: self listGrid;
-		addChildToFootButtonGroup: (Me5Button newSuccess
-			icon: Me5I newFasSave; 
-			text: 'Speichern';
-			addClickEventSelector: #saveEvent eventReceiver: self;
+	self addChild: (Me5H1 new 
+			text: 'Admin-Tools';
+			addCssClassTextCenter;
 			yourself);
-		addChildToFootButtonGroup: (Me5Button newInfo
-			icon: Me5I newFasPlus; 
-			text: 'Spieler hinzuf&uuml;gen';
-			addClickEventSelector: #addPlayerEvent eventReceiver: self;
+		addChild: Me5Hr new;
+		addChild: (Me5FormPortlet new
+			addCssClassColMd12;
+			addChildToBody: self listGrid;
+				addChildToFootButtonGroup: (Me5Button newSuccess
+				icon: Me5I newFasSave; 
+				text: 'Speichern';
+				addClickEventSelector: #saveEvent eventReceiver: self;
+				yourself);
+			addChildToFootButtonGroup: (Me5Button newInfo
+				icon: Me5I newFasPlus; 
+				text: 'Spieler hinzuf&uuml;gen';
+				addClickEventSelector: #addPlayerEvent eventReceiver: self;
+				yourself);
+			addChildToFootButtonGroup: (Me5Button newWarning
+				icon: Me5I newFasUndo;
+				text: 'Reinigen';
+				addClickEventSelector: #clearEvent eventReceiver: self;
+				yourself);
 			yourself);
-		addChildToFootButtonGroup: (Me5Button newWarning
-			icon: Me5I newFasUndo;
-			text: 'Reinigen';
-			addClickEventSelector: #clearEvent eventReceiver: self;
-			yourself);
-		yourself);
-	yourself
+		yourself
 ]
 
 { #category : 'Initial-Events' }

@@ -34,8 +34,8 @@ ManageTournamentsView >> createComponents [
 	| thePlayers |
 	
 	thePlayers := OrderedCollection new.
-	self members do: [	:eachPlayer |
-		thePlayers add: eachPlayer asString.].
+	self members do: [:eachPlayer |
+		thePlayers add: eachPlayer asString].
 	
 	self createTournamentRows.
 	
@@ -44,8 +44,10 @@ ManageTournamentsView >> createComponents [
 		addChild: self createMe5Form;
 		yourself).
 	
-	self addChild: (Me5H1 new text: 'Turniere');
-		addChild: (Me5Hr new);
+	self addChild: (Me5H1 new 
+			addCssClassTextCenter;
+			text: 'Turniere');
+		addChild: Me5Hr new;
 		addChild: (Me5Accordion new
 			addChild: (Me5AccordionItem new
 				icon: Me5I newFasEdit;
@@ -123,8 +125,7 @@ ManageTournamentsView >> createTournament [
 	theSelectedCollection := OrderedCollection new.
 	
 	theExistingTournament := self tournaments detect: [ :eachTournament |
-		eachTournament name = self textFieldTournamentName value
-	] ifNone: [nil].
+		eachTournament name = self textFieldTournamentName value] ifNone: [nil].
 	
 	theExistingTournament 
 		ifNil: [
@@ -169,7 +170,7 @@ ManageTournamentsView >> createTournament [
 				
 					self tournaments add: theCurrentTournament.
 					TournamentPlannerApp saveCollectionOfTournaments: self tournaments]
-				ifFalse: [self showErrorNotificationWithMessage: ('Turnier hat zu wenig Mitspieler').].]
+				ifFalse: [self showErrorNotificationWithMessage: ('Turnier hat zu wenig Mitspieler')]]
 		ifNotNil: [
 			self showErrorNotificationWithMessage: ('Das Turnier mit dem Namen %1 exisistiert bereits...'
 				bindWith: theExistingTournament name)]
@@ -404,9 +405,9 @@ ManageTournamentsView >> removeTournament: aMe5DialogEvent [
 	
 	theDivTournament parent removeChild: theDivTournament ifAbsent: [].
 	theTournament := self tournaments detect: [ :eachTournament |
-		eachTournament name = theDivTournament children first title.
-	] ifNone: [self showErrorNotificationWithMessage: 'Turnier exisistiert nicht mehr...'.
-		theTournamentExistsBoolean := false.].
+		eachTournament name = theDivTournament children first title]
+		ifNone: [self showErrorNotificationWithMessage: 'Turnier exisistiert nicht mehr...'.
+		theTournamentExistsBoolean := false].
 		
 	theTournamentExistsBoolean
 		ifTrue: [self tournaments remove: theTournament ifAbsent: [].

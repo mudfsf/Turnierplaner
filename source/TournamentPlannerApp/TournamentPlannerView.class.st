@@ -129,11 +129,10 @@ TournamentPlannerView >> collectionOfTournaments: aCollectionOfTournament [
 { #category : 'Initials' }
 TournamentPlannerView >> createComponents [
 
-	self 
-		addChild: (Me5H1 new
+	self addChild: (Me5H1 new
+			addCssClassTextCenter;
 			text: 'Turnierplaner';
-			yourself
-		);
+			yourself);
 		addChild: (Me5Portlet new	
 			addChildToBody: (Me5Tabbable newFilled
 				addTabs: self tabsCollection;
@@ -318,7 +317,10 @@ yourself.
 			
 
 ^(Me5Div new
-	addChild: (Me5H1 new text: 'Dashboard');
+	addChild: (Me5H1 new 
+		text: 'Dashboard';
+		addCssClassTextCenter;
+		yourself);
 	addChild: Me5Hr new;
 	addChild: theDashboard;
 	yourself
@@ -507,31 +509,24 @@ TournamentPlannerView >> teamsRow: anObject [
 { #category : 'Not categorized' }
 TournamentPlannerView >> teamsTab [
 
+	"<^hOf Me5Div>"
 	"Create the teamsTab where we can see and manage all teams"
 
 	| theTeamMemberDiv theResultDiv theTeamList theCollectionOfTeamMemberCollections thePersons textFieldTeamName multiComboBoxTeamMembers |
-		
-		thePersons := OrderedCollection new.
-		TournamentPlannerApp collectionOfPlayers data do: [ :eachPerson |
-			thePersons add: ('%1 %2' bindWith: eachPerson firstName with: eachPerson lastName).
-		].
-		
-		theTeamList := OrderedCollection new.
-		theCollectionOfTeamMemberCollections := OrderedCollection new.
-		
-		TournamentPlannerApp collectionOfTeams data do: [ :eachTeam |
-			| eachPlayerList |
-			
-			theTeamList add: eachTeam teamName.			
-			eachPlayerList := OrderedCollection new.
-			eachTeam members do: [ :eachPlayer |
-				eachPlayerList add: eachPlayer.
-			].
-			theCollectionOfTeamMemberCollections add: eachPlayerList.
-		].
-		
-		teamsRow := Me5Row new.		
-		
+
+	thePersons := OrderedCollection new.
+	TournamentPlannerApp collectionOfPlayers data do: [ :eachPerson |
+		thePersons add: ('%1 %2' bindWith: eachPerson firstName with: eachPerson lastName)].
+	theTeamList := OrderedCollection new.
+	theCollectionOfTeamMemberCollections := OrderedCollection new.
+	TournamentPlannerApp collectionOfTeams data do: [ :eachTeam |
+		| eachPlayerList |
+		theTeamList add: eachTeam teamName.
+		eachPlayerList := OrderedCollection new.
+		eachTeam members do: [ :eachPlayer |
+			eachPlayerList add: eachPlayer].
+		theCollectionOfTeamMemberCollections add: eachPlayerList].
+		teamsRow := Me5Row new.
 		TournamentPlannerApp collectionOfTeams data do: [ :eachTeam | 
 			theTeamMemberDiv := Me5Div new.
 			eachTeam members do: [ :eachPlayer |
@@ -540,61 +535,62 @@ TournamentPlannerView >> teamsTab [
 						text: eachPlayer asString;
 						fontSize: 'large';
 						yourself))].
-		
+
 			teamsRow addChild: (Me5Div new
+				padding: 15;
+				addCssClassColSm12;
+				addCssClassColMd6;
+				addCssClassColXl4;
 				addChild: (Me5Portlet newPrimary
 					title: (eachTeam teamName);
-					addChildToBody: theTeamMemberDiv;
-					addChildToFoot: (Me5Button newDanger
-						text: 'L&ouml;schen';
-						icon: Me5Flaticon newDelete1;
-						addClickEventSelector: #yesNoModalRemoveTeam: eventReceiver: self;
-						yourself);
-					yourself);
-				padding: 15;
-				addCssClassColSm12;
-				addCssClassColMd6;
-				addCssClassColXl4;
-				yourself).
-		].
-																	
-		theResultDiv := Me5Div new.
-		theResultDiv 
-			addChild: teamsRow;
-			addChild: (Me5Div new
-				addChild: (Me5Portlet newSuccess
-					title: 'Neues Team erstellen';
-					addChildToFoot: (Me5Form new
-						addChildToBody: (textFieldTeamName := Me5TextField new
-							text: 'Neues Team';
-							"value: teamName;"
-							placeholder: 'Teamname';
-							addCssClassCol12;
-							addCssClassColLg6;
-						yourself);
-						addChildToBody: (multiComboBoxTeamMembers := Me5MultiComboBox new
-							text: 'Teammitglieder';
-							helpText: 'Im Team:';
-							objects: thePersons;
-							placeholder: 'Personen';
+						addChildToBody: theTeamMemberDiv;
+						addChildToFoot: (Me5Button newDanger
+							text: 'L&ouml;schen';
+							icon: Me5Flaticon newDelete1;
+							addClickEventSelector: #yesNoModalRemoveTeam: eventReceiver: self;
 							yourself);
-						addChildToBody: (Me5Button newSuccess
-							text: 'Speichern';
-							icon: Me5I newFasSave;
-							addClickEventSelector: #buttonNewTeam;
-							yourself);
+						yourself);
+					yourself)].
+	theResultDiv := Me5Div new 
+		addChild: (Me5H1 new 
+			text: 'Teams';
+			addCssClassTextCenter;
+			yourself);
+		addChild: Me5Hr new;
+		addChild: teamsRow;
+		addChild: (Me5Div new
+			padding: 15;
+			addCssClassColSm12;
+			addCssClassColMd6;
+			addCssClassColXl4;
+			addChild: (Me5Portlet newSuccess
+				title: 'Neues Team erstellen';
+				addChildToFoot: (Me5Form new
+					addChildToBody: (textFieldTeamName := Me5TextField new
+						text: 'Neues Team';
+						placeholder: 'Teamname';
+						addCssClassCol12;
+						addCssClassColLg6;
+						yourself);
+					addChildToBody: (multiComboBoxTeamMembers := Me5MultiComboBox new
+						text: 'Teammitglieder';
+						helpText: 'Im Team:';
+						objects: thePersons;
+						placeholder: 'Personen';
+						yourself);
+					addChildToBody: (Me5Button newSuccess
+						text: 'Speichern';
+						icon: Me5I newFasSave;
+						addClickEventSelector: #buttonNewTeam;
+						yourself);
 					yourself));
-				padding: 15;
-				addCssClassColSm12;
-				addCssClassColMd6;
-				addCssClassColXl4;
-			yourself).
-			
+				yourself);
+			yourself.
+
 		self modalTextFieldTeamName: textFieldTeamName.
 		self modalMultiComboBoxTeamMembers: multiComboBoxTeamMembers.
 
 	^theResultDiv
-
 ]
 
 { #category : 'Accessing' }
@@ -648,61 +644,58 @@ TournamentPlannerView >> user: anObject [
 { #category : 'Not categorized' }
 TournamentPlannerView >> userSettingsTab [
 
+	"<^hOf Me5Div>"
+	"Sends the userSettings Tab to the receiver"
+
 	| thePlayer |
-	"User muss noch ermittelt werden"
+
 	(self user isNil)
 		ifTrue: [
 			thePlayer:=Player newWithFirstName: 'Max' lastName: 'Muster'  email: 'max.muster@gmail.com'.
-			self user:thePlayer.] .
+			self user:thePlayer] .
 
-
-
-	^(Me5Div new
-		addChild:	(Me5H1 new text: 'Einstellungen');
+	^Me5Div new
+		addChild: (Me5H1 new 
+			text: 'Einstellungen';
+			addCssClassTextCenter;
+			yourself);
 		addChild: Me5Hr new;
-		addChild: (Me5FormPortlet newPrimary
-			title:'Einstellungen';
-		
+			addChild: (Me5Form new
 				addChildToBody: (Me5Row  new
 					addChild: (Me5TextField new
-						text:'Vorname';
+						text: 'Vorname';
 						value: user firstName;
-						placeholder:'Vorname';
+						placeholder: 'Vorname';
 						addCssClassCol12;
 						addCssClassColLg6;
-					yourself);
+						yourself);
 					addChild: (Me5TextField new
-						text:'Nachname';
+						text: 'Nachname';
 						value: user lastName;
 						placeholder: 'Nachname';
 						addCssClassColLg6;
 						addCssClassCol12;
-					yourself);	
+						yourself);
 					addChild: (Me5TextField new
-						text:'E-Mail';
+						text: 'E-Mail';
 						value: user email;
 						placeholder: 'E-Mail';
 						addCssClassColLg6;
 						addCssClassCol12;
-					yourself);	
-				yourself);
-				addChildToBody: (Me5Row new
+						yourself);
 					addChild: (Me5PasswordField new
-							text:'Passwort';
-							placeholder: 'Passwort';
-							addCssClassColLg6;
-							addCssClassCol12;
-						yourself);	
+						text: 'Passwort';
+						placeholder: 'Passwort';
+						addCssClassColLg6;
+						addCssClassCol12;
+						yourself);
 					yourself);
-			
-				
-				addChildToFoot: (Me5Button newPrimary
-					text:'Speichern';
+				addChildToRow:  (Me5Button newPrimary
+					text: 'Speichern';
 					icon: Me5I newFasSave;
-					"addClickEventSelector: #savePlayer;"
 					yourself);
 				yourself);
-			yourself).
+			yourself
 ]
 
 { #category : 'Events' }
