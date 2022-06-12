@@ -29,7 +29,10 @@ Player class >> newWithName: aString [
 	"<aString : hOF String, ^self>"
 	"Create instance of game with firstName @aString"
 
-	^self new firstName: aString
+	^self new 
+		firstName: aString;
+		lastName: '';
+		yourself
 ]
 
 { #category : 'API' }

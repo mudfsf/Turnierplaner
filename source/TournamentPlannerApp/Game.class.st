@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'layer',
 		'name',
-		'members'
+		'members',
+		'isBuy'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -20,6 +21,24 @@ Game class >> newWithName: aString layer: aNumber members: aCollection [
 		layer: aNumber;
 		members: aCollection;	
 		yourself
+]
+
+{ #category : 'Accessing' }
+Game >> isBuy [
+
+	"<^(true | false)>"
+	"Answer the isBuy of the receiver"
+
+	^isBuy
+]
+
+{ #category : 'Accessing' }
+Game >> isBuy: aBoolean [
+
+	"<aBoolean: (true | false), ^self>"
+	"Set the isBuy of the receiver"
+
+	isBuy := aBoolean
 ]
 
 { #category : 'Accessing' }
