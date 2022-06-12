@@ -12,18 +12,18 @@ Class {
 SpecificTournamentView >> beforeCreateComponents [
 
 	self tournament: (TournamentPlannerApp collectionOfTournaments data detect: [ :eachTournament |
-		eachTournament name = (self queryParameters at: 'tournamentName'). ]
-		)
+		eachTournament name = (self queryParameters at: 'tournamentName')])
 ]
 
 { #category : 'Initial-Events' }
 SpecificTournamentView >> createComponents [
 
 	self addChild: (Me5H1 new
-			text: 'Specific Tournament');
-		addChild: (Me5H3 new
-			text: (self tournament name)); 
-		addChild: self specificTournament;
+			addCssClassTextCenter;
+			text: self tournament name;
+			yourself);
+		addChild: Me5Hr new;
+		addChild: self createTournament;
 		yourself
 ]
 
@@ -33,33 +33,15 @@ SpecificTournamentView >> createModules [
 	super createModules
 ]
 
-{ #category : 'Accessing' }
-SpecificTournamentView >> gameID [
-
-	"<^iOf String>"
-	"Answer the gameID of the receiver"
-
-	^gameID
-]
-
-{ #category : 'Accessing' }
-SpecificTournamentView >> gameID: aString [
-
-	"<aString: iOf String, ^self>"
-	"Set the gameID of the receiver"
-
-	gameID := aString
-]
-
 { #category : 'Internal' }
-SpecificTournamentView >> specificTournament [
+SpecificTournamentView >> createTournament [
 
 	| theResultDiv theScroller theNumberOfGamesFirstColumn theGamesinColumn theOffsetX theOffsetY theGameWidth theGameHeight theRowsSpacing theColumnSpacing theGameHeightAndSpacing theCoordinatesLineArray theNumberOfColumn theGameIndex |
 
 	theNumberOfGamesFirstColumn := (self tournament membercollection size) / 2.
 	theGamesinColumn := theNumberOfGamesFirstColumn.
-	theOffsetX := 10.
-	theOffsetY := 10.
+	theOffsetX := 40.
+	theOffsetY := 40.
 	theGameWidth := 400.
 	theGameHeight := 260.
 	theRowsSpacing := 20.
@@ -71,10 +53,8 @@ SpecificTournamentView >> specificTournament [
 	"{ spalte { reihe { x1 y1 x2 y2 } reihe {...} reihe {...} reihe {...} } spalte {...} spalte {...} }"
 	
 	theResultDiv := Me5Div new
-		addChild: (Me5H1 newWithText: 'Beispielansicht Turnier');
 		addChild: (theScroller := Me5Scroller new
-		height: 2 * theNumberOfGamesFirstColumn * theGameHeightAndSpacing);
-		yourself.
+		height: 2 * theNumberOfGamesFirstColumn * theGameHeightAndSpacing).
 
 	1 to: theNumberOfColumn do: [ :eachColumn |
 		theCoordinatesLineArray at: eachColumn put: (Array new: theGamesinColumn).
@@ -165,6 +145,24 @@ SpecificTournamentView >> specificTournament [
 			yourself).].].
 
 	^theResultDiv
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> gameID [
+
+	"<^iOf String>"
+	"Answer the gameID of the receiver"
+
+	^gameID
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> gameID: aString [
+
+	"<aString: iOf String, ^self>"
+	"Set the gameID of the receiver"
+
+	gameID := aString
 ]
 
 { #category : 'Accessing' }

@@ -164,7 +164,7 @@ ManageTournamentsView >> createTournament [
 						yourself).
 	
 					self rowTournaments addChild: (self createTournamentDivWithTournament: theCurrentTournament 
-						WithTournamenTyp: theTournamentTypeAsString
+						WithTournamenType: theTournamentTypeAsString
 						WithMembers: theSelectedAsStringCollection).
 				
 					self tournaments add: theCurrentTournament.
@@ -176,7 +176,7 @@ ManageTournamentsView >> createTournament [
 ]
 
 { #category : 'Internal' }
-ManageTournamentsView >> createTournamentDivWithTournament: aTournament WithTournamenTyp: aString WithMembers: aCollection [
+ManageTournamentsView >> createTournamentDivWithTournament: aTournament WithTournamenType: aString WithMembers: aCollection [
 
 	"aTournament: iOf Tournament, aString: hOf String, aCollection: hOf Collection: {hOf String}, ^Me5Div"
 	"Answer a Me5Div representing Tournament"
@@ -193,19 +193,18 @@ ManageTournamentsView >> createTournamentDivWithTournament: aTournament WithTour
 				addClickEventSelector: #yesNoModalRemoveTournament: eventReceiver: self;
 				yourself);
 			addChildToBody: (Me5P new
-				text: '%1 / %2' bindWith: aString with: aTournament gameMode ;
+				text: ('%1 / %2' bindWith: aString with: aTournament gameMode);
 				fontSize: 'medium';
 				yourself);
 			addChildToBody: (Me5P new 
-				text: 'Rivalen: %1' bindWith: (aCollection joinUsing:  ', ');
+				text: ('Rivalen: %1' bindWith: ((aCollection select: [ :eachMember | eachMember notNil ]) joinUsing:  ', '));
 				fontSize: 'large';
 				yourself);
 			addChildToBody: (Me5A newPrimary
 				setTargetBlank;
 				rightIcon: Me5I newFasAngleRight;
 				text: 'Zum Turnier';
-				href: ('TurnierplanerView/specificTournament?tournamentName=dasErsteTurnier%1&team=true', 
-				aTournament name);
+				href: ('TurnierplanerView/specificTournament?tournamentName=%1&team=true' bindWith: aTournament name);
 				yourself);
 			addChildToFoot:  (Me5ProgressBar newPrimary
 				value: (aTournament numberOfPlayedGames 
@@ -255,7 +254,7 @@ ManageTournamentsView >> createTournamentRows [
 					fontSize: 'medium';
 					yourself);
 				addChildToBody: (Me5P new 
-					text: ('Rivalen: ', (theMembers joinUsing: ', '));
+					text: ('Rivalen: %1' bindWith: ((theMembers select: [ :eachMember | eachMember notNil ]) joinUsing:  ', '));
 					fontSize: 'large';
 					yourself);
 				addChildToBody: (Me5A newPrimary
