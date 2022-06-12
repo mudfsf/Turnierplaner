@@ -6,47 +6,18 @@ Class {
 		'multiComboBoxRivals',
 		'startUp',
 		'user',
-		'collectionOfPlayers',
-		'collectionOfTournaments',
-		'collectionOfTeams',
 		'tournamentRow',
-		'createTournamentRadioGroupGameMode',
-		'createTournamentRadioGroupTournamentType',
-		'createTournamentMultiComboBoxRivals',
 		'createTournamentTextFieldTournamentName',
 		'collapsiblePortlet',
 		'teamsRow',
 		'modalTextFieldTeamName',
 		'modalMultiComboBoxTeamMembers',
-		'removeTeamEvent'
+		'removeTeamEvent',
+		'radioGroupGameMode',
+		'radioGroupTournamentType'
 	],
 	#category : 'TournamentPlannerApp'
 }
-
-{ #category : 'Initials' }
-TournamentPlannerView >> beforeCreateComponents [
-
-	self startUp: Memory new.	
-
-	"theBlob := OrderedCollection new.
-		
-	theMemory saveObject: theBlob onPath: 'C:\TournamentPlanner\Memory\tournaments.dat'.
-
-		theBlob add: (Player new
-		firstName: 'TestAdmin';
-		lastName:  '';
-		email: 'TestAdmin@Test.com';
-		yourself).
-		
-	theMemory saveObject: theBlob onPath: 'C:\TournamentPlanner\Memory\players.dat'."
-	
-	"self collectionOfTournaments: (self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat').
-	self collectionOfPlayers:  (self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat').
-	self collectionOfTeams:  (self startUp loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\teams.dat')."
-
-	
-
-]
 
 { #category : 'Not categorized' }
 TournamentPlannerView >> buttonNewTeam [
@@ -105,48 +76,6 @@ TournamentPlannerView >> buttonNewTeam [
 	
 ]
 
-{ #category : 'Accessing' }
-TournamentPlannerView >> collectionOfPlayers [
-
-	^collectionOfPlayers
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> collectionOfPlayers: aCollectionOfPlayer [
-
-	collectionOfPlayers := aCollectionOfPlayer
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> collectionOfTeams [
-
-	"<^hOf Collection of: {iOf Object}>"
-	"Answer the collectionOfTeams of the receiver"
-
-	^collectionOfTeams
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> collectionOfTeams: aCollectionOfTeams [
-
-	"<aCollection: hOf Collection of: {iOf Object}, ^self>"
-	"Set the collectionOfTeams of the receiver"
-
-	collectionOfTeams := aCollectionOfTeams
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> collectionOfTournaments [
-
-	^collectionOfTournaments
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> collectionOfTournaments: aCollectionOfTournament [
-
-	collectionOfTournaments := aCollectionOfTournament
-]
-
 { #category : 'Initials' }
 TournamentPlannerView >> createComponents [
 
@@ -171,78 +100,6 @@ TournamentPlannerView >> createModules [
 	self addModuleByModuleClass: Me5DataGridModuleBundle.
 	self addModuleByModuleClass: Bs4TooltipsterTooltipModuleBundle.
 	self addModuleByModuleClass: Me5Select2SelectBoxModuleBundle.
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> createTournamentMultiComboBoxRivals [
-
-	"<^iOf Object>"
-	"Answer the createTournamentMultiComboBoxRivals of the receiver"
-
-	^createTournamentMultiComboBoxRivals
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> createTournamentMultiComboBoxRivals: anObject [
-
-	"<anObject: iOf Object, ^self>"
-	"Set the createTournamentMultiComboBoxRivals of the receiver"
-
-	createTournamentMultiComboBoxRivals := anObject
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> createTournamentRadioGroupGameMode [
-
-	"<^iOf Object>"
-	"Answer the createTournamentRadioGroupGameMode of the receiver"
-
-	^createTournamentRadioGroupGameMode
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> createTournamentRadioGroupGameMode: anObject [
-
-	"<anObject: iOf Object, ^self>"
-	"Set the createTournamentRadioGroupGameMode of the receiver"
-
-	createTournamentRadioGroupGameMode := anObject
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> createTournamentRadioGroupTournamentType [
-
-	"<^iOf Object>"
-	"Answer the createTournamentRadioGroupTournamentType of the receiver"
-
-	^createTournamentRadioGroupTournamentType
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> createTournamentRadioGroupTournamentType: anObject [
-
-	"<anObject: iOf Object, ^self>"
-	"Set the createTournamentRadioGroupTournamentType of the receiver"
-
-	createTournamentRadioGroupTournamentType := anObject
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> createTournamentTextFieldTournamentName [
-
-	"<^iOf Object>"
-	"Answer the createTournamentTextFieldTournamentName of the receiver"
-
-	^createTournamentTextFieldTournamentName
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> createTournamentTextFieldTournamentName: anObject [
-
-	"<anObject: iOf Object, ^self>"
-	"Set the createTournamentTextFieldTournamentName of the receiver"
-
-	createTournamentTextFieldTournamentName := anObject
 ]
 
 { #category : 'Not categorized' }
@@ -396,12 +253,40 @@ TournamentPlannerView >> multiComboBoxRivals: anObject [
 	multiComboBoxRivals := anObject
 ]
 
-{ #category : 'Not categorized' }
-TournamentPlannerView >> removeAllTournaments [
+{ #category : 'Accessing' }
+TournamentPlannerView >> radioGroupGameMode [
 
-	self collectionOfTournaments removeAll.
-	
-	self startUp saveObject: self collectionOfTournaments onPath: 'C:\TournamentPlanner\Memory\tournaments.dat'.
+	"<^iOf Object>"
+	"Answer the createTournamentRadioGroupGameMode of the receiver"
+
+	^radioGroupGameMode
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> radioGroupGameMode: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the createTournamentRadioGroupGameMode of the receiver"
+
+	radioGroupGameMode := anObject
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> radioGroupTournamentType [
+
+	"<^iOf Object>"
+	"Answer the createTournamentRadioGroupTournamentType of the receiver"
+
+	^radioGroupTournamentType
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> radioGroupTournamentType: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the createTournamentRadioGroupTournamentType of the receiver"
+
+	radioGroupTournamentType := anObject
 ]
 
 { #category : 'Events' }
@@ -439,12 +324,6 @@ TournamentPlannerView >> removeTeamEvent: aMe5Event [
 	removeTeamEvent := aMe5Event
 ]
 
-{ #category : 'Not categorized' }
-TournamentPlannerView >> removeTournament [
-
-	self tournamentTab removeTournament.
-]
-
 { #category : 'Accessing' }
 TournamentPlannerView >> startUp [
 
@@ -465,21 +344,15 @@ TournamentPlannerView >> startUp: anObject [
 
 { #category : 'Not categorized' }
 TournamentPlannerView >> tabsCollection [
-
-	| theUserSettings theCreateTournamentModal |
 	
 	self tournamentTab: ManageTournamentsView new.
-
-	"theCreateTournamentModal := (CreateTournamentModal  new
-	yourself).
-	theCreateTournamentModal createView."
 	
 	^OrderedCollection new
 		add: (Me5Tab new
 			text: 'Dashboard';
 			icon: Me5I newFasHome;
 			addChildToTabPane: self dashboardTab;
-			activateTab; "Make sure that 'activateTab' is called after you added a child to tabPane."
+			activateTab;
 			yourself);
 		add: (Me5Tab new
 			text: 'Turniere';
@@ -488,7 +361,7 @@ TournamentPlannerView >> tabsCollection [
 				holdingView: self tournamentTab;
 				yourself);
 			yourself);
-	add: (Me5Tab new
+		add: (Me5Tab new
 			text: 'Teams';
 			icon: Me5FontAwesomeIconSolid newSmile;
 			addChildToTabPane: self teamsTab;
@@ -496,7 +369,7 @@ TournamentPlannerView >> tabsCollection [
 		add: (Me5Tab new
 			text: 'Einstellungen';
 			icon: Me5FontAwesomeIconSolid newCog;
-			addChildToTabPane: self userSettingsTab "theCreateTournamentModal view";
+			addChildToTabPane: self userSettingsTab;
 			yourself);
 		add: (Me5Tab new
 			text: 'Admin-Tools';
@@ -666,8 +539,8 @@ TournamentPlannerView >> userSettingsTab [
 
 	(self user isNil)
 		ifTrue: [
-			thePlayer:=Player newWithFirstName: 'Max' lastName: 'Muster'  email: 'max.muster@gmail.com'.
-			self user:thePlayer] .
+			thePlayer := Player newWithFirstName: 'Max' lastName: 'Muster'  email: 'max.muster@gmail.com'.
+			self user:thePlayer].
 
 	^Me5Div new
 		addChild: (Me5H1 new 
@@ -705,7 +578,7 @@ TournamentPlannerView >> userSettingsTab [
 						addCssClassCol12;
 						yourself);
 					yourself);
-				addChildToRow:  (Me5Button newPrimary
+				addChildToRow: (Me5Button newPrimary
 					text: 'Speichern';
 					icon: Me5I newFasSave;
 					yourself);

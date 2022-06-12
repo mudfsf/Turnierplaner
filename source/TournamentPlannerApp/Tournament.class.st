@@ -3,6 +3,7 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'tournamentType',
+		'playedGames',
 		'games',
 		'name',
 		'numberOfGames',
@@ -128,6 +129,24 @@ Tournament >> numberOfPlayedGames: aNumber [
 	"Set the numberOfPlayedGames of the receiver"
 
 	numberOfPlayedGames := aNumber
+]
+
+{ #category : 'Accessing' }
+Tournament >> playedGames [
+
+	"<^hOf Collection of: {iOf Game}>"
+	"Answer the playedGames of the receiver"
+
+	^playedGames
+]
+
+{ #category : 'Accessing' }
+Tournament >> playedGames: aCollection [
+
+	"<aCollection: hOf Collection of: {iOf Game}, ^self>"
+	"Set the playedGames of the receiver"
+
+	playedGames := aCollection
 ]
 
 { #category : 'Accessing' }

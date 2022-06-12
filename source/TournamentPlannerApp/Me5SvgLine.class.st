@@ -22,7 +22,6 @@ Me5SvgLine >> htmlElementClass [
 	"^ClwHtmlElementDiv"
 
 	^ClwHtmlElementDiv
-	
 ]
 
 { #category : 'Internal' }
@@ -49,7 +48,7 @@ Me5SvgLine >> setAdditionalAttributesOfHtmlElement: aClwHtmlBaseElement [
 	aClwHtmlBaseElement 
 		attributeAt: 'style' put: 'text-align: center';
 		text: (theSvgElement asXmlString);
-		yourself.
+		yourself
 ]
 
 { #category : 'Accessing' }

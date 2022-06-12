@@ -119,61 +119,63 @@ ManageTournamentsView >> createTournament [
 
 	"creates and saves Tournament"
 
-	| theSelectedCollection theExistingTournament theSelectedAsStringCollection theCurrentTournament theTournamentType theTournamentTypeAsString theGames |
+	| theSelectedCollection theCollection theExistingTournament theSelectedAsStringCollection theTournamentType theTournamentTypeAsString theGames theCurrentTournament |
 	
-	theSelectedAsStringCollection := OrderedCollection new..
+	theSelectedAsStringCollection := OrderedCollection new.
 	theSelectedCollection := OrderedCollection new.
 	
 	theExistingTournament := self tournaments detect: [ :eachTournament |
 		eachTournament name = self textFieldTournamentName value] ifNone: [nil].
 	
 	theExistingTournament 
-		ifNil: [
-			| theCollection |
-			
-			self radioGroupGameMode value = 'Einzel'
-				ifTrue: [theCollection := TournamentPlannerApp collectionOfPlayers data].
-			self radioGroupGameMode value = 'Team'
-				ifTrue: [theCollection := TournamentPlannerApp collectionOfTeams data].
-			
-			theTournamentTypeAsString := self radioGroupTournamentType value.
-			theTournamentTypeAsString = 'KO'
-				ifTrue: [theTournamentType := KOTournamentType new.].
-			theTournamentTypeAsString = 'Runden'
-				ifTrue: [theTournamentType := LapsTournamentType new.].
-			theTournamentTypeAsString = 'Mixed'
-				ifTrue: [theTournamentType := MixedTournamentType new.].			
-			
-			self multiComboBoxRivals value do: [ :eachSelectable |
-				| theSelected |
-				theSelected := theCollection detect: [ :member |
-					member asString = eachSelectable] ifNone: [].
-				theSelectedCollection add: theSelected.
-				theSelectedAsStringCollection add: theSelected asString.].
-	
-			theSelectedCollection size > 1
-				ifTrue: [
-					theGames := theTournamentType getCollectionOfGamesWithMembers: theSelectedCollection.
-					theCurrentTournament := (Tournament new
-						name: self textFieldTournamentName value;
-						tournamentType: theTournamentType;
-						gameMode: self radioGroupGameMode value;
-						numberOfGames: theGames size;
-						numberOfPlayedGames: 0;
-						games: theGames;
-						membercollection: theSelectedCollection;
-						yourself).
-	
-					self rowTournaments addChild: (self createTournamentDivWithTournament: theCurrentTournament 
-						WithTournamenType: theTournamentTypeAsString
-						WithMembers: theSelectedAsStringCollection).
-				
-					self tournaments add: theCurrentTournament.
-					TournamentPlannerApp saveCollectionOfTournaments: self tournaments]
-				ifFalse: [self showErrorNotificationWithMessage: ('Turnier hat zu wenig Mitspieler')]]
 		ifNotNil: [
 			self showErrorNotificationWithMessage: ('Das Turnier mit dem Namen %1 exisistiert bereits...'
-				bindWith: theExistingTournament name)]
+				bindWith: theExistingTournament name).
+			^self].
+
+			
+	self radioGroupGameMode value = 'Einzel'
+		ifTrue: [theCollection := TournamentPlannerApp collectionOfPlayers data].
+	self radioGroupGameMode value = 'Team'
+		ifTrue: [theCollection := TournamentPlannerApp collectionOfTeams data].
+			
+	theTournamentTypeAsString := self radioGroupTournamentType value.
+	theTournamentTypeAsString = 'KO'
+		ifTrue: [theTournamentType := KOTournamentType new].
+	theTournamentTypeAsString = 'Runden'
+		ifTrue: [theTournamentType := LapsTournamentType new].
+	theTournamentTypeAsString = 'Mixed'
+		ifTrue: [theTournamentType := MixedTournamentType new].			
+			
+	self multiComboBoxRivals value do: [ :eachSelectable |
+		| theSelected |
+		theSelected := theCollection detect: [ :member |
+			member asString = eachSelectable] ifNone: [].
+		theSelectedCollection add: theSelected.
+		theSelectedAsStringCollection add: theSelected asString].
+	
+	theSelectedCollection size < 2
+		ifTrue: [
+		self showErrorNotificationWithMessage: ('Turnier hat zu wenig Mitspieler').
+		^self].
+
+	theGames := theTournamentType getCollectionOfGamesWithMembers: theSelectedCollection.
+	theCurrentTournament := (Tournament new
+		name: self textFieldTournamentName value;
+		tournamentType: theTournamentType;
+		gameMode: self radioGroupGameMode value;
+		numberOfGames: theGames size;
+		numberOfPlayedGames: 0;
+		games: theGames;
+		membercollection: theSelectedCollection;
+		yourself).
+	
+	self rowTournaments addChild: (self createTournamentDivWithTournament: theCurrentTournament 
+		WithTournamenType: theTournamentTypeAsString
+		WithMembers: theSelectedAsStringCollection).
+				
+	self tournaments add: theCurrentTournament.
+	TournamentPlannerApp saveCollectionOfTournaments: self tournaments
 ]
 
 { #category : 'Internal' }
@@ -279,7 +281,7 @@ ManageTournamentsView >> createTournamentRows [
 			addCssClassColSm12;
 			addCssClassColMd6;
 			addCssClassColXl4;
-		yourself).]
+		yourself)]
 ]
 
 { #category : 'Accessing',
@@ -406,11 +408,13 @@ ManageTournamentsView >> removeTournament: aMe5DialogEvent [
 	theDivTournament parent removeChild: theDivTournament ifAbsent: [].
 	theTournament := self tournaments detect: [ :eachTournament |
 		eachTournament name = theDivTournament children first title]
-		ifNone: [self showErrorNotificationWithMessage: 'Turnier exisistiert nicht mehr...'.
-		theTournamentExistsBoolean := false].
+		ifNone: [
+			self showErrorNotificationWithMessage: 'Turnier exisistiert nicht mehr...'.
+			theTournamentExistsBoolean := false].
 		
 	theTournamentExistsBoolean
-		ifTrue: [self tournaments remove: theTournament ifAbsent: [].
+		ifTrue: [
+			self tournaments remove: theTournament ifAbsent: [].
 			TournamentPlannerApp saveCollectionOfTournaments: self tournaments.
 			self showSuccessNotificationWithMessage: ('Turnier mit dem Namen %1 gel&ouml;scht' 
 				bindWith: theTournament name)]
@@ -492,6 +496,4 @@ ManageTournamentsView >> yesNoModalRemoveTournament: aMe5Event [
 	"confirmation to delete Tournament"
 
 	self showYesNoDialogWithTitle: 'Turnier l&ouml;schen?' message: '' yesSelector: #removeTournament:
-
-	
 ]

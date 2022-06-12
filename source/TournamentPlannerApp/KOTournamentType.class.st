@@ -86,7 +86,7 @@ KOTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 			
 		self gameCollection add: theCurrentGame.
 		theRecursiveParamListCollectionOfGames add: (theCurrentMember class 
-			newWithName: 'Winner of game ', theCurrentGame name).].
+			newWithName: ('Spiel %1' bindWith:  theCurrentGame name))].
 	
 	theHasToContinueBoolean 
 		ifTrue: [^self getCollectionOfGamesWithMembers: theRecursiveParamListCollectionOfGames]

@@ -25,14 +25,14 @@ LapsTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 				yourself.
 				
 			theCurrentPlayer := aCollectionOfMembers at: eachIndexForFirstPlayer.
-			theCurrentGame	name: theCurrentGame name, theCurrentPlayer asString.
+			theCurrentGame	name: ('%1' bindWith: theCurrentPlayer asString).
 			theCurrentGame	members add: theCurrentPlayer.
 				
 			theCurrentPlayer := aCollectionOfMembers at: (eachIndexForFirstPlayer + eachIndexForSecondPlayer).
-			theCurrentGame name: theCurrentGame name, ' vs ', theCurrentPlayer asString.
+			theCurrentGame name: ('%1 VS %2' bindWith: theCurrentGame name with: theCurrentPlayer asString).
 			theCurrentGame members add: theCurrentPlayer.
 				
-			theCollectionOfGames add: theCurrentGame.].].
+			theCollectionOfGames add: theCurrentGame]].
 	
 	^theCollectionOfGames
 ]

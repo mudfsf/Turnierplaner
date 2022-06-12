@@ -26,7 +26,7 @@ MixedTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 				add: (theMemberType newWithName: 'Zweiter');
 				add: (theMemberType newWithName: 'Dritter');
 				add: (theMemberType newWithName: 'Vierter');
-				yourself.].
+				yourself].
 	theCollectionOfGames addAll: (theKO getCollectionOfGamesWithMembers: theCollectionOfPlayers).
 	
 	^theCollectionOfGames

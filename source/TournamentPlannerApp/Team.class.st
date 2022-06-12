@@ -43,7 +43,7 @@ Team >> asString [
 
 	"Answer the receiver as a string"
 
-	^self teamName 
+	^self teamName
 ]
 
 { #category : 'Accessing' }
@@ -56,12 +56,12 @@ Team >> members [
 ]
 
 { #category : 'Accessing' }
-Team >> members: aCollection [
+Team >> members: aPlayerCollection [
 
-	"<aCollection: hOf Collection of: {iOf Player}, ^self>"
+	"<aPlayerCollection: hOf Collection of: {iOf Player}, ^self>"
 	"Set the players of the receiver"
 
-	players := aCollection
+	players := aPlayerCollection
 ]
 
 { #category : 'Accessing' }

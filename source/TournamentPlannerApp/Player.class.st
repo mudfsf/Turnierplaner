@@ -41,7 +41,7 @@ Player >> = anObject [
 	"<anObject: hOf Object, ^self>"
 	"Answer if @anObject is equal to the receiver."
 
-	^(((self firstName = anObject firstName and: [self lastName = anObject lastName]) and: [self email = anObject email]) and: [self symbol = anObject symbol])
+	^((self firstName = anObject firstName and: [self lastName = anObject lastName]) and: [self email = anObject email]) and: [self symbol = anObject symbol]
 ]
 
 { #category : 'API' }
@@ -116,10 +116,10 @@ Player >> symbol [
 ]
 
 { #category : 'Accessing' }
-Player >> symbol: aSymbol [
+Player >> symbol: aSymbolOrString [
 
-	"<aSymbol: hOf Symbol, ^self>"
+	"<aSymbolOrString: hOf Symbol | hOf String, ^self>"
 	"Set the symbol of the receiver"
 	
-	symbol := aSymbol
+	symbol := aSymbolOrString asSymbol
 ]

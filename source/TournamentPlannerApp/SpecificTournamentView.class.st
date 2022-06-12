@@ -28,7 +28,8 @@ SpecificTournamentView >> beforeCreateComponents [
 		yourself
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> columnSpacing [
 
 	"<^hOf Number>"
@@ -37,7 +38,8 @@ SpecificTournamentView >> columnSpacing [
 	^columnSpacing
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> columnSpacing: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -100,7 +102,7 @@ SpecificTournamentView >> createTournament [
 						yourself);
 					yourself).
 					
-				eachLayer <	self tournament games last layer
+				eachLayer < self tournament games last layer
 					ifTrue: [
 						| theLine |
 						theLine := Array new: 2.
@@ -109,13 +111,7 @@ SpecificTournamentView >> createTournament [
 							y: theTop;
 							yourself).
 						thePoints add: theLine].
-				"set line coordinates (1er) x1 y1"
-				"(theCoordinatesLineArray at: eachLayer)
-					at: eachIndex put: ((Array new: 4)
-						at: 1 put: theLeft; 
-						at: 2 put: theTop; 
-						yourself)."
-				"set line coordinates (2er) x2 y2"
+
 				eachLayer > 1 
 					ifTrue: [
 						(thePoints at: (eachLayer * eachIndex - 1))
@@ -160,25 +156,8 @@ SpecificTournamentView >> createTournament [
 	^theResultDiv
 ]
 
-{ #category : 'Accessing' }
-SpecificTournamentView >> gameID [
-
-	"<^iOf String>"
-	"Answer the gameID of the receiver"
-
-	^gameID
-]
-
-{ #category : 'Accessing' }
-SpecificTournamentView >> gameID: aString [
-
-	"<aString: iOf String, ^self>"
-	"Set the gameID of the receiver"
-
-	gameID := aString
-]
-
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> height [
 
 	"<^hOf Number>"
@@ -187,7 +166,8 @@ SpecificTournamentView >> height [
 	^height
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> height: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -196,7 +176,8 @@ SpecificTournamentView >> height: aNumber [
 	height := aNumber
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetX [
 
 	"<^hOf Number>"
@@ -205,7 +186,8 @@ SpecificTournamentView >> offsetX [
 	^offsetX
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetX: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -214,7 +196,8 @@ SpecificTournamentView >> offsetX: aNumber [
 	offsetX := aNumber
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetY [
 
 	"<^hOf Number>"
@@ -223,7 +206,8 @@ SpecificTournamentView >> offsetY [
 	^offsetY
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetY: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -232,7 +216,8 @@ SpecificTournamentView >> offsetY: aNumber [
 	offsetY := aNumber
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> rowsSpacing [
 
 	"<^hOf Number>"
@@ -241,7 +226,8 @@ SpecificTournamentView >> rowsSpacing [
 	^rowsSpacing
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> rowsSpacing: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -253,22 +239,23 @@ SpecificTournamentView >> rowsSpacing: aNumber [
 { #category : 'Accessing' }
 SpecificTournamentView >> tournament [
 
-	"<^iOf Object>"
+	"<^iOf Tournament>"
 	"Answer the tournament of the receiver"
 
 	^tournament
 ]
 
 { #category : 'Accessing' }
-SpecificTournamentView >> tournament: anObject [
+SpecificTournamentView >> tournament: aTournament [
 
-	"<anObject: iOf Object, ^self>"
+	"<aTournament: iOf Tournament, ^self>"
 	"Set the tournament of the receiver"
 
-	tournament := anObject
+	tournament := aTournament
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> width [
 
 	"<^hOf Number>"
@@ -277,7 +264,8 @@ SpecificTournamentView >> width [
 	^width
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> width: aNumber [
 
 	"<aNumber: hOf Number, ^self>"

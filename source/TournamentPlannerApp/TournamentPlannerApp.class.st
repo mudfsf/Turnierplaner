@@ -124,39 +124,39 @@ TournamentPlannerApp class >> loadAll [
 { #category : 'API' }
 TournamentPlannerApp class >> saveCollectionOfPlayers: aCollectionOfPlayers [
 
-	"<aCollectionOfTeams: hOf Collection of: iOf Player, ^self>"
+	"<aCollectionOfTeams: hOf Collection of: {iOf Player}, ^self>"
 	"Saves the collectionOfPlayers of the receiver"
 
 	TournamentPlannerApp collectionOfPlayers data: aCollectionOfPlayers.
 	Memory saveObject: aCollectionOfPlayers onPath: 'C:\TournamentPlanner\Memory\players.dat'.
 	TournamentPlannerApp collectionOfPlayers observerCollection do: [ :eachObserver |
-		eachObserver resetData.]
+		eachObserver resetData]
 	
 ]
 
 { #category : 'API' }
 TournamentPlannerApp class >> saveCollectionOfTeams: aCollectionOfTeams [
 
-	"<aCollectionOfTeams: hOf Collection of: iOf Team, ^self>"
+	"<aCollectionOfTeams: hOf Collection of: {iOf Team}, ^self>"
 	"Saves the collectionOfTeams of the receiver"
 
 	TournamentPlannerApp collectionOfTeams data: aCollectionOfTeams.
 	Memory saveObject: aCollectionOfTeams onPath: 'C:\TournamentPlanner\Memory\teams.dat'.
 	TournamentPlannerApp collectionOfTeams observerCollection do: [ :eachObserver |
-		eachObserver resetData.]
+		eachObserver resetData]
 	
 ]
 
 { #category : 'API' }
 TournamentPlannerApp class >> saveCollectionOfTournaments: aCollectionOfTournaments [
 
-	"<aCollectionOfTournaments: hOf Collection of: iOf Tournament, ^self>"
+	"<aCollectionOfTournaments: hOf Collection of: {iOf Tournament}, ^self>"
 	"Saves the collectionOfTournaments of the receiver"
 	
 	TournamentPlannerApp collectionOfTournaments data: aCollectionOfTournaments.
 	Memory saveObject: aCollectionOfTournaments onPath: 'C:\TournamentPlanner\Memory\tournaments.dat'.
 	TournamentPlannerApp collectionOfTournaments observerCollection do: [ :eachObserver |
-		eachObserver resetData.]
+		eachObserver resetData]
 	
 ]
 
@@ -170,6 +170,5 @@ TournamentPlannerApp class >> startUp [
 	
 	self httpServer: (Me5SstHttpServer startUpHttpServerOnPort: '9004' serverApplicationClass: self).
 	self httpServer addViewClass: TournamentPlannerView.
-	self httpServer addViewClass: ManagePlayersView.
-	self addRouteToHttpServer.
+	self addRouteToHttpServer
 ]

@@ -15,8 +15,7 @@ ManagePlayersView >> addPlayerEvent [
 	"Adds empty row to listGrid"
 
 	(self data includes: self placeholder)
-		ifFalse: [
-			self data add: self placeholder.].
+		ifFalse: [self data add: self placeholder].
 	
 	self listGrid dataSourceBlock: [self data].
 	
@@ -40,8 +39,7 @@ ManagePlayersView >> clearEvent [
 	"Removes empty row from listGrid"
 
 	(self data includes: self placeholder)
-		ifTrue: [
-			self data remove: self placeholder.].
+		ifTrue: [self data remove: self placeholder].
 	
 	self listGrid dataSourceBlock: [self data].
 	
@@ -80,6 +78,13 @@ ManagePlayersView >> createComponents [
 			title: 'E-Mail';
 			getterSelector: #email;
 			setterSelector: #email:;
+			enableHeaderSort;
+			minWidth: 200;
+			yourself);
+		addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
+			title: 'K&uumlrzel';
+			getterSelector: #symbol;
+			setterSelector: #symbol:;
 			enableHeaderSort;
 			minWidth: 200;
 			yourself);
@@ -167,7 +172,7 @@ ManagePlayersView >> deletePlayerEvent: anEvent [
 	((self data includes: thePlayer) and: [self data size > 1])
 		ifTrue: [
 			self data remove: thePlayer.
-			isSuccessfullBoolean := true.].
+			isSuccessfullBoolean := true].
 	
 	self listGrid dataSourceBlock: [self data].
 		
@@ -175,8 +180,8 @@ ManagePlayersView >> deletePlayerEvent: anEvent [
 
 	isSuccessfullBoolean
 		ifTrue: [self showSuccessNotificationWithMessage: ('Deleted Player %1 %2...' 
-			bindWith: thePlayer firstName with: thePlayer lastName).]
-		ifFalse: [self showErrorNotificationWithMessage: ('Can not delete last Player...').].
+			bindWith: thePlayer firstName with: thePlayer lastName)]
+		ifFalse: [self showErrorNotificationWithMessage: ('Can not delete last Player...')].
 		
 	TournamentPlannerApp saveCollectionOfPlayers: self data
 ]
@@ -225,7 +230,7 @@ ManagePlayersView >> saveEvent [
 			ifTrue: [
 				(theFieldName at: 1) isVowel
 					ifTrue: [eachEditedDataGridCell errorText: 'Please enter an ', theFieldName]
-					ifFalse: [eachEditedDataGridCell errorText: 'Please enter a ', theFieldName].].].
+					ifFalse: [eachEditedDataGridCell errorText: 'Please enter a ', theFieldName]]].
 
 	self listGrid hasValidationError
 		ifTrue: [^self showErrorNotificationWithMessage: 'Validation failed...'].
@@ -242,5 +247,4 @@ ManagePlayersView >> saveEvent [
 		bindWith: theNumberOfEditedDataGridRows).
 	
 	TournamentPlannerApp saveCollectionOfPlayers: self data
-
 ]
