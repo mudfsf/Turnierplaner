@@ -25,7 +25,7 @@ Team class >> newWithTeamName: aName players: aPlayerCollection [
 
 	^self new
 		teamName: aName;
-		players: aPlayerCollection;
+		members: aPlayerCollection;
 		yourself
 ]
 
@@ -35,7 +35,7 @@ Team >> = anObject [
 	"<anObject : hOf Object, ^self>"
 	"Answer if @anObject is equal to the receiver."
 
-	^self players = anObject players and: [self teamName = anObject teamName]
+	^self members = anObject members and: [self teamName = anObject teamName]
 ]
 
 { #category : 'API' }
@@ -47,7 +47,7 @@ Team >> asString [
 ]
 
 { #category : 'Accessing' }
-Team >> players [
+Team >> members [
 
 	"<^hOf Collection of: {iOf Player}>"
 	"Answer the players of the receiver"
@@ -56,7 +56,7 @@ Team >> players [
 ]
 
 { #category : 'Accessing' }
-Team >> players: aCollection [
+Team >> members: aCollection [
 
 	"<aCollection: hOf Collection of: {iOf Player}, ^self>"
 	"Set the players of the receiver"

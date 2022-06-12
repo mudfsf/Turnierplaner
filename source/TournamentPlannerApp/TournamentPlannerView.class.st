@@ -524,7 +524,7 @@ TournamentPlannerView >> teamsTab [
 			
 			theTeamList add: eachTeam teamName.			
 			eachPlayerList := OrderedCollection new.
-			eachTeam players do: [ :eachPlayer |
+			eachTeam members do: [ :eachPlayer |
 				eachPlayerList add: eachPlayer.
 			].
 			theCollectionOfTeamMemberCollections add: eachPlayerList.
@@ -534,7 +534,7 @@ TournamentPlannerView >> teamsTab [
 		
 		TournamentPlannerApp collectionOfTeams data do: [ :eachTeam | 
 			theTeamMemberDiv := Me5Div new.
-			eachTeam players do: [ :eachPlayer |
+			eachTeam members do: [ :eachPlayer |
 				theTeamMemberDiv addChild: (Me5Div new
 					addChild: (Me5P new
 						text: eachPlayer asString;
