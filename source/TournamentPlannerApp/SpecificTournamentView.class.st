@@ -2,10 +2,19 @@ Class {
 	#name : 'SpecificTournamentView',
 	#superclass : 'Me5BaseView',
 	#instVars : [
-		'gameID'
+		'gameID',
+		'tournament'
 	],
 	#category : 'TournamentPlannerApp'
 }
+
+{ #category : 'Initial-Events' }
+SpecificTournamentView >> beforeCreateComponents [
+
+	self tournament: (TournamentPlannerApp collectionOfTournaments data detect: [ :eachTournament |
+		eachTournament name = (self queryParameters at: 'tournamentName'). ]
+		)
+]
 
 { #category : 'Initial-Events' }
 SpecificTournamentView >> createComponents [
@@ -13,7 +22,7 @@ SpecificTournamentView >> createComponents [
 	self addChild: (Me5H1 new
 			text: 'Specific Tournament');
 		addChild: (Me5H3 new
-			text: (self queryParameters at: 'tournamentName')); 
+			text: (self tournament name)); 
 		addChild: self specificTournament;
 		yourself
 ]
@@ -45,10 +54,10 @@ SpecificTournamentView >> gameID: aString [
 { #category : 'Internal' }
 SpecificTournamentView >> specificTournament [
 
-	| theResultDiv theScroller theNumberOfGames theGamesinColumn theOffsetX theOffsetY theGameWidth theGameHeight theRowsSpacing theColumnSpacing theGameHeightAndSpacing theCoordinatesLineArray theNumberOfColumn |
+	| theResultDiv theScroller theNumberOfGamesFirstColumn theGamesinColumn theOffsetX theOffsetY theGameWidth theGameHeight theRowsSpacing theColumnSpacing theGameHeightAndSpacing theCoordinatesLineArray theNumberOfColumn theGameIndex |
 
-	theNumberOfGames := 8.
-	theGamesinColumn := theNumberOfGames.
+	theNumberOfGamesFirstColumn := (self tournament membercollection size) / 2.
+	theGamesinColumn := theNumberOfGamesFirstColumn.
 	theOffsetX := 10.
 	theOffsetY := 10.
 	theGameWidth := 400.
@@ -56,25 +65,41 @@ SpecificTournamentView >> specificTournament [
 	theRowsSpacing := 20.
 	theColumnSpacing := 100.
 	theGameHeightAndSpacing := theGameHeight + theRowsSpacing.
-	theNumberOfColumn := ((theNumberOfGames log: 2) + 1) asInteger.
+	theNumberOfColumn := ((theNumberOfGamesFirstColumn log: 2) + 1) asInteger.
 	theCoordinatesLineArray := Array new: theNumberOfColumn.
+	theGameIndex := 1.
 	"{ spalte { reihe { x1 y1 x2 y2 } reihe {...} reihe {...} reihe {...} } spalte {...} spalte {...} }"
-
+	
 	theResultDiv := Me5Div new
 		addChild: (Me5H1 newWithText: 'Beispielansicht Turnier');
 		addChild: (theScroller := Me5Scroller new
-		height: 2 * theNumberOfGames * theGameHeightAndSpacing);
+		height: 2 * theNumberOfGamesFirstColumn * theGameHeightAndSpacing);
 		yourself.
 
 	1 to: theNumberOfColumn do: [ :eachColumn |
 		theCoordinatesLineArray at: eachColumn put: (Array new: theGamesinColumn).
 		1 to: theGamesinColumn do: [ :eachRow |
-			| theTop theLeft |
+			| theTop theLeft gameTitle gameMembers |
 			theTop := theOffsetY + ((eachRow - 1) * theGameHeightAndSpacing).
 			theLeft := theOffsetX + ((eachColumn - 1) * (theGameWidth + theColumnSpacing)).
 			
+			gameMembers := (self tournament games at: theGameIndex) members.
+			(gameMembers at: 1) class = UndefinedObject ifTrue: [
+				(gameMembers at: 2) class = UndefinedObject ifTrue: [
+					gameTitle := ''.] ifFalse: [
+						gameTitle := ('Freilos %1' bindWith: (gameMembers at: 2) firstName).] 
+				.]
+				
+				ifFalse: [
+					(gameMembers at: 2) class = UndefinedObject ifTrue: [
+						gameTitle := ('Freilos %1' bindWith: (gameMembers at: 1) firstName).] 
+						ifFalse: [
+							gameTitle := ('%1 VS %2' bindWith: (gameMembers at: 1) firstName with: (gameMembers at: 2) firstName).].].
+					
+				
+			
 			theScroller addChild: (Me5Portlet newSuccess
-				title: 'Gegner 1 VS Gegner 2';
+				title: gameTitle;
 				setPositionToAbsolute;
 				zIndex: 1;
 				top: theTop;
@@ -105,10 +130,11 @@ SpecificTournamentView >> specificTournament [
 						at: eachRow * 2)
 							at: 3 put: theLeft;
 							at: 4 put: theTop;
-							yourself].].
+							yourself].
+					theGameIndex := theGameIndex + 1.].
 
 		theGamesinColumn := theGamesinColumn / 2.
-		theOffsetY := theOffsetY + theGameHeightAndSpacing / 2.
+		theOffsetY := theOffsetY + (theGameHeightAndSpacing / 2) asInteger.
 		theGameHeightAndSpacing := theGameHeightAndSpacing * 2.
 	].
 	
@@ -139,4 +165,22 @@ SpecificTournamentView >> specificTournament [
 			yourself).].].
 
 	^theResultDiv
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> tournament [
+
+	"<^iOf Object>"
+	"Answer the tournament of the receiver"
+
+	^tournament
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> tournament: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the tournament of the receiver"
+
+	tournament := anObject
 ]

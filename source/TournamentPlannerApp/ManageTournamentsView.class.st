@@ -185,7 +185,7 @@ ManageTournamentsView >> createTournament [
 								setTargetBlank;
 								rightIcon: Me5I newFasAngleRight;
 								text: 'Zum Turnier';
-								href: ('TurnierplanerView/specificTournament?tournamentName=dasErsteTurnier%1&team=true', 
+								href: ('TurnierplanerView/specificTournament?tournamentName=%1&team=true', 
 									theCurrentTournament name);
 								yourself);
 							addChildToFoot:  (Me5ProgressBar newPrimary
@@ -250,7 +250,7 @@ ManageTournamentsView >> createTournamentRows [
 					setTargetBlank;
 					rightIcon: Me5I newFasAngleRight;
 					text: 'Zum Turnier';
-					href: ('TurnierplanerView/specificTournament?tournamentName=dasErsteTurnier %1&team=true' bindWith: (eachTournament name));
+					href: ('TurnierplanerView/specificTournament?tournamentName=%1&team=true' bindWith: (eachTournament name));
 					yourself);
 				addChildToFoot:  (Me5ProgressBar newPrimary
 					value: ((eachTournament numberOfPlayedGames asInteger) / (eachTournament numberOfGames asInteger) * 100) asInteger;

@@ -43,19 +43,21 @@ KOTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 	"<aCollectionOfMembers hOf Collection of: iOf Member>"
 	"Answer the Collection of Game"
 
-	| theCollectionSize theNumberOfBuys theRecursiveParamListCollectionOfGames theHasToContinueBoolean thePowerOf2Number |
+	| theCollectionSize theRecursiveParamListCollectionOfGames theHasToContinueBoolean theLog2Number |
 
 	theRecursiveParamListCollectionOfGames := OrderedCollection new.
 	theCollectionSize := aCollectionOfMembers size.
-	theNumberOfBuys := theCollectionSize / 2.
 	
 	self layer = 0
 		ifTrue: [
-			thePowerOf2Number := (theCollectionSize log: 2) asInteger power: 2.
-			theNumberOfBuys := (theCollectionSize - thePowerOf2Number) abs.
-			theRecursiveParamListCollectionOfGames addAll: (aCollectionOfMembers first: theNumberOfBuys).
-			aCollectionOfMembers removeAll: theRecursiveParamListCollectionOfGames ifAbsent: [].].
-
+			theLog2Number := (theCollectionSize log: 2).
+			(theLog2Number modulo: 1) = 0.0 ifFalse: [
+				theLog2Number := theLog2Number + 1.].
+			theLog2Number := (theLog2Number - (theLog2Number modulo: 1)) asInteger .
+			1 to: ((theLog2Number power: 2) - theCollectionSize) do: [ :eachIndex |
+				aCollectionOfMembers add: nil.].
+			].
+			
 	self layer: self layer + 1.
 	theHasToContinueBoolean := theCollectionSize > 2.
 	
@@ -68,15 +70,12 @@ KOTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 			yourself.	
 		theCurrentMember := aCollectionOfMembers at: eachIndex.
 		theCurrentGame members add: theCurrentMember.
-		theCurrentGame name: ('%1' bindWith: theCurrentMember asString).
 		
 		theCurrentMember := aCollectionOfMembers at: aCollectionOfMembers size +1 - eachIndex.
 		theCurrentGame members add: theCurrentMember.
-		theCurrentGame	name: ('%1 vs %2' bindWith: theCurrentGame name with: theCurrentMember asString).
 			
 		self gameCollection add: theCurrentGame.
-		theRecursiveParamListCollectionOfGames add: (theCurrentMember class 
-			newWithName: 'Winner of game ', theCurrentGame name).].
+		theRecursiveParamListCollectionOfGames add: nil.].
 	
 	theHasToContinueBoolean 
 		ifTrue: [^self getCollectionOfGamesWithMembers: theRecursiveParamListCollectionOfGames]
