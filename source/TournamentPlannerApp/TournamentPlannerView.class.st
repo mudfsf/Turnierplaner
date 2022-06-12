@@ -526,31 +526,31 @@ TournamentPlannerView >> teamsTab [
 		eachTeam members do: [ :eachPlayer |
 			eachPlayerList add: eachPlayer].
 		theCollectionOfTeamMemberCollections add: eachPlayerList].
-		teamsRow := Me5Row new.
-		TournamentPlannerApp collectionOfTeams data do: [ :eachTeam | 
-			theTeamMemberDiv := Me5Div new.
-			eachTeam members do: [ :eachPlayer |
-				theTeamMemberDiv addChild: (Me5Div new
-					addChild: (Me5P new
-						text: eachPlayer asString;
-						fontSize: 'large';
-						yourself))].
+	teamsRow := Me5Row new.
+	TournamentPlannerApp collectionOfTeams data do: [ :eachTeam | 
+		theTeamMemberDiv := Me5Div new.
+		eachTeam members do: [ :eachPlayer |
+			theTeamMemberDiv addChild: (Me5Div new
+			addChild: (Me5P new
+			text: eachPlayer asString;
+			fontSize: 'large';
+			yourself))].
 
-			teamsRow addChild: (Me5Div new
-				padding: 15;
-				addCssClassColSm12;
-				addCssClassColMd6;
-				addCssClassColXl4;
-				addChild: (Me5Portlet newPrimary
-					title: (eachTeam teamName);
-						addChildToBody: theTeamMemberDiv;
-						addChildToFoot: (Me5Button newDanger
-							text: 'L&ouml;schen';
-							icon: Me5Flaticon newDelete1;
-							addClickEventSelector: #yesNoModalRemoveTeam: eventReceiver: self;
-							yourself);
-						yourself);
-					yourself)].
+		teamsRow addChild: (Me5Div new
+			padding: 15;
+			addCssClassColSm12;
+			addCssClassColMd6;
+			addCssClassColXl4;
+			addChild: (Me5Portlet newPrimary
+				title: (eachTeam teamName);
+				addChildToBody: theTeamMemberDiv;
+				addChildToFoot: (Me5Button newDanger
+					text: 'L&ouml;schen';
+					icon: Me5Flaticon newDelete1;
+					addClickEventSelector: #yesNoModalRemoveTeam: eventReceiver: self;
+					yourself);
+				yourself);
+			yourself)].
 	theResultDiv := Me5Div new 
 		addChild: (Me5H1 new 
 			text: 'Teams';
@@ -562,31 +562,25 @@ TournamentPlannerView >> teamsTab [
 				icon: Me5I newFasEdit;
 				title: 'Team erstellen';
 				addChildToContent: (Me5Form new
-						addChildToBody: (textFieldTeamName := Me5TextField new
-							text: 'Neues Team';
-							placeholder: 'Teamname';
-							yourself);
-						addChildToBody: (multiComboBoxTeamMembers := Me5Select2MultiSelectBox new
-							text: 'Teammitglieder';
-							objects: thePersons;
-							placeholder: 'Personen';
-							yourself);
-						addChildToActions: (Me5Button newSuccess
-							text: 'Speichern';
-							icon: Me5I newFasSave;
-							addClickEventSelector: #buttonNewTeam;
-							yourself);
+					addChildToBody: (textFieldTeamName := Me5TextField new
+						text: 'Neues Team';
+						placeholder: 'Teamname';
 						yourself);
+					addChildToBody: (multiComboBoxTeamMembers := Me5Select2MultiSelectBox new
+						text: 'Teammitglieder';
+						objects: thePersons;
+						placeholder: 'Personen';
+						yourself);
+					addChildToActions: (Me5Button newSuccess
+						text: 'Speichern';
+						icon: Me5I newFasSave;
+						addClickEventSelector: #buttonNewTeam;
+						yourself);
+					yourself);
 				yourself);
 			yourself);
 		addChild: teamsRow;
-		addChild: (Me5Div new
-			padding: 15;
-			addCssClassColSm12;
-			addCssClassColMd6;
-			addCssClassColXl4;
-				yourself);
-			yourself.
+		yourself.
 
 		self modalTextFieldTeamName: textFieldTeamName.
 		self modalMultiComboBoxTeamMembers: multiComboBoxTeamMembers.
