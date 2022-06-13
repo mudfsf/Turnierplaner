@@ -34,44 +34,37 @@ TournamentPlannerView >> buttonNewTeam [
 			self showErrorNotificationWithMessage: 'Team hat keinen Namen'.
 			^self].
 	theExistingTeam := TournamentPlannerApp collectionOfTeams data detect: [ :eachTeam |
-		eachTeam teamName = self modalTextFieldTeamName value
-	] ifNone: [nil].
+		eachTeam teamName = self modalTextFieldTeamName value] ifNone: [nil].
 	theExistingTeam
 		ifNil: [
 			self modalMultiComboBoxTeamMembers value size>0
-			ifTrue: [
-				self modalMultiComboBoxTeamMembers value do: [ :eachValue | 	
-					theTeamMembers add: eachValue.
-					theSingleTeamDiv addChild: (Me5Div new
-					addChild: (Me5P new 
-						text: eachValue;
-						fontSize: 'large';
-						yourself))].
-				self teamsRow addChild: (Me5Div new
-					addChild: (Me5Portlet newPrimary
-						title: (self modalTextFieldTeamName value);
-						addChildToHeadTools: (Me5A newIconOnlyPrimary
+				ifTrue: [
+					self modalMultiComboBoxTeamMembers value do: [ :eachValue | 	
+						theTeamMembers add: eachValue.
+						theSingleTeamDiv addChild: (Me5P new 
+							text: eachValue;
+							fontSize: 'large';
+							yourself)].
+					self teamsRow addChild: (Me5Div new
+						addChild: (Me5Portlet newPrimary
+							title: (self modalTextFieldTeamName value);
+							addChildToHeadTools: (Me5A newIconOnlyPrimary
 								icon: Me5I newFasTrash;
 								addClickEventSelector: #yesNoModalRemoveTeam: eventReceiver: self;
 								yourself);
-						addChildToBody: theSingleTeamDiv;
-						yourself);
-					padding: 15;
-					addCssClassColSm12;
-					addCssClassColMd6;
-					addCssClassColXl4;
-				yourself).
-				
-				theTeam := Team newWithTeamName: (self modalTextFieldTeamName value ) players: theTeamMembers.
-				TournamentPlannerApp collectionOfTeams data add: theTeam.
-					
-				TournamentPlannerApp saveCollectionOfTeams: (TournamentPlannerApp collectionOfTeams data)
-			]
-			ifFalse: [
-				self showErrorNotificationWithMessage: 'Team hat zu wenig Mitglieder']]
-		ifNotNil: [
-			self showErrorNotificationWithMessage: ('Das Team mit dem Namen %1 exisistiert bereits'
-				bindWith: theExistingTeam teamName)]
+							addChildToBody: theSingleTeamDiv;
+							yourself);
+						padding: 15;
+						addCssClassColSm12;
+						addCssClassColMd6;
+						addCssClassColXl4;
+						yourself).				
+					theTeam := Team newWithTeamName: (self modalTextFieldTeamName value ) players: theTeamMembers.
+					TournamentPlannerApp collectionOfTeams data add: theTeam.					
+					TournamentPlannerApp saveCollectionOfTeams: (TournamentPlannerApp collectionOfTeams data)]
+				ifFalse: [self showErrorNotificationWithMessage: 'Team hat zu wenig Mitglieder']]
+		ifNotNil: [self showErrorNotificationWithMessage: ('Das Team mit dem Namen %1 exisistiert bereits'
+			bindWith: theExistingTeam teamName)]
 ]
 
 { #category : 'Initial-Events' }
@@ -107,94 +100,64 @@ TournamentPlannerView >> createModules [
 { #category : 'Internal' }
 TournamentPlannerView >> dashboardTab [
 
-	 | theDashboard theTextNextGame theTextActualTournament theTextActualMatch theTextDateForNextMatch 
-	 theTextRunningTournaments theTextBestTeamNowInTheTournament theTextTeamMatchesInTheTournament 
-	 theTextBestPlayerNowInTheTournament theTextPlayerMatchesInTheTournament theTextForBets 
-	 theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets theTextWithOutcome |
-	 
-	 theTextNextGame := Me5H3 new text: 'N&auml;chstes Spiel f&uuml;r dich'.
-	 theTextActualTournament := Me5H5 new text: 'Turnier: Bestes Team'.
-	 theTextActualMatch := Me5H5 new text: 'Team Yeah VS Team Nope'.
-	 theTextDateForNextMatch := Me5H5 new text: 'In 3 Tagen um 15:30'.
-	 theTextRunningTournaments := Me5H3 new text: 'Laufende Turniere'.
-	 theTextBestTeamNowInTheTournament := Me5H5 new text: 'Turnier: Bestes Team'.
-	 theTextTeamMatchesInTheTournament := Me5H6 new text: '5 &Uuml;brige Spiele'.
-	 theTextBestPlayerNowInTheTournament := Me5H5 new text: 'Bester Spieler'.
-	 theTextPlayerMatchesInTheTournament := Me5H6 new text: '12 &Uuml;brige Spiele'.
-	 theTextForBets := Me5H3 new text: 'Wetten'.
-	 theTextWithWageredMoney := Me5H5 new text: '35&euro;'.
-	 theTextForRunningBets := Me5H5 new text: 'Laufende Wetten'.
-	 theTextWithWageredMoneyForTheBets := Me5H5 new text: '5&euro;'.
-	 theTextWithOutcome := Me5H6 new text: 'Team Yeah - 14.6.2022'.
-	 
-	theDashboard := Me5Div new.
-	theDashboard 
-	addChild:  (Me5H2 new
-		text: 'HR-Works Turnierplaner';
-		addChild: (Me5Portlet new
-					addChildToBody: (Me5Div new
-						addChild: (theTextNextGame);
-						addChild: 
-							(Me5Hr new);
-						addChild: 
-							(theTextActualTournament);
-						addChild: 
-							(theTextActualMatch);
-						addChild: 
-							(Me5Hr new);
-						addChild: 
-							(theTextDateForNextMatch);
-							yourself);
-						yourself);
-					yourself);
-		addChild: (Me5Portlet new
-					addChildToBody: (Me5Div new
-					addChild: 
-					(theTextRunningTournaments);
-					addChild: 
-							(Me5Hr new);
-					addChild: 
-							(theTextBestTeamNowInTheTournament);
-					addChild: 
-							(theTextTeamMatchesInTheTournament);
-					addChild: 
-						(Me5ProgressBar newPrimary
-											addCssClassMProgressLg;
-											value: 50;
-											yourself);
-					addChild: 
-							(Me5Hr new);									
-					addChild: 
-							(theTextBestPlayerNowInTheTournament);
-					addChild: 
-							(theTextPlayerMatchesInTheTournament);
-					addChild: 
-						(Me5ProgressBar newPrimary
-											addCssClassMProgressLg;
-											value: 50;
-											yourself);
-							yourself);
-						yourself);
-		addChild: (Me5Portlet new
-					addChildToBody: (Me5Div new
-					addChild: 
-					(theTextForBets);
-					addChild: 
-							(Me5Hr new);
-					addChild: 
-							(theTextWithWageredMoney);
-					addChild: 
-							(Me5Hr new);									
-					addChild: 
-							(theTextForRunningBets);
-					addChild: 
-							(theTextWithWageredMoneyForTheBets);
-					addChild: 
-							(theTextWithOutcome);
-							yourself);
-						yourself);	
-	yourself.
+	| theDashboard theTextNextGame theTextActualTournament theTextActualMatch theTextDateForNextMatch 
+	theTextRunningTournaments theTextBestTeamNowInTheTournament theTextTeamMatchesInTheTournament 
+	theTextBestPlayerNowInTheTournament theTextPlayerMatchesInTheTournament theTextForBets 
+	theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets theTextWithOutcome |
 
+	theTextNextGame := Me5H3 new text: 'N&auml;chstes Spiel f&uuml;r dich'.
+	theTextActualTournament := Me5H5 new text: 'Turnier: Bestes Team'.
+	theTextActualMatch := Me5H5 new text: 'Team Yeah VS Team Nope'.
+	theTextDateForNextMatch := Me5H5 new text: 'In 3 Tagen um 15:30'.
+	theTextRunningTournaments := Me5H3 new text: 'Laufende Turniere'.
+	theTextBestTeamNowInTheTournament := Me5H5 new text: 'Turnier: Bestes Team'.
+	theTextTeamMatchesInTheTournament := Me5H6 new text: '5 &Uuml;brige Spiele'.
+	theTextBestPlayerNowInTheTournament := Me5H5 new text: 'Bester Spieler'.
+	theTextPlayerMatchesInTheTournament := Me5H6 new text: '12 &Uuml;brige Spiele'.
+	theTextForBets := Me5H3 new text: 'Wetten'.
+	theTextWithWageredMoney := Me5H5 new text: '35&euro;'.
+	theTextForRunningBets := Me5H5 new text: 'Laufende Wetten'.
+	theTextWithWageredMoneyForTheBets := Me5H5 new text: '5&euro;'.
+	theTextWithOutcome := Me5H6 new text: 'Team Yeah - 14.6.2022'.
+	
+	theDashboard := (Me5Div new
+		addChild: (Me5H2 newWithText: 'HR-Works Turnierplaner');
+		addChild: (Me5Portlet new
+			addChildToBody: theTextNextGame;
+			addChildToBody: Me5Hr new;
+			addChildToBody: theTextActualTournament;
+			addChildToBody: theTextActualMatch;
+			addChildToBody: Me5Hr new;
+			addChildToBody: theTextDateForNextMatch;
+			yourself);		
+		addChild: (Me5Portlet new
+			addChildToBody: theTextRunningTournaments;
+			addChildToBody: Me5Hr new;
+			addChildToBody: theTextBestTeamNowInTheTournament;
+			addChildToBody: theTextTeamMatchesInTheTournament;
+			addChildToBody: (Me5ProgressBar newPrimary
+				addCssClassMProgressLg;
+				value: 50;
+				yourself);
+			addChildToBody: Me5Hr new;									
+			addChildToBody: theTextBestPlayerNowInTheTournament;
+			addChildToBody: theTextPlayerMatchesInTheTournament;
+			addChildToBody: (Me5ProgressBar newPrimary
+				addCssClassMProgressLg;
+				value: 50;
+				yourself);
+			yourself);
+		addChild: (Me5Portlet new
+			addChildToBody: theTextForBets;
+			addChildToBody: Me5Hr new;
+			addChildToBody: theTextWithWageredMoney;
+			addChildToBody: Me5Hr new;									
+			addChildToBody: theTextForRunningBets;
+			addChildToBody: theTextWithWageredMoneyForTheBets;
+			addChildToBody: theTextWithOutcome;
+			yourself);
+		yourself).
+	
 	^Me5Div new
 		addChild: (Me5H1 new 
 			text: 'Dashboard';
@@ -270,11 +233,10 @@ TournamentPlannerView >> removeTeam: aMe5DialogEvent [
 	theDivTeam := aMe5DialogEvent originalEvent component parent parent parent parent parent parent.
 	theDivTeam parent removeChild: theDivTeam ifAbsent: [].	
 	theTeam := TournamentPlannerApp collectionOfTeams data detect: [ :eachTeam |
-		eachTeam teamName = theDivTeam children first title.
-	] ifNone: [].
-	 TournamentPlannerApp collectionOfTeams data remove: theTeam ifAbsent: [].
+		eachTeam teamName = theDivTeam children first title] ifNone: [].
+	TournamentPlannerApp collectionOfTeams data remove: theTeam ifAbsent: [].
 	TournamentPlannerApp saveCollectionOfTeams: TournamentPlannerApp collectionOfTeams data.
-	self showSuccessNotificationWithMessage: ('Team %1 gel&ouml;scht' bindWith: theTeam teamName)
+	self showSuccessNotificationWithMessage: ('Team %1 gel&ouml;scht' bindWith: theTeam asString)
 ]
 
 { #category : 'Internal' }
@@ -356,7 +318,7 @@ TournamentPlannerView >> teamsTab [
 		eachTeam members do: [ :eachPlayer |
 			eachPlayerList add: eachPlayer].
 		theCollectionOfTeamMemberCollections add: eachPlayerList].
-	teamsRow := Me5Row new.
+	self teamsRow: Me5Row new.
 	TournamentPlannerApp collectionOfTeams data do: [ :eachTeam | 
 		theTeamMemberDiv := Me5Div new.
 		eachTeam members do: [ :eachPlayer |
@@ -365,7 +327,7 @@ TournamentPlannerView >> teamsTab [
 			text: eachPlayer asString;
 			fontSize: 'large';
 			yourself))].
-		teamsRow addChild: (Me5Div new
+		self teamsRow addChild: (Me5Div new
 			padding: 15;
 			addCssClassColSm12;
 			addCssClassColMd6;
@@ -409,8 +371,8 @@ TournamentPlannerView >> teamsTab [
 			yourself);
 		addChild: teamsRow;
 		yourself.
-		self modalTextFieldTeamName: textFieldTeamName.
-		self modalMultiComboBoxTeamMembers: multiComboBoxTeamMembers.
+	self modalTextFieldTeamName: textFieldTeamName.
+	self modalMultiComboBoxTeamMembers: multiComboBoxTeamMembers.
 	^theResultDiv
 ]
 
