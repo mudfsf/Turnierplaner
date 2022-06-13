@@ -19,7 +19,7 @@ Class {
 	#category : 'TournamentPlannerApp'
 }
 
-{ #category : 'Not categorized' }
+{ #category : 'Events' }
 TournamentPlannerView >> buttonNewTeam [
 
 	| theSingleTeamDiv theTeamMembers theTeam theExistingTeam|
@@ -76,7 +76,7 @@ TournamentPlannerView >> buttonNewTeam [
 	
 ]
 
-{ #category : 'Initials' }
+{ #category : 'Initial-Events' }
 TournamentPlannerView >> createComponents [
 
 	self addChild: (Me5H1 new
@@ -91,7 +91,7 @@ TournamentPlannerView >> createComponents [
 		yourself.
 ]
 
-{ #category : 'Initials' }
+{ #category : 'Initial-Events' }
 TournamentPlannerView >> createModules [
 
 	super createModules.
@@ -102,7 +102,7 @@ TournamentPlannerView >> createModules [
 	self addModuleByModuleClass: Me5Select2SelectBoxModuleBundle.
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 TournamentPlannerView >> dashboardTab [
 
  | theDashboard theTextNextGame theTextActualTournament theTextActualMatch theTextDateForNextMatch 
@@ -205,7 +205,7 @@ yourself.
 	).
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 TournamentPlannerView >> modalMultiComboBoxTeamMembers [
 
 	"<^iOf Object>"
@@ -214,7 +214,7 @@ TournamentPlannerView >> modalMultiComboBoxTeamMembers [
 	^modalMultiComboBoxTeamMembers
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 TournamentPlannerView >> modalMultiComboBoxTeamMembers: anObject [
 
 	"<anObject: iOf Object, ^self>"
@@ -223,7 +223,7 @@ TournamentPlannerView >> modalMultiComboBoxTeamMembers: anObject [
 	modalMultiComboBoxTeamMembers := anObject
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 TournamentPlannerView >> modalTextFieldTeamName [
 
 	"<^iOf Object>"
@@ -232,7 +232,7 @@ TournamentPlannerView >> modalTextFieldTeamName [
 	^modalTextFieldTeamName
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 TournamentPlannerView >> modalTextFieldTeamName: anObject [
 
 	"<anObject: iOf Object, ^self>"
@@ -342,7 +342,7 @@ TournamentPlannerView >> startUp: anObject [
 	startUp := anObject
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 TournamentPlannerView >> tabsCollection [
 	
 	self tournamentTab: ManageTournamentsView new.
@@ -382,25 +382,25 @@ TournamentPlannerView >> tabsCollection [
 
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Accessing' }
 TournamentPlannerView >> teamsRow [
 
-	"<^iOf Object>"
+	"<^iOf Me5Row>"
 	"Answer the tournamentRow of the receiver"
 
 	^teamsRow
 ]
 
-{ #category : 'Not categorized' }
-TournamentPlannerView >> teamsRow: anObject [
+{ #category : 'Accessing' }
+TournamentPlannerView >> teamsRow: aRowOfTeams [
 
-	"<anObject: iOf Object, ^self>"
+	"<aRowOfTeams: iOf Me5Row, ^self>"
 	"Set the tournamentRow of the receiver"
 
-	teamsRow := anObject
+	teamsRow := aRowOfTeams
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 TournamentPlannerView >> teamsTab [
 
 	"<^hOf Me5Div>"
@@ -529,7 +529,7 @@ TournamentPlannerView >> user: anObject [
 	user := anObject
 ]
 
-{ #category : 'Not categorized' }
+{ #category : 'Internal' }
 TournamentPlannerView >> userSettingsTab [
 
 	"<^hOf Me5Div>"

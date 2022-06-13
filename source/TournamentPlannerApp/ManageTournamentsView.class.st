@@ -207,7 +207,7 @@ ManageTournamentsView >> createTournamentDivWithTournament: aTournament WithTour
 				setTargetBlank;
 				rightIcon: Me5I newFasAngleRight;
 				text: 'Zum Turnier';
-				href: ('TurnierplanerView/specificTournament?tournamentName=%1&team=true' bindWith: aTournament name);
+				href: ('TurnierplanerView/specificTournament?tournamentName=%1&tournamentType=%2' bindWith: aTournament name with: aString);
 				yourself);
 			addChildToFoot:  (Me5ProgressBar newPrimary
 				value: (aTournament numberOfPlayedGames 

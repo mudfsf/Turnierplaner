@@ -4,6 +4,7 @@ Class {
 	#instVars : [
 		'gameID',
 		'tournament',
+		'tournamentType',
 		'offsetX',
 		'offsetY',
 		'width',
@@ -25,6 +26,7 @@ SpecificTournamentView >> beforeCreateComponents [
 		columnSpacing: 100;
 		tournament: (TournamentPlannerApp collectionOfTournaments data detect: [ :eachTournament |
 			eachTournament name = (self queryParameters at: 'tournamentName')]);
+		tournamentType: (self queryParameters at: 'tournamentType');
 		yourself
 ]
 
@@ -56,8 +58,10 @@ SpecificTournamentView >> createComponents [
 			text: self tournament name;
 			yourself);
 		addChild: Me5Hr new;
-		addChild: self createTournament;
-		yourself
+		yourself.
+		
+	self tournamentType = 'KO'
+		ifTrue: [self addChild: self createTournament]
 ]
 
 { #category : 'Initial-Events' }
@@ -69,6 +73,9 @@ SpecificTournamentView >> createModules [
 { #category : 'Internal' }
 SpecificTournamentView >> createTournament [
 
+	"^self"
+	"creates Tournaments with KOTournamentType"
+	
 	| theResultDiv theScroller thePoints |
 
 	thePoints := OrderedCollection new.
@@ -96,6 +103,7 @@ SpecificTournamentView >> createTournament [
 					width: self width;
 					addChildToBody: (Me5Button newSuccess
 						text: 'Ergebnis eintragen';
+						addClickEventSelector: #setResultEvent:;
 						yourself);
 					addChildToFoot: (Me5Button newSuccess
 						text: 'Wetten';
@@ -236,6 +244,14 @@ SpecificTournamentView >> rowsSpacing: aNumber [
 	rowsSpacing := aNumber
 ]
 
+{ #category : 'Events' }
+SpecificTournamentView >> setResultEvent: anEvent [
+
+	"wip"
+
+	anEvent component parent parent title.
+]
+
 { #category : 'Accessing' }
 SpecificTournamentView >> tournament [
 
@@ -252,6 +268,24 @@ SpecificTournamentView >> tournament: aTournament [
 	"Set the tournament of the receiver"
 
 	tournament := aTournament
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> tournamentType [
+
+	"<^iOf String>"
+	"Answer the tournamentType of the receiver"
+
+	^tournamentType
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> tournamentType: aString [
+
+	"<aString: iOf String, ^self>"
+	"Set the tournamentType of the receiver"
+
+	tournamentType := aString
 ]
 
 { #category : 'Accessing',
