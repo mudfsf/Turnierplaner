@@ -2,7 +2,7 @@ Class {
 	#name : 'SpecificTournamentView',
 	#superclass : 'Me5BaseView',
 	#instVars : [
-		'gameID',
+		'selectBoxPlayers',
 		'tournament',
 		'tournamentType',
 		'offsetX',
@@ -117,12 +117,12 @@ SpecificTournamentView >> createKOTournament [
 						theLines add: theLine].
 				eachLayer > 1 
 					ifTrue: [
-						(theLines at: (eachLayer * eachIndex - 1))
+						(theLines at: ((eachLayer * (eachLayer - 1)) * eachIndex - 1))
 							at: 2 put: (Point new
 								x: theLeft;
 								y: theTop;
 								yourself).
-						(theLines at: (eachLayer * eachIndex))
+						(theLines at: ((eachLayer * (eachLayer - 1)) * eachIndex))
 							at: 2 put: (Point new
 								x: theLeft;
 								y: theTop;
@@ -297,13 +297,59 @@ SpecificTournamentView >> rowsSpacing: aNumber [
 	rowsSpacing := aNumber
 ]
 
+{ #category : 'Accessing' }
+SpecificTournamentView >> selectBoxPlayers [
+
+	"<^hOf Me5SelectBox>"
+	"Answer the selectBoxPlayers of the receiver"
+
+	^selectBoxPlayers
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> selectBoxPlayers: aMe5SelectBox [
+
+	"<aMe5SelectBox: hOf Me5SelectBox, ^self>"
+	"Set the selectBoxPlayers of the receiver"
+
+	selectBoxPlayers := aMe5SelectBox
+]
+
 { #category : 'Events' }
 SpecificTournamentView >> setResultEvent: anEvent [
 
 	"<^self>"
-	"wip"
+	"wip"	
+	
+	| theGame |
+	
+	theGame := self tournament games detect: [ :eachGame |
+		eachGame name = anEvent component parent parent title] ifNone: [].
+	
+	self openModal: (ModalView new
+		title: 'Ergebnis';
+		body: (Me5Form new
+			addChildToBody: (self selectBoxPlayers: (Me5SelectBox new
+				text: 'Sieger';
+				noneObject: 'Kein Sieger festgelegt';
+				objects: (theGame members collect: [ :eachMember | 
+					eachMember asString]);
+				yourself);
+				selectBoxPlayers);
+			addChildToBody: (Me5Button newPrimary
+				text: 'Speichern';
+				icon: Me5I newFasSave;
+				addClickEventSelector: #test: eventReceiver: self;
+				yourself);
+			yourself);
+		yourself)
+]
 
-	anEvent component parent parent title.
+{ #category : 'Events' }
+SpecificTournamentView >> test: anEvent [
+
+	anEvent component parent children first value.
+	self tournament.
 ]
 
 { #category : 'Accessing' }
