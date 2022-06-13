@@ -64,7 +64,10 @@ SpecificTournamentView >> createComponents [
 		addChild: Me5Hr new;
 		yourself.
 	self tournamentType = 'KO'
-		ifTrue: [self addChild: self createKOTournament]
+		ifTrue: [self addChild: self createKOTournament].
+	self tournamentType = 'Runden'
+		ifTrue: [self addChild: self createLapsTournament]
+		
 ]
 
 { #category : 'Internal' }
@@ -148,6 +151,62 @@ SpecificTournamentView >> createKOTournament [
 			svgLeft: 0;
 			yourself)].
 	^theResultDiv
+]
+
+{ #category : 'Internal' }
+SpecificTournamentView >> createLapsTournament [
+
+	"<^hOf Me5Div>"
+	"creates the View of the Lapstournament."
+	
+	| theTableOfMatches theTableOfRanking |
+	
+	theTableOfMatches := Me5Table new.
+	theTableOfRanking := Me5Table new.
+	theTableOfMatches
+		addChildToHead: (Me5TableRow new
+			addTableHeaderWithText: 'Spiel-Nr.';
+			addTableHeaderWithText: 'Spieler 1';
+			addTableHeaderWithText: 'Spieler 2';
+			addTableHeaderWithText: 'Sieger';
+			yourself).
+	self tournament games doWithIndex: [ :eachGame  :eachIndex |
+	theTableOfMatches addChildToBody: (Me5TableRow new
+		addTableDataWithText: eachIndex;
+		addTableDataWithText: eachGame members first;
+		addTableDataWithText: eachGame members second;
+		addTableDataWithText: 'noch nicht ausgetragen';
+		yourself)].	
+	theTableOfRanking
+		addChildToHead: (Me5TableRow new
+			addTableHeaderWithText: 'Platzierung';
+			addTableHeaderWithText: 'Spieler';
+			addTableHeaderWithText: 'Siege';
+			addTableHeaderWithText: 'Niederlagen';
+			yourself).
+	self tournament membercollection doWithIndex: [ :eachMember :eachIndex |
+	theTableOfRanking addChildToBody: (Me5TableRow new
+		addTableDataWithText: eachIndex;
+		addTableDataWithText: eachMember asString;
+		addTableDataWithText: 0;
+		addTableDataWithText: '0';
+		yourself)].
+	
+	^Me5Div new
+		addChild: (Me5Portlet new
+			icon: Me5I newFasTable;
+			title: 'Auszutragende Spiele';
+			addChildToBody: theTableOfMatches;
+			yourself);
+			addChild: (Me5Button newAirPrimary
+				text: 'Ergebnisse melden';
+				yourself);
+		addChild: (Me5Portlet new
+			icon: Me5I newFasTable;
+			title: 'Platzierungstabelle';
+			addChildToBody: theTableOfRanking;
+			yourself);	
+		yourself
 ]
 
 { #category : 'Initial-Events' }
