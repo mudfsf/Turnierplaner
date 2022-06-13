@@ -11,16 +11,14 @@ Class {
 
 { #category : 'Events' }
 ManagePlayersView >> addPlayerEvent [
-
+	
+	"<^self>"
 	"Adds empty row to listGrid"
 
 	(self data includes: self placeholder)
 		ifFalse: [self data add: self placeholder].
-	
 	self listGrid dataSourceBlock: [self data].
-	
 	self listGrid resetEditedDataGridCells.
-
 	self showSuccessNotificationWithMessage: ('Added row to save Player...')
 ]
 
@@ -36,23 +34,22 @@ ManagePlayersView >> beforeCreateComponents [
 { #category : 'Events' }
 ManagePlayersView >> clearEvent [
 
+	"<^self>"
 	"Removes empty row from listGrid"
 
 	(self data includes: self placeholder)
 		ifTrue: [self data remove: self placeholder].
-	
 	self listGrid dataSourceBlock: [self data].
-	
 	self listGrid resetEditedDataGridCells.
-
 	self showSuccessNotificationWithMessage: ('Cleared Grid...')
 ]
 
 { #category : 'Initial-Events' }
 ManagePlayersView >> createComponents [
 
-	"Entry point for creating components."
-	 "Sets listGrid"
+	"<^self>"
+	"Entry point for creating components.
+	 Sets listGrid"
 
 	self listGrid: (Me5ListGrid new
 		addCssClassColMd12;
@@ -64,7 +61,6 @@ ManagePlayersView >> createComponents [
 			setterSelector: #firstName:;
 			enableHeaderSort;
 			minWidth: 200;
-			maxWidth:  'vw 40';
 			yourself);
 		addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
 			title: 'Nachname';
@@ -110,7 +106,7 @@ ManagePlayersView >> createComponents [
 		addChild: (Me5FormPortlet new
 			addCssClassColMd12;
 			addChildToBody: self listGrid;
-				addChildToFootButtonGroup: (Me5Button newSuccess
+			addChildToFootButtonGroup: (Me5Button newSuccess
 				icon: Me5I newFasSave; 
 				text: 'Speichern';
 				addClickEventSelector: #saveEvent eventReceiver: self;
@@ -132,6 +128,7 @@ ManagePlayersView >> createComponents [
 { #category : 'Initial-Events' }
 ManagePlayersView >> createModules [
 
+	"<^self>"
 	"Creates and adds the modules which should be embedded for this view."
 
 	super createModules.
@@ -161,28 +158,23 @@ ManagePlayersView >> data: aPlayerCollection [
 { #category : 'Events' }
 ManagePlayersView >> deletePlayerEvent: anEvent [
 
-	"<anEvent: hOf Me5Event>"
+	"<anEvent: hOf Me5Event, ^self>"
 	"Deletes Player from listGrid and memory"
 
 	| thePlayer isSuccessfullBoolean |
 	
 	isSuccessfullBoolean := false.
 	thePlayer := anEvent dataGridComponentsHolderCellObject.
-	
 	((self data includes: thePlayer) and: [self data size > 1])
 		ifTrue: [
 			self data remove: thePlayer.
 			isSuccessfullBoolean := true].
-	
 	self listGrid dataSourceBlock: [self data].
-		
 	self listGrid resetEditedDataGridCells.
-
 	isSuccessfullBoolean
 		ifTrue: [self showSuccessNotificationWithMessage: ('Deleted Player %1 %2...' 
 			bindWith: thePlayer firstName with: thePlayer lastName)]
-		ifFalse: [self showErrorNotificationWithMessage: ('Can not delete last Player...')].
-		
+		ifFalse: [self showErrorNotificationWithMessage: ('Can not delete last Player...')].		
 	TournamentPlannerApp saveCollectionOfPlayers: self data
 ]
 
@@ -215,13 +207,13 @@ ManagePlayersView >> placeholder [
 
 { #category : 'Events' }
 ManagePlayersView >> saveEvent [
-
+	
+	"<^self>"
 	"Adds Player to listGrid and memory"
 
 	| theNumberOfEditedDataGridRows |
 
 	theNumberOfEditedDataGridRows := self listGrid numberOfEditedDataGridRows.
-
 	self listGrid validateEditedDataGridCellsForBlock: [ :eachEditedDataGridCell | | theFieldName theValue |
 		theFieldName := (self listGrid dataGridColumnDefinitions at: eachEditedDataGridCell field asNumber) 
 			title lowercaseFirstCharacter.
@@ -231,20 +223,14 @@ ManagePlayersView >> saveEvent [
 				(theFieldName at: 1) isVowel
 					ifTrue: [eachEditedDataGridCell errorText: 'Please enter an ', theFieldName]
 					ifFalse: [eachEditedDataGridCell errorText: 'Please enter a ', theFieldName]]].
-
 	self listGrid hasValidationError
 		ifTrue: [^self showErrorNotificationWithMessage: 'Validation failed...'].
-	
 	self listGrid dataSourceBlock: [self data].
-
 	self listGrid editedDataGridRows do: [ :eachEditedDataGridRow |
 		eachEditedDataGridRow editedDataGridCells do: [ :eachEditedDataGridCell |
 			eachEditedDataGridCell writeValueToObject]].
-		
 	self listGrid resetEditedDataGridCells.
-	
 	self showSuccessNotificationWithMessage: ('Saved %1 edited row(s)...' 
 		bindWith: theNumberOfEditedDataGridRows).
-	
 	TournamentPlannerApp saveCollectionOfPlayers: self data
 ]

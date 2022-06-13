@@ -38,7 +38,7 @@ Player class >> newWithName: aString [
 { #category : 'API' }
 Player >> = anObject [
 
-	"<anObject: hOf Object, ^self>"
+	"<anObject: hOf any, ^self>"
 	"Answer if @anObject is equal to the receiver."
 
 	^((self firstName = anObject firstName and: [self lastName = anObject lastName]) and: [self email = anObject email]) and: [self symbol = anObject symbol]
@@ -47,6 +47,7 @@ Player >> = anObject [
 { #category : 'API' }
 Player >> asString [
 
+	"<^hOf String>"
 	"Answer the receiver as a string"
 
 	^'%1 %2' bindWith: self firstName with: self lastName

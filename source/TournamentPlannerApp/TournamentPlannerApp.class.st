@@ -13,24 +13,24 @@ Class {
 { #category : 'Initials' }
 TournamentPlannerApp class >> addRouteToHttpServer [
 
+	"<^self>"
+
 	| theRootPathDefinition |
 
 	theRootPathDefinition := ClwGroupRouteDefinition forPath: ''.
-
 	theRootPathDefinition addRouteDefinitionForPath: 'SpecificTournament' name: '/specificTournament' viewClass: SpecificTournamentView.
-
 	self httpServer
 		addRoutesForDefinition: theRootPathDefinition configuration: (ClwRouteCalculatorConfiguration new
 			viewUrlHandlerClass: Bs4ViewUrlHandler;
 			redirectUrlHandlerClass: Bs4RedirectUrlHandler;
 			yourself);
-		yourself.
+		yourself
 ]
 
 { #category : 'Accessing' }
 TournamentPlannerApp class >> collectionOfPlayers [
 
-	"<^hOf Collection of: {iOf Player}>"
+	"<^hOf Collection of: {iOf MemoryData}>"
 	"Answer the CollectionOfPlayers of the receiver"
 
 	^CollectionOfPlayers
@@ -39,7 +39,7 @@ TournamentPlannerApp class >> collectionOfPlayers [
 { #category : 'Accessing' }
 TournamentPlannerApp class >> collectionOfPlayers: aCollectionOfPlayers [
 
-	"<aCollection: hOf Collection of: {iOf Player}, ^self>"
+	"<aCollectionOfPlayers: hOf Collection of: {iOf MemoryData}, ^self>"
 	"Set the CollectionOfPlayers of the receiver"
 
 	CollectionOfPlayers := aCollectionOfPlayers.
@@ -49,7 +49,7 @@ TournamentPlannerApp class >> collectionOfPlayers: aCollectionOfPlayers [
 { #category : 'Accessing' }
 TournamentPlannerApp class >> collectionOfTeams [
 
-	"<^hOf Collection of: {iOf Team}>"
+	"<^hOf Collection of: {iOf MemoryData}>"
 	"Answer the CollectionOfTeams of the receiver"
 
 	^CollectionOfTeams
@@ -58,7 +58,7 @@ TournamentPlannerApp class >> collectionOfTeams [
 { #category : 'Accessing' }
 TournamentPlannerApp class >> collectionOfTeams: aCollectionOfTeams [
 
-	"<aCollection: hOf Collection of: {iOf Team}, ^self>"
+	"<aCollectionOfTeams: hOf Collection of: {iOf MemoryData}, ^self>"
 	"Set the CollectionOfTeams of the receiver"
 
 	CollectionOfTeams := aCollectionOfTeams
@@ -67,7 +67,7 @@ TournamentPlannerApp class >> collectionOfTeams: aCollectionOfTeams [
 { #category : 'Accessing' }
 TournamentPlannerApp class >> collectionOfTournaments [
 
-	"<^hOf Collection of: {iOf Tournament}>"
+	"<^hOf Collection of: {iOf MemoryData}>"
 	"Answer the CollectionOfTournaments of the receiver"
 
 	^CollectionOfTournaments
@@ -76,7 +76,7 @@ TournamentPlannerApp class >> collectionOfTournaments [
 { #category : 'Accessing' }
 TournamentPlannerApp class >> collectionOfTournaments: aCollectionOfTournaments [
 
-	"<aCollection: hOf Collection of: {iOf Tournament}, ^self>"
+	"<aCollection: hOf Collection of: {iOf MemoryData}, ^self>"
 	"Set the CollectionOfTournaments of the receiver"
 
 	CollectionOfTournaments := aCollectionOfTournaments
@@ -85,7 +85,7 @@ TournamentPlannerApp class >> collectionOfTournaments: aCollectionOfTournaments 
 { #category : 'Accessing' }
 TournamentPlannerApp class >> httpServer [
 
-	"<^iOf HttpServer>"
+	"<^hOf HttpServer>"
 	"Answer the httpServer of the receiver"
 
 	^HttpServer
@@ -94,7 +94,7 @@ TournamentPlannerApp class >> httpServer [
 { #category : 'Accessing' }
 TournamentPlannerApp class >> httpServer: aHttpServer [
 
-	"<aHttpServer: iOf httpServer, ^self>"
+	"<aHttpServer: hOf httpServer, ^self>"
 	"Set the HttpServer of the receiver"
 
 	HttpServer := aHttpServer
@@ -131,7 +131,6 @@ TournamentPlannerApp class >> saveCollectionOfPlayers: aCollectionOfPlayers [
 	Memory saveObject: aCollectionOfPlayers onPath: 'C:\TournamentPlanner\Memory\players.dat'.
 	TournamentPlannerApp collectionOfPlayers observerCollection do: [ :eachObserver |
 		eachObserver resetData]
-	
 ]
 
 { #category : 'API' }
@@ -144,7 +143,6 @@ TournamentPlannerApp class >> saveCollectionOfTeams: aCollectionOfTeams [
 	Memory saveObject: aCollectionOfTeams onPath: 'C:\TournamentPlanner\Memory\teams.dat'.
 	TournamentPlannerApp collectionOfTeams observerCollection do: [ :eachObserver |
 		eachObserver resetData]
-	
 ]
 
 { #category : 'API' }
@@ -157,7 +155,6 @@ TournamentPlannerApp class >> saveCollectionOfTournaments: aCollectionOfTourname
 	Memory saveObject: aCollectionOfTournaments onPath: 'C:\TournamentPlanner\Memory\tournaments.dat'.
 	TournamentPlannerApp collectionOfTournaments observerCollection do: [ :eachObserver |
 		eachObserver resetData]
-	
 ]
 
 { #category : 'Initials' }
@@ -167,7 +164,6 @@ TournamentPlannerApp class >> startUp [
 	"Starts server, loads data and adds views."
 	
 	self loadAll.
-	
 	self httpServer: (Me5SstHttpServer startUpHttpServerOnPort: '9004' serverApplicationClass: self).
 	self httpServer addViewClass: TournamentPlannerView.
 	self addRouteToHttpServer

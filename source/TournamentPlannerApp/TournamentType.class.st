@@ -7,7 +7,7 @@ Class {
 { #category : 'API' }
 TournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 
-	"<aCollectionOfTeams hOf Collection of: iOf Member>"
+	"<aCollectionOfMembers: hOf Collection of: {iOf Member}, ^self>"
 	"Answer the Collection of Game"
 	
 	^self subclassResponsibility

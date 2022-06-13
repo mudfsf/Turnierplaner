@@ -69,12 +69,12 @@ Game >> members [
 ]
 
 { #category : 'Accessing' }
-Game >> members: aCollection [
+Game >> members: aCollectionOfMembers [
 
-	"<aCollection: hOf Collection of: {iOf Member}, ^self>"
+	"<aCollectionOfMembers: hOf Collection of: {iOf Member}, ^self>"
 	"Set the members of the receiver"
 
-	members := aCollection
+	members := aCollectionOfMembers
 ]
 
 { #category : 'Accessing' }

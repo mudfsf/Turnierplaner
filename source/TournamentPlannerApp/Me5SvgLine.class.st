@@ -35,7 +35,6 @@ Me5SvgLine >> setAdditionalAttributesOfHtmlElement: aClwHtmlBaseElement [
 		width: self svgWidth;
 		height: self svgHeight;
 		yourself). 
-
 	theSvgElement addLine
 		x1: self x1;
 		x2: self x2;
@@ -44,7 +43,6 @@ Me5SvgLine >> setAdditionalAttributesOfHtmlElement: aClwHtmlBaseElement [
 		stroke: self stroke;
 		strokeWidth: self strokeWidth;
 		yourself.
-
 	aClwHtmlBaseElement 
 		attributeAt: 'style' put: 'text-align: center';
 		text: (theSvgElement asXmlString);

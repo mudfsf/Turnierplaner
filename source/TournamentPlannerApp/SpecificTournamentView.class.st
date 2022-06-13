@@ -18,6 +18,8 @@ Class {
 { #category : 'Initial-Events' }
 SpecificTournamentView >> beforeCreateComponents [
 
+	"<^self>"
+
 	self offsetX: 40;
 		offsetY: 40;
 		width: 400;
@@ -53,38 +55,31 @@ SpecificTournamentView >> columnSpacing: aNumber [
 { #category : 'Initial-Events' }
 SpecificTournamentView >> createComponents [
 
+	"<^self>"
+
 	self addChild: (Me5H1 new
 			addCssClassTextCenter;
 			text: self tournament name;
 			yourself);
 		addChild: Me5Hr new;
 		yourself.
-		
 	self tournamentType = 'KO'
-		ifTrue: [self addChild: self createTournament]
-]
-
-{ #category : 'Initial-Events' }
-SpecificTournamentView >> createModules [
-
-	super createModules
+		ifTrue: [self addChild: self createKOTournament]
 ]
 
 { #category : 'Internal' }
-SpecificTournamentView >> createTournament [
+SpecificTournamentView >> createKOTournament [
 
-	"^self"
+	"<^self>"
 	"creates Tournaments with KOTournamentType"
 	
-	| theResultDiv theScroller thePoints |
+	| theResultDiv theScroller theLines |
 
-	thePoints := OrderedCollection new.
+	theLines := OrderedCollection new.
 	"{ spalte { reihe { x1 y1 x2 y2 } reihe {...} reihe {...} reihe {...} } spalte {...} spalte {...} }"
-	
 	theResultDiv := Me5Div new
 		addChild: (theScroller := Me5Scroller new
 		height: 2 * self tournament games last layer * (self height + self rowsSpacing )).
-
 	1 to: self tournament games last layer do: [ :eachLayer |
 		| theGamesOfLayer |
 		theGamesOfLayer := self tournament games select: [ :eachGame |
@@ -92,8 +87,7 @@ SpecificTournamentView >> createTournament [
 			theGamesOfLayer doWithIndex: [ :eachGame :eachIndex |
 				| theTop theLeft |
 				theTop := (((self height + self rowsSpacing) * eachLayer) / 2  + self offsetY) + ((eachIndex - 1) * (self height + self rowsSpacing)).
-				theLeft := self offsetX + ((eachLayer - 1) * (self width + self columnSpacing )).
-				
+				theLeft := self offsetX + ((eachLayer - 1) * (self width + self columnSpacing)).				
 				theScroller addChild: (Me5Portlet newSuccess
 					title: eachGame name;
 					setPositionToAbsolute;
@@ -109,7 +103,6 @@ SpecificTournamentView >> createTournament [
 						text: 'Wetten';
 						yourself);
 					yourself).
-					
 				eachLayer < self tournament games last layer
 					ifTrue: [
 						| theLine |
@@ -118,36 +111,30 @@ SpecificTournamentView >> createTournament [
 							x: theLeft;
 							y: theTop;
 							yourself).
-						thePoints add: theLine].
-
+						theLines add: theLine].
 				eachLayer > 1 
 					ifTrue: [
-						(thePoints at: (eachLayer * eachIndex - 1))
+						(theLines at: (eachLayer * eachIndex - 1))
 							at: 2 put: (Point new
 								x: theLeft;
 								y: theTop;
 								yourself).
-						(thePoints at: (eachLayer * eachIndex))
+						(theLines at: (eachLayer * eachIndex))
 							at: 2 put: (Point new
 								x: theLeft;
 								y: theTop;
 								yourself)]]].
-	
 	"draw Lines"
-	
-	thePoints do: [ :eachLine |
+	theLines do: [ :eachLine |
 		| theFirstPoint theSecondPoint theMaxX theMaxY |
-		
 		theFirstPoint := eachLine at: 1.
 		theSecondPoint := eachLine at: 2.
-		
 		(theFirstPoint x  > theSecondPoint x) 
 			ifTrue: [theMaxX := theFirstPoint x] 
 			ifFalse: [theMaxX := theSecondPoint x].
 		(theFirstPoint y  > theSecondPoint y) 
 			ifTrue: [theMaxY := theFirstPoint y] 
 			ifFalse: [theMaxY := theSecondPoint x].
-		
 		theScroller addChild: (Me5SvgLine new
 			x1: theFirstPoint x + (self width * 0.75);
 			y1: theFirstPoint y+ (self height * 0.5);
@@ -160,8 +147,15 @@ SpecificTournamentView >> createTournament [
 			svgTop: 0;
 			svgLeft: 0;
 			yourself)].
-
 	^theResultDiv
+]
+
+{ #category : 'Initial-Events' }
+SpecificTournamentView >> createModules [
+
+	"<^self>"
+
+	super createModules
 ]
 
 { #category : 'Accessing',
@@ -247,6 +241,7 @@ SpecificTournamentView >> rowsSpacing: aNumber [
 { #category : 'Events' }
 SpecificTournamentView >> setResultEvent: anEvent [
 
+	"<^self>"
 	"wip"
 
 	anEvent component parent parent title.
@@ -273,7 +268,7 @@ SpecificTournamentView >> tournament: aTournament [
 { #category : 'Accessing' }
 SpecificTournamentView >> tournamentType [
 
-	"<^iOf String>"
+	"<^hOf String>"
 	"Answer the tournamentType of the receiver"
 
 	^tournamentType
@@ -282,7 +277,7 @@ SpecificTournamentView >> tournamentType [
 { #category : 'Accessing' }
 SpecificTournamentView >> tournamentType: aString [
 
-	"<aString: iOf String, ^self>"
+	"<aString: hOf String, ^self>"
 	"Set the tournamentType of the receiver"
 
 	tournamentType := aString

@@ -31,19 +31,18 @@ ManageTournamentsView >> beforeCreateComponents [
 { #category : 'Initial-Events' }
 ManageTournamentsView >> createComponents [
 
+	"<^self>"
+
 	| thePlayers |
 	
 	thePlayers := OrderedCollection new.
 	self members do: [:eachPlayer |
 		thePlayers add: eachPlayer asString].
-	
 	self createTournamentRows.
-	
 	self divTournamentCreation: (Me5Div new
 		addCssClassCol6;
 		addChild: self createMe5Form;
 		yourself).
-	
 	self addChild: (Me5H1 new 
 			addCssClassTextCenter;
 			text: 'Turniere');
@@ -95,20 +94,18 @@ ManageTournamentsView >> createMe5Form [
 { #category : 'Events' }
 ManageTournamentsView >> createRivalsMultiComboBox [
 
+	"<^self>"
 	"creates and fills rivalsMultiComboBox"
 
 	| theMembers |
 	
 	self divTournamentCreation children first children first removeChild: (self multiComboBoxRivals) ifAbsent: [].
-	
 	self multiComboBoxRivals: (Me5Select2MultiSelectBox new 
 		text: 'Rivalen').
 	theMembers := OrderedCollection new.
-		
 	self getMemberCollection do: [ :eachPlayer | 
 		theMembers add: eachPlayer asString].
 	self multiComboBoxRivals objects: theMembers.
-		
 	self divTournamentCreation children first 
 		children first addChild: self multiComboBoxRivals 
 			after: self radioGroupGameMode
@@ -117,28 +114,24 @@ ManageTournamentsView >> createRivalsMultiComboBox [
 { #category : 'Events' }
 ManageTournamentsView >> createTournament [
 
+	"<^self>"
 	"creates and saves Tournament"
 
 	| theSelectedCollection theCollection theExistingTournament theSelectedAsStringCollection theTournamentType theTournamentTypeAsString theGames theCurrentTournament |
 	
 	theSelectedAsStringCollection := OrderedCollection new.
-	theSelectedCollection := OrderedCollection new.
-	
+	theSelectedCollection := OrderedCollection new.	
 	theExistingTournament := self tournaments detect: [ :eachTournament |
 		eachTournament name = self textFieldTournamentName value] ifNone: [nil].
-	
 	theExistingTournament 
 		ifNotNil: [
 			self showErrorNotificationWithMessage: ('Das Turnier mit dem Namen %1 exisistiert bereits...'
 				bindWith: theExistingTournament name).
 			^self].
-
-			
 	self radioGroupGameMode value = 'Einzel'
 		ifTrue: [theCollection := TournamentPlannerApp collectionOfPlayers data].
 	self radioGroupGameMode value = 'Team'
 		ifTrue: [theCollection := TournamentPlannerApp collectionOfTeams data].
-			
 	theTournamentTypeAsString := self radioGroupTournamentType value.
 	theTournamentTypeAsString = 'KO'
 		ifTrue: [theTournamentType := KOTournamentType new].
@@ -146,19 +139,16 @@ ManageTournamentsView >> createTournament [
 		ifTrue: [theTournamentType := LapsTournamentType new].
 	theTournamentTypeAsString = 'Mixed'
 		ifTrue: [theTournamentType := MixedTournamentType new].			
-			
 	self multiComboBoxRivals value do: [ :eachSelectable |
 		| theSelected |
 		theSelected := theCollection detect: [ :member |
 			member asString = eachSelectable] ifNone: [].
 		theSelectedCollection add: theSelected.
 		theSelectedAsStringCollection add: theSelected asString].
-	
 	theSelectedCollection size < 2
 		ifTrue: [
 		self showErrorNotificationWithMessage: ('Turnier hat zu wenig Mitspieler').
 		^self].
-
 	theGames := theTournamentType getCollectionOfGamesWithMembers: theSelectedCollection.
 	theCurrentTournament := (Tournament new
 		name: self textFieldTournamentName value;
@@ -169,11 +159,9 @@ ManageTournamentsView >> createTournament [
 		games: theGames;
 		membercollection: theSelectedCollection;
 		yourself).
-	
 	self rowTournaments addChild: (self createTournamentDivWithTournament: theCurrentTournament 
 		WithTournamenType: theTournamentTypeAsString
 		WithMembers: theSelectedAsStringCollection).
-				
 	self tournaments add: theCurrentTournament.
 	TournamentPlannerApp saveCollectionOfTournaments: self tournaments
 ]
@@ -181,7 +169,7 @@ ManageTournamentsView >> createTournament [
 { #category : 'Internal' }
 ManageTournamentsView >> createTournamentDivWithTournament: aTournament WithTournamenType: aString WithMembers: aCollection [
 
-	"aTournament: iOf Tournament, aString: hOf String, aCollection: hOf Collection: {hOf String}, ^Me5Div"
+	"<aTournament: iOf Tournament, aString: hOf String, aCollection: hOf Collection: {hOf String}, ^Me5Div>"
 	"Answer a Me5Div representing Tournament"
 
 	^Me5Div new
@@ -228,25 +216,23 @@ ManageTournamentsView >> createTournamentDivWithTournament: aTournament WithTour
 { #category : 'Initial-Events' }
 ManageTournamentsView >> createTournamentRows [
 	
+	"<^self>"
 	"Creates Rows of Tournaments"
 	
 	self rowTournaments: Me5Row new.
 	self tournaments do: [	:eachTournament | 
 		| theMembers theTournamentType |
-		
 		(eachTournament tournamentType isKindOf: KOTournamentType)
 			ifTrue: [theTournamentType := 'KO'].
 		(eachTournament tournamentType isKindOf: LapsTournamentType)
 			ifTrue: [theTournamentType := 'Runden'].
 		(eachTournament tournamentType isKindOf: MixedTournamentType)
 			ifTrue: [theTournamentType := 'Mixed'].
-			
 		theMembers := OrderedCollection new.
 		eachTournament membercollection do: [ :eachMember |
-			theMembers add: eachMember asString].
-			
+			theMembers add: eachMember asString].			
 		self rowTournaments addChild: (Me5Div new
-			addChild: (Me5Portlet newPrimary
+			addChild: (Me5Portlet newPrimary "code Redundancy fix"
 				title: eachTournament name;
 				addChildToHeadTools: (Me5A newIconOnlyPrimary
 					icon: Me5I newFasTrash;
@@ -307,7 +293,7 @@ ManageTournamentsView >> divTournamentCreation: aDiv [
 { #category : 'Internal' }
 ManageTournamentsView >> getMemberCollection [
 
-	"^hOf Collection: {iOf Member}"
+	"<^hOf Collection: {iOf Member}>"
 	"Answer Collection of Member depending on GameMode"
 	
 	self radioGroupGameMode value = 'Einzel'
@@ -327,12 +313,12 @@ ManageTournamentsView >> members [
 ]
 
 { #category : 'Accessing' }
-ManageTournamentsView >> members: aCollection [
+ManageTournamentsView >> members: aMemberCollection [
 
-	"<aCollection: hOf Collection of: {iOf Member}, ^self>"
+	"<aMemberCollection: hOf Collection of: {iOf Member}, ^self>"
 	"Set the players of the receiver"
 
-	members := aCollection
+	members := aMemberCollection
 ]
 
 { #category : 'Accessing',
@@ -398,37 +384,35 @@ ManageTournamentsView >> radioGroupTournamentType: aMe5RadioGroup [
 { #category : 'Events' }
 ManageTournamentsView >> removeTournament: aMe5DialogEvent [
 
+	"<^self>"
 	"removes and saves Tournament"
 	
 	| theDivTournament theTournament theTournamentExistsBoolean|
 	
 	theTournamentExistsBoolean := true.
-	theDivTournament := aMe5DialogEvent originalEvent component parent parent parent parent parent parent.
-	
+	theDivTournament := aMe5DialogEvent originalEvent component parent parent parent parent parent parent.	
 	theDivTournament parent removeChild: theDivTournament ifAbsent: [].
 	theTournament := self tournaments detect: [ :eachTournament |
 		eachTournament name = theDivTournament children first title]
 		ifNone: [
 			self showErrorNotificationWithMessage: 'Turnier exisistiert nicht mehr...'.
 			theTournamentExistsBoolean := false].
-		
 	theTournamentExistsBoolean
 		ifTrue: [
 			self tournaments remove: theTournament ifAbsent: [].
 			TournamentPlannerApp saveCollectionOfTournaments: self tournaments.
 			self showSuccessNotificationWithMessage: ('Turnier mit dem Namen %1 gel&ouml;scht' 
 				bindWith: theTournament name)]
-
 ]
 
 { #category : 'API' }
 ManageTournamentsView >> resetData [
 	
+	"<^self>"
 	"refreshes all data sources and rebuilds affected classes"
 	
 	self members: TournamentPlannerApp collectionOfPlayers data.
 	self tournaments: TournamentPlannerApp collectionOfTournaments data.
-	
 	self createRivalsMultiComboBox
 ]
 
@@ -482,17 +466,18 @@ ManageTournamentsView >> tournaments [
 ]
 
 { #category : 'Accessing' }
-ManageTournamentsView >> tournaments: aCollection [
+ManageTournamentsView >> tournaments: aTournamentCollection [
 
-	"<aCollection: hOf Collection of: {iOf Tournament}, ^self>"
+	"<aTournamentCollection: hOf Collection of: {iOf Tournament}, ^self>"
 	"Set the tournaments of the receiver"
 
-	tournaments := aCollection
+	tournaments := aTournamentCollection
 ]
 
 { #category : 'Events' }
 ManageTournamentsView >> yesNoModalRemoveTournament: aMe5Event [
 
+	"<^self>"
 	"confirmation to delete Tournament"
 
 	self showYesNoDialogWithTitle: 'Turnier l&ouml;schen?' message: '' yesSelector: #removeTournament:

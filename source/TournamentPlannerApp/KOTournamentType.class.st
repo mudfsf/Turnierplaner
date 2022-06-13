@@ -40,7 +40,7 @@ KOTournamentType >> gameCollection: aGameCollection [
 { #category : 'API' }
 KOTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 
-	"<aCollectionOfMembers hOf Collection of: iOf Member>"
+	"<aCollectionOfMembers hOf Collection of: {iOf Member}, ^self>"
 	"Answer the Collection of Game"
 
 	| theCollectionSize theBuys theNumberOfBuys theRecursiveParamListCollectionOfGames theHasToContinueBoolean thePowerOf2Number |

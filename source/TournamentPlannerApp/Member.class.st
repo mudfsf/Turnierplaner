@@ -16,6 +16,7 @@ Member class >> newWithName: aString [
 { #category : 'API' }
 Member >> asString [
 
+	"<^hOf String>"
 	"Answer the receiver as a string"
 	
 	^self subclassResponsibility

@@ -11,7 +11,7 @@ MixedTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 	"Answer the Collection of Game"
 	"Combines Games of KOTournamenttype and LapsTournamentType"
 	
-	|theLaps theKO theMemberType theCollectionOfPlayers theCollectionOfGames|
+	| theLaps theKO theMemberType theCollectionOfPlayers theCollectionOfGames |
 
 	theCollectionOfPlayers := OrderedCollection withAll: aCollectionOfMembers.
 	theCollectionOfGames := OrderedCollection new.

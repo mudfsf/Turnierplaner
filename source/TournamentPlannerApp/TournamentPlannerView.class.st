@@ -21,21 +21,21 @@ Class {
 
 { #category : 'Events' }
 TournamentPlannerView >> buttonNewTeam [
-
+	
+	"<^self>"
+	"creates new Team"
+	
 	| theSingleTeamDiv theTeamMembers theTeam theExistingTeam|
 	
 	theTeamMembers := OrderedCollection new.
 	theSingleTeamDiv := Me5Div new.
-	
 	self modalTextFieldTeamName value = ''
 		ifTrue: [
 			self showErrorNotificationWithMessage: 'Team hat keinen Namen'.
 			^self].
-	
 	theExistingTeam := TournamentPlannerApp collectionOfTeams data detect: [ :eachTeam |
 		eachTeam teamName = self modalTextFieldTeamName value
 	] ifNone: [nil].
-	
 	theExistingTeam
 		ifNil: [
 			self modalMultiComboBoxTeamMembers value size>0
@@ -44,9 +44,9 @@ TournamentPlannerView >> buttonNewTeam [
 					theTeamMembers add: eachValue.
 					theSingleTeamDiv addChild: (Me5Div new
 					addChild: (Me5P new 
-							text: eachValue;
-							fontSize: 'large';
-							yourself)).].
+						text: eachValue;
+						fontSize: 'large';
+						yourself))].
 				self teamsRow addChild: (Me5Div new
 					addChild: (Me5Portlet newPrimary
 						title: (self modalTextFieldTeamName value);
@@ -72,12 +72,12 @@ TournamentPlannerView >> buttonNewTeam [
 		ifNotNil: [
 			self showErrorNotificationWithMessage: ('Das Team mit dem Namen %1 exisistiert bereits'
 				bindWith: theExistingTeam teamName)]
-	
-	
 ]
 
 { #category : 'Initial-Events' }
 TournamentPlannerView >> createComponents [
+
+	"<^self>"
 
 	self addChild: (Me5H1 new
 			addCssClassTextCenter;
@@ -94,6 +94,8 @@ TournamentPlannerView >> createComponents [
 { #category : 'Initial-Events' }
 TournamentPlannerView >> createModules [
 
+	"<^self>"
+
 	super createModules.
 	
 	self addModuleByModuleClass: Me5ComboBoxModuleBundle.
@@ -105,248 +107,183 @@ TournamentPlannerView >> createModules [
 { #category : 'Internal' }
 TournamentPlannerView >> dashboardTab [
 
- | theDashboard theTextNextGame theTextActualTournament theTextActualMatch theTextDateForNextMatch 
- theTextRunningTournaments theTextBestTeamNowInTheTournament theTextTeamMatchesInTheTournament 
- theTextBestPlayerNowInTheTournament theTextPlayerMatchesInTheTournament theTextForBets 
- theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets theTextWithOutcome |
- 
- theTextNextGame := Me5H3 new text: 'N&auml;chstes Spiel f&uuml;r dich'.
- theTextActualTournament := Me5H5 new text: 'Turnier: Bestes Team'.
- theTextActualMatch := Me5H5 new text: 'Team Yeah VS Team Nope'.
- theTextDateForNextMatch := Me5H5 new text: 'In 3 Tagen um 15:30'.
- theTextRunningTournaments := Me5H3 new text: 'Laufende Turniere'.
- theTextBestTeamNowInTheTournament := Me5H5 new text: 'Turnier: Bestes Team'.
- theTextTeamMatchesInTheTournament := Me5H6 new text: '5 &Uuml;brige Spiele'.
- theTextBestPlayerNowInTheTournament := Me5H5 new text: 'Bester Spieler'.
- theTextPlayerMatchesInTheTournament := Me5H6 new text: '12 &Uuml;brige Spiele'.
- theTextForBets := Me5H3 new text: 'Wetten'.
- theTextWithWageredMoney := Me5H5 new text: '35&euro;'.
- theTextForRunningBets := Me5H5 new text: 'Laufende Wetten'.
- theTextWithWageredMoneyForTheBets := Me5H5 new text: '5&euro;'.
- theTextWithOutcome := Me5H6 new text: 'Team Yeah - 14.6.2022'.
- 
-theDashboard := Me5Div new.
-theDashboard 
-addChild:  (Me5H2 new
-	text: 'HR-Works Turnierplaner';
-	addChild: (Me5Portlet new
-				addChildToBody: (Me5Div new
-					addChild: (theTextNextGame);
-					addChild: 
-						(Me5Hr new);
-					addChild: 
-						(theTextActualTournament);
-					addChild: 
-						(theTextActualMatch);
-					addChild: 
-						(Me5Hr new);
-					addChild: 
-						(theTextDateForNextMatch);
+	 | theDashboard theTextNextGame theTextActualTournament theTextActualMatch theTextDateForNextMatch 
+	 theTextRunningTournaments theTextBestTeamNowInTheTournament theTextTeamMatchesInTheTournament 
+	 theTextBestPlayerNowInTheTournament theTextPlayerMatchesInTheTournament theTextForBets 
+	 theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets theTextWithOutcome |
+	 
+	 theTextNextGame := Me5H3 new text: 'N&auml;chstes Spiel f&uuml;r dich'.
+	 theTextActualTournament := Me5H5 new text: 'Turnier: Bestes Team'.
+	 theTextActualMatch := Me5H5 new text: 'Team Yeah VS Team Nope'.
+	 theTextDateForNextMatch := Me5H5 new text: 'In 3 Tagen um 15:30'.
+	 theTextRunningTournaments := Me5H3 new text: 'Laufende Turniere'.
+	 theTextBestTeamNowInTheTournament := Me5H5 new text: 'Turnier: Bestes Team'.
+	 theTextTeamMatchesInTheTournament := Me5H6 new text: '5 &Uuml;brige Spiele'.
+	 theTextBestPlayerNowInTheTournament := Me5H5 new text: 'Bester Spieler'.
+	 theTextPlayerMatchesInTheTournament := Me5H6 new text: '12 &Uuml;brige Spiele'.
+	 theTextForBets := Me5H3 new text: 'Wetten'.
+	 theTextWithWageredMoney := Me5H5 new text: '35&euro;'.
+	 theTextForRunningBets := Me5H5 new text: 'Laufende Wetten'.
+	 theTextWithWageredMoneyForTheBets := Me5H5 new text: '5&euro;'.
+	 theTextWithOutcome := Me5H6 new text: 'Team Yeah - 14.6.2022'.
+	 
+	theDashboard := Me5Div new.
+	theDashboard 
+	addChild:  (Me5H2 new
+		text: 'HR-Works Turnierplaner';
+		addChild: (Me5Portlet new
+					addChildToBody: (Me5Div new
+						addChild: (theTextNextGame);
+						addChild: 
+							(Me5Hr new);
+						addChild: 
+							(theTextActualTournament);
+						addChild: 
+							(theTextActualMatch);
+						addChild: 
+							(Me5Hr new);
+						addChild: 
+							(theTextDateForNextMatch);
+							yourself);
 						yourself);
 					yourself);
-				yourself);
-	addChild: (Me5Portlet new
-				addChildToBody: (Me5Div new
-				addChild: 
-				(theTextRunningTournaments);
-				addChild: 
-						(Me5Hr new);
-				addChild: 
-						(theTextBestTeamNowInTheTournament);
-				addChild: 
-						(theTextTeamMatchesInTheTournament);
-				addChild: 
-					(Me5ProgressBar newPrimary
-										addCssClassMProgressLg;
-										value: 50;
-										yourself);
-				addChild: 
-						(Me5Hr new);									
-				addChild: 
-						(theTextBestPlayerNowInTheTournament);
-				addChild: 
-						(theTextPlayerMatchesInTheTournament);
-				addChild: 
-					(Me5ProgressBar newPrimary
-										addCssClassMProgressLg;
-										value: 50;
-										yourself);
+		addChild: (Me5Portlet new
+					addChildToBody: (Me5Div new
+					addChild: 
+					(theTextRunningTournaments);
+					addChild: 
+							(Me5Hr new);
+					addChild: 
+							(theTextBestTeamNowInTheTournament);
+					addChild: 
+							(theTextTeamMatchesInTheTournament);
+					addChild: 
+						(Me5ProgressBar newPrimary
+											addCssClassMProgressLg;
+											value: 50;
+											yourself);
+					addChild: 
+							(Me5Hr new);									
+					addChild: 
+							(theTextBestPlayerNowInTheTournament);
+					addChild: 
+							(theTextPlayerMatchesInTheTournament);
+					addChild: 
+						(Me5ProgressBar newPrimary
+											addCssClassMProgressLg;
+											value: 50;
+											yourself);
+							yourself);
 						yourself);
-					yourself);
-	addChild: (Me5Portlet new
-				addChildToBody: (Me5Div new
-				addChild: 
-				(theTextForBets);
-				addChild: 
-						(Me5Hr new);
-				addChild: 
-						(theTextWithWageredMoney);
-				addChild: 
-						(Me5Hr new);									
-				addChild: 
-						(theTextForRunningBets);
-				addChild: 
-						(theTextWithWageredMoneyForTheBets);
-				addChild: 
-						(theTextWithOutcome);
-						yourself);
-					yourself);	
-yourself.
-			
+		addChild: (Me5Portlet new
+					addChildToBody: (Me5Div new
+					addChild: 
+					(theTextForBets);
+					addChild: 
+							(Me5Hr new);
+					addChild: 
+							(theTextWithWageredMoney);
+					addChild: 
+							(Me5Hr new);									
+					addChild: 
+							(theTextForRunningBets);
+					addChild: 
+							(theTextWithWageredMoneyForTheBets);
+					addChild: 
+							(theTextWithOutcome);
+							yourself);
+						yourself);	
+	yourself.
 
-^(Me5Div new
-	addChild: (Me5H1 new 
-		text: 'Dashboard';
-		addCssClassTextCenter;
-		yourself);
-	addChild: Me5Hr new;
-	addChild: theDashboard;
-	yourself
-	).
+	^Me5Div new
+		addChild: (Me5H1 new 
+			text: 'Dashboard';
+			addCssClassTextCenter;
+			yourself);
+		addChild: Me5Hr new;
+		addChild: theDashboard;
+		yourself
 ]
 
 { #category : 'Accessing' }
 TournamentPlannerView >> modalMultiComboBoxTeamMembers [
 
-	"<^iOf Object>"
+	"<^hOf Me5MultiComboBox>"
 	"Answer the modalMultiComboBoxRivals of the receiver"
 
 	^modalMultiComboBoxTeamMembers
 ]
 
 { #category : 'Accessing' }
-TournamentPlannerView >> modalMultiComboBoxTeamMembers: anObject [
+TournamentPlannerView >> modalMultiComboBoxTeamMembers: aMultiComboBox [
 
-	"<anObject: iOf Object, ^self>"
+	"<aMultiComboBox: hOf Me5MultiComboBox, ^self>"
 	"Set the modalMultiComboBoxRivals of the receiver"
 
-	modalMultiComboBoxTeamMembers := anObject
+	modalMultiComboBoxTeamMembers := aMultiComboBox
 ]
 
 { #category : 'Accessing' }
 TournamentPlannerView >> modalTextFieldTeamName [
 
-	"<^iOf Object>"
+	"<^hOf Me5TextField>"
 	"Answer the modalTextFieldTournamentName of the receiver"
 
 	^modalTextFieldTeamName
 ]
 
 { #category : 'Accessing' }
-TournamentPlannerView >> modalTextFieldTeamName: anObject [
+TournamentPlannerView >> modalTextFieldTeamName: aTextfield [
 
-	"<anObject: iOf Object, ^self>"
+	"<aTextfield: hOf Me5TextField, ^self>"
 	"Set the modalTextFieldTournamentName of the receiver"
 
-	modalTextFieldTeamName := anObject
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> multiComboBoxRivals [
-
-	^multiComboBoxRivals
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> multiComboBoxRivals: anObject [
-
-	multiComboBoxRivals := anObject
+	modalTextFieldTeamName := aTextfield
 ]
 
 { #category : 'Accessing' }
 TournamentPlannerView >> radioGroupGameMode [
 
-	"<^iOf Object>"
+	"<^hOf Me5RadioGroup>"
 	"Answer the createTournamentRadioGroupGameMode of the receiver"
 
 	^radioGroupGameMode
 ]
 
 { #category : 'Accessing' }
-TournamentPlannerView >> radioGroupGameMode: anObject [
+TournamentPlannerView >> radioGroupGameMode: aRadioGroup [
 
-	"<anObject: iOf Object, ^self>"
+	"<aRadioGroup: hOf Me5RadioGroup, ^self>"
 	"Set the createTournamentRadioGroupGameMode of the receiver"
 
-	radioGroupGameMode := anObject
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> radioGroupTournamentType [
-
-	"<^iOf Object>"
-	"Answer the createTournamentRadioGroupTournamentType of the receiver"
-
-	^radioGroupTournamentType
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> radioGroupTournamentType: anObject [
-
-	"<anObject: iOf Object, ^self>"
-	"Set the createTournamentRadioGroupTournamentType of the receiver"
-
-	radioGroupTournamentType := anObject
+	radioGroupGameMode := aRadioGroup
 ]
 
 { #category : 'Events' }
 TournamentPlannerView >> removeTeam: aMe5DialogEvent [
 
-	| theDivTeam theTeam|
-	theDivTeam := self removeTeamEvent component parent parent parent parent parent parent.
-	theDivTeam parent removeChild: theDivTeam ifAbsent: [].
-		
+	"<^self>"
+	"removes Team"
+
+	| theDivTeam theTeam |
+	
+	theDivTeam := aMe5DialogEvent originalEvent component parent parent parent parent parent parent.
+	theDivTeam parent removeChild: theDivTeam ifAbsent: [].	
 	theTeam := TournamentPlannerApp collectionOfTeams data detect: [ :eachTeam |
 		eachTeam teamName = theDivTeam children first title.
 	] ifNone: [].
 	 TournamentPlannerApp collectionOfTeams data remove: theTeam ifAbsent: [].
-	
 	TournamentPlannerApp saveCollectionOfTeams: TournamentPlannerApp collectionOfTeams data.
-
 	self showSuccessNotificationWithMessage: ('Team %1 gel&ouml;scht' bindWith: theTeam teamName)
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> removeTeamEvent [
-
-	"<^hOf Me5Event>"
-	"Answer the removeTeamEvent of the receiver"
-
-	^removeTeamEvent
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> removeTeamEvent: aMe5Event [
-
-	"<aMe5Event: hOf Me5Event, ^self>"
-	"Set the removeTeamEvent of the receiver"
-
-	removeTeamEvent := aMe5Event
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> startUp [
-
-	"<^iOf Object>"
-	"Answer the startUp of the receiver"
-
-	^startUp
-]
-
-{ #category : 'Accessing' }
-TournamentPlannerView >> startUp: anObject [
-
-	"<anObject: iOf Object, ^self>"
-	"Set the startUp of the receiver"
-
-	startUp := anObject
 ]
 
 { #category : 'Internal' }
 TournamentPlannerView >> tabsCollection [
 	
-	self tournamentTab: ManageTournamentsView new.
+	"<^hOf Collection of: {hOf Me5Tab}>"
+	"Answer the Collection of all tabs"
 	
+	self tournamentTab: ManageTournamentsView new.
 	^OrderedCollection new
 		add: (Me5Tab new
 			text: 'Dashboard';
@@ -379,13 +316,12 @@ TournamentPlannerView >> tabsCollection [
 				yourself);
 			yourself);
 		yourself
-
 ]
 
 { #category : 'Accessing' }
 TournamentPlannerView >> teamsRow [
 
-	"<^iOf Me5Row>"
+	"<^hOf Me5Row>"
 	"Answer the tournamentRow of the receiver"
 
 	^teamsRow
@@ -394,7 +330,7 @@ TournamentPlannerView >> teamsRow [
 { #category : 'Accessing' }
 TournamentPlannerView >> teamsRow: aRowOfTeams [
 
-	"<aRowOfTeams: iOf Me5Row, ^self>"
+	"<aRowOfTeams: hOf Me5Row, ^self>"
 	"Set the tournamentRow of the receiver"
 
 	teamsRow := aRowOfTeams
@@ -429,7 +365,6 @@ TournamentPlannerView >> teamsTab [
 			text: eachPlayer asString;
 			fontSize: 'large';
 			yourself))].
-
 		teamsRow addChild: (Me5Div new
 			padding: 15;
 			addCssClassColSm12;
@@ -474,59 +409,63 @@ TournamentPlannerView >> teamsTab [
 			yourself);
 		addChild: teamsRow;
 		yourself.
-
 		self modalTextFieldTeamName: textFieldTeamName.
 		self modalMultiComboBoxTeamMembers: multiComboBoxTeamMembers.
-
 	^theResultDiv
 ]
 
 { #category : 'Accessing' }
 TournamentPlannerView >> tournamentRow [
 
-	"<^iOf Object>"
+	"<^hOf Me5Row>"
 	"Answer the tournamentRow of the receiver"
 
 	^tournamentRow
 ]
 
 { #category : 'Accessing' }
-TournamentPlannerView >> tournamentRow: anObject [
+TournamentPlannerView >> tournamentRow: aTournamentRow [
 
-	"<anObject: iOf Object, ^self>"
+	"<aTournamentRow: hOf Me5Row, ^self>"
 	"Set the tournamentRow of the receiver"
 
-	tournamentRow := anObject
+	tournamentRow := aTournamentRow
 ]
 
 { #category : 'Accessing' }
 TournamentPlannerView >> tournamentTab [
 
+	"<^iOf ManageTournamentsView>"
+	"Answer the tournamentTab of the receiver"
+
 	^tournamentTab
 ]
 
 { #category : 'Accessing' }
-TournamentPlannerView >> tournamentTab: anObject [
+TournamentPlannerView >> tournamentTab: aManageTournamentsView [
 
-	tournamentTab := anObject
+	"<aManageTournamentsView: iOf ManageTournamentsView, ^self>"
+	"Set the tournamentTab of the receiver"
+
+	tournamentTab := aManageTournamentsView
 ]
 
 { #category : 'Accessing' }
 TournamentPlannerView >> user [
 
-	"<^iOf Object>"
+	"<^iOf Player>"
 	"Answer the user of the receiver"
 
 	^user
 ]
 
 { #category : 'Accessing' }
-TournamentPlannerView >> user: anObject [
+TournamentPlannerView >> user: aPlayer [
 
-	"<anObject: iOf Object, ^self>"
+	"<aPlayer: iOf Player, ^self>"
 	"Set the user of the receiver"
 
-	user := anObject
+	user := aPlayer
 ]
 
 { #category : 'Internal' }
@@ -541,7 +480,6 @@ TournamentPlannerView >> userSettingsTab [
 		ifTrue: [
 			thePlayer := Player newWithFirstName: 'Max' lastName: 'Muster'  email: 'max.muster@gmail.com'.
 			self user:thePlayer].
-
 	^Me5Div new
 		addChild: (Me5H1 new 
 			text: 'Einstellungen';
@@ -589,6 +527,7 @@ TournamentPlannerView >> userSettingsTab [
 { #category : 'Events' }
 TournamentPlannerView >> yesNoModalRemoveTeam: aMe5Event [
 
-	self removeTeamEvent: aMe5Event.
+	"<^self>"
+
 	self showYesNoDialogWithTitle: 'Team l&ouml;schen?' message: '' yesSelector: #removeTeam:
 ]
