@@ -6,8 +6,6 @@ Class {
 		'playedGames',
 		'games',
 		'name',
-		'numberOfGames',
-		'numberOfPlayedGames',
 		'gameMode',
 		'membercollection'
 	],
@@ -93,42 +91,6 @@ Tournament >> name: aString [
 	"Set the name of the receiver"
 
 	name := aString
-]
-
-{ #category : 'Accessing' }
-Tournament >> numberOfGames [
-
-	"<^hOf Number>"
-	"Answer the numberOfGames of the receiver"
-
-	^numberOfGames
-]
-
-{ #category : 'Accessing' }
-Tournament >> numberOfGames: aNumber [
-
-	"<aNumber: hOf Number, ^self>"
-	"Set the numberOfGames of the receiver"
-
-	numberOfGames := aNumber
-]
-
-{ #category : 'Accessing' }
-Tournament >> numberOfPlayedGames [
-
-	"<^hOf Number>"
-	"Answer the numberOfPlayedGames of the receiver"
-
-	^numberOfPlayedGames
-]
-
-{ #category : 'Accessing' }
-Tournament >> numberOfPlayedGames: aNumber [
-
-	"<aNumber: hOf Number, ^self>"
-	"Set the numberOfPlayedGames of the receiver"
-
-	numberOfPlayedGames := aNumber
 ]
 
 { #category : 'Accessing' }

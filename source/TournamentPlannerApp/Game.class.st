@@ -4,9 +4,9 @@ Class {
 	#instVars : [
 		'layer',
 		'name',
-		'members',
-		'isBuy',
-		'resultCollection'
+		'memberCollection',
+		'resultCollection',
+		'isBuyBoolean'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -25,21 +25,21 @@ Game class >> newWithName: aString layer: aNumber members: aCollection [
 ]
 
 { #category : 'Accessing' }
-Game >> isBuy [
+Game >> isBuyBoolean [
 
 	"<^(true | false)>"
 	"Answer the isBuy of the receiver"
 
-	^isBuy
+	^isBuyBoolean
 ]
 
 { #category : 'Accessing' }
-Game >> isBuy: aBoolean [
+Game >> isBuyBoolean: aBoolean [
 
 	"<aBoolean: (true | false), ^self>"
 	"Set the isBuy of the receiver"
 
-	isBuy := aBoolean
+	isBuyBoolean := aBoolean
 ]
 
 { #category : 'Accessing' }
@@ -61,21 +61,21 @@ Game >> layer: aNumber [
 ]
 
 { #category : 'Accessing' }
-Game >> members [
+Game >> memberCollection [
 
 	"<^hOf Collection of: {iOf Member}>"
-	"Answer the members of the receiver"
+	"Answer the memberCollection of the receiver"
 
-	^members
+	^memberCollection
 ]
 
 { #category : 'Accessing' }
-Game >> members: aCollectionOfMembers [
+Game >> memberCollection: aCollectionOfMembers [
 
 	"<aCollectionOfMembers: hOf Collection of: {iOf Member}, ^self>"
-	"Set the members of the receiver"
+	"Set the memberCollection of the receiver"
 
-	members := aCollectionOfMembers
+	memberCollection := aCollectionOfMembers
 ]
 
 { #category : 'Accessing' }

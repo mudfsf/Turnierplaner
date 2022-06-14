@@ -20,19 +20,19 @@ LapsTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 			| theCurrentPlayer theCurrentGame |
 			theCurrentGame := Game new
 				layer: 0;
-				isBuy: false;
+				isBuyBoolean: false;
 				resultCollection: OrderedCollection new;
-				members: OrderedCollection new;
+				memberCollection: OrderedCollection new;
 				name: '';
 				yourself.
 				
 			theCurrentPlayer := aCollectionOfMembers at: eachIndexForFirstPlayer.
 			theCurrentGame	name: ('%1' bindWith: theCurrentPlayer asString).
-			theCurrentGame	members add: theCurrentPlayer.
+			theCurrentGame	memberCollection add: theCurrentPlayer.
 				
 			theCurrentPlayer := aCollectionOfMembers at: (eachIndexForFirstPlayer + eachIndexForSecondPlayer).
 			theCurrentGame name: ('%1 VS %2' bindWith: theCurrentGame name with: theCurrentPlayer asString).
-			theCurrentGame members add: theCurrentPlayer.
+			theCurrentGame memberCollection add: theCurrentPlayer.
 				
 			theCollectionOfGames add: theCurrentGame]].
 	

@@ -347,14 +347,14 @@ SpecificTournamentView >> saveWinnerEvent: anEvent [
 	theMemberName = 'Kein Sieger festgelegt'
 		ifTrue: [self showErrorNotificationWithMessage: 'Bitte Sieger auswählen'.
 			^self].
-	theWinnerMember := self game members detect: [:eachMember |
+	theWinnerMember := self game memberCollection detect: [:eachMember |
 		eachMember asString = theMemberName] ifNone: [].
-	theMember := self game members reject: [:eachMember |
+	theMember := self game memberCollection reject: [:eachMember |
 		eachMember asString = theMemberName].
 		
 	theResultCollection := OrderedCollection new	
 		add: (Result newWithPlayer: theWinnerMember ranking: 1 points: 2);
-		add: (Result newWithPlayer: theMember ranking: 2 points: 1);
+		add: (Result newWithPlayer: theMember first ranking: 2 points: 1);
 		yourself.
 	self game resultCollection removeAll.
 	self game resultCollection addAll: theResultCollection
@@ -383,31 +383,40 @@ SpecificTournamentView >> setResultEvent: anEvent [
 
 	"<^self>"
 	"wip"	
-		
+	
+	| theModalView |
+	
 	self game: (self tournament games detect: [ :eachGame |
 		eachGame name = anEvent component parent parent title] ifNone: []).
+		
+	theModalView := ModalView new title: 'Ergebnis'.
 	
-	self openModal: (ModalView new
-		title: 'Ergebnis';
-		body: (self form: (Me5Form new
-			addChildToBody: (self selectBoxPlayers: (Me5SelectBox new
-				text: 'Sieger';
-				noneObject: 'Kein Sieger festgelegt';
-				objects: (self game members collect: [ :eachMember | 
-					eachMember asString]);
-				yourself);
-				selectBoxPlayers);
-			addChildToBody: (Me5Button newPrimary
+	self game resultCollection size = 0
+		ifTrue: [
+			theModalView body: (Me5Form new
+				addChildToBody: (Me5SelectBox new
+					text: 'Sieger';
+					noneObject: 'Kein Sieger festgelegt';
+					objects: (self game memberCollection collect: [ :eachMember | 
+						eachMember asString]);
+					yourself);
+				yourself)]
+		ifFalse: [
+				theModalView body: (Me5Form new
+					addChildToBody: (Me5SelectBox new
+						text: 'Sieger';
+						disableNoneObject;
+						objects: (self game resultCollection collect: [ :eachResult | 
+							eachResult player asString]);
+						yourself);
+					yourself)].
+	theModalView body addChildToBody: (Me5Button newPrimary
 				text: 'Speichern';
 				icon: Me5I newFasSave;
 				addClickEventSelector: #saveWinnerEvent: eventReceiver: self;
-				yourself);
-			yourself);
-			form);
-		yourself).
-	
-	self game resultCollection size = 1
-		ifTrue: [self selectBoxPlayers disableNoneObject] 
+				yourself).
+		
+	self openModal: theModalView
 ]
 
 { #category : 'Accessing' }

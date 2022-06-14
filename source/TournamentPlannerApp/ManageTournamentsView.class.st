@@ -154,9 +154,9 @@ ManageTournamentsView >> createTournament [
 		name: self textFieldTournamentName value;
 		tournamentType: theTournamentType;
 		gameMode: self radioGroupGameMode value;
-		numberOfGames: theGames size;
-		numberOfPlayedGames: 0;
 		games: theGames;
+		playedGames: (theGames select: [ :eachGame |
+			eachGame isBuyBoolean]);
 		membercollection: theSelectedCollection;
 		yourself).
 	self rowTournaments addChild: (self createTournamentDivWithTournament: theCurrentTournament 
@@ -198,13 +198,13 @@ ManageTournamentsView >> createTournamentDivWithTournament: aTournament WithTour
 				href: ('TurnierplanerView/specificTournament?tournamentName=%1&tournamentType=%2' bindWith: aTournament name with: aString);
 				yourself);
 			addChildToFoot:  (Me5ProgressBar newPrimary
-				value: (aTournament numberOfPlayedGames 
-					/ aTournament numberOfGames * 100) asInteger;
+				value: (aTournament playedGames size 
+					/ aTournament games size * 100) asInteger;
 				height: 20;
 				setPrimaryStyle;
 				yourself);
 			addChildToFoot: (Me5P new
-				text: ('%1 von %2' bindWith: aTournament numberOfPlayedGames asString with: aTournament numberOfGames asString);
+				text: ('%1 von %2' bindWith: aTournament playedGames size asString with: aTournament games size asString);
 				textAlign: 'center';
 				fontSize: 'larger';
 				yourself);
