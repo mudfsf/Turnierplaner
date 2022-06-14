@@ -6,7 +6,7 @@ Class {
 		'name',
 		'members',
 		'isBuy',
-		'result'
+		'resultCollection'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -97,19 +97,19 @@ Game >> name: aString [
 ]
 
 { #category : 'Accessing' }
-Game >> result [
+Game >> resultCollection [
 
-	"<^iOf Result>"
+	"<^hOf Collection of: {iOf Result}>"
 	"Answer the result of the receiver"
 
-	^result
+	^resultCollection
 ]
 
 { #category : 'Accessing' }
-Game >> result: aResult [
+Game >> resultCollection: aResultCollection [
 
-	"<aResult: iOf Result, ^self>"
+	"<aResultCollection: hOf Collection of: {iOf Result}, ^self>"
 	"Set the result of the receiver"
 
-	result := aResult
+	resultCollection := aResultCollection
 ]

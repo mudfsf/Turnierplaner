@@ -20,6 +20,8 @@ LapsTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 			| theCurrentPlayer theCurrentGame |
 			theCurrentGame := Game new
 				layer: 0;
+				isBuy: false;
+				resultCollection: OrderedCollection new;
 				members: OrderedCollection new;
 				name: '';
 				yourself.

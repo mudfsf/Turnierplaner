@@ -61,6 +61,9 @@ KOTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 				self gameCollection add: (Game new
 					layer: 1;
 					isBuy: true;
+					resultCollection: (OrderedCollection new
+						add: (Result newWithPlayer: eachMember ranking: 1 points: 2);
+						yourself);
 					members: (OrderedCollection new
 						add: eachMember;
 						yourself);
@@ -75,6 +78,7 @@ KOTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 		theCurrentGame := Game new
 			layer: self layer;
 			isBuy: false;
+			resultCollection: OrderedCollection new;
 			members: OrderedCollection new;
 			name: '';
 			yourself.	

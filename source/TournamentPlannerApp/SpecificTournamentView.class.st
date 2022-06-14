@@ -2,7 +2,9 @@ Class {
 	#name : 'SpecificTournamentView',
 	#superclass : 'Me5BaseView',
 	#instVars : [
+		'form',
 		'selectBoxPlayers',
+		'game',
 		'tournament',
 		'tournamentType',
 		'offsetX',
@@ -217,6 +219,42 @@ SpecificTournamentView >> createModules [
 	super createModules
 ]
 
+{ #category : 'Accessing' }
+SpecificTournamentView >> form [
+
+	"<^hOf Me5Form>"
+	"Answer the form of the receiver"
+
+	^form
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> form: aMe5Form [
+
+	"<aMe5Form: hOf Me5Form, ^self>"
+	"Set the form of the receiver"
+
+	form := aMe5Form
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> game [
+
+	"<^iOf Game>"
+	"Answer the game of the receiver"
+
+	^game
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> game: aGame [
+
+	"<aGame: iOf Game, ^self>"
+	"Set the game of the receiver"
+
+	game := aGame
+]
+
 { #category : 'Accessing',
   #vaVisibility : 'private' }
 SpecificTournamentView >> height [
@@ -297,6 +335,31 @@ SpecificTournamentView >> rowsSpacing: aNumber [
 	rowsSpacing := aNumber
 ]
 
+{ #category : 'Events' }
+SpecificTournamentView >> saveWinnerEvent: anEvent [
+
+	
+	| theMemberName theWinnerMember theMember theResultCollection |
+	
+	self game resultCollection size = 1
+		ifTrue: [^self].
+	theMemberName := anEvent component parent children first value.
+	theMemberName = 'Kein Sieger festgelegt'
+		ifTrue: [self showErrorNotificationWithMessage: 'Bitte Sieger auswählen'.
+			^self].
+	theWinnerMember := self game members detect: [:eachMember |
+		eachMember asString = theMemberName] ifNone: [].
+	theMember := self game members reject: [:eachMember |
+		eachMember asString = theMemberName].
+		
+	theResultCollection := OrderedCollection new	
+		add: (Result newWithPlayer: theWinnerMember ranking: 1 points: 2);
+		add: (Result newWithPlayer: theMember ranking: 2 points: 1);
+		yourself.
+	self game resultCollection removeAll.
+	self game resultCollection addAll: theResultCollection
+]
+
 { #category : 'Accessing' }
 SpecificTournamentView >> selectBoxPlayers [
 
@@ -320,36 +383,31 @@ SpecificTournamentView >> setResultEvent: anEvent [
 
 	"<^self>"
 	"wip"	
-	
-	| theGame |
-	
-	theGame := self tournament games detect: [ :eachGame |
-		eachGame name = anEvent component parent parent title] ifNone: [].
+		
+	self game: (self tournament games detect: [ :eachGame |
+		eachGame name = anEvent component parent parent title] ifNone: []).
 	
 	self openModal: (ModalView new
 		title: 'Ergebnis';
-		body: (Me5Form new
+		body: (self form: (Me5Form new
 			addChildToBody: (self selectBoxPlayers: (Me5SelectBox new
 				text: 'Sieger';
 				noneObject: 'Kein Sieger festgelegt';
-				objects: (theGame members collect: [ :eachMember | 
+				objects: (self game members collect: [ :eachMember | 
 					eachMember asString]);
 				yourself);
 				selectBoxPlayers);
 			addChildToBody: (Me5Button newPrimary
 				text: 'Speichern';
 				icon: Me5I newFasSave;
-				addClickEventSelector: #test: eventReceiver: self;
+				addClickEventSelector: #saveWinnerEvent: eventReceiver: self;
 				yourself);
 			yourself);
-		yourself)
-]
-
-{ #category : 'Events' }
-SpecificTournamentView >> test: anEvent [
-
-	anEvent component parent children first value.
-	self tournament.
+			form);
+		yourself).
+	
+	self game resultCollection size = 1
+		ifTrue: [self selectBoxPlayers disableNoneObject] 
 ]
 
 { #category : 'Accessing' }
