@@ -231,43 +231,8 @@ ManageTournamentsView >> createTournamentRows [
 		theMembers := OrderedCollection new.
 		eachTournament membercollection do: [ :eachMember |
 			theMembers add: eachMember asString].			
-		self rowTournaments addChild: (Me5Div new
-			addChild: (Me5Portlet newPrimary "code Redundancy fix"
-				title: eachTournament name;
-				addChildToHeadTools: (Me5A newIconOnlyPrimary
-					icon: Me5I newFasTrash;
-					addClickEventSelector: #yesNoModalRemoveTournament: eventReceiver: self;
-					yourself);
-				addChildToBody: (Me5P new
-					text: (theTournamentType, ' / ', (eachTournament gameMode) asString );
-					fontSize: 'medium';
-					yourself);
-				addChildToBody: (Me5P new 
-					text: ('Rivalen: %1' bindWith: ((theMembers select: [ :eachMember | eachMember notNil ]) joinUsing:  ', '));
-					fontSize: 'large';
-					yourself);
-				addChildToBody: (Me5A newPrimary
-					setTargetBlank;
-					rightIcon: Me5I newFasAngleRight;
-					text: 'Zum Turnier';
-					href: ('TurnierplanerView/specificTournament?tournamentName=%1&team=true' bindWith: (eachTournament name));
-					yourself);
-				addChildToFoot:  (Me5ProgressBar newPrimary
-					value: ((eachTournament numberOfPlayedGames asInteger) / (eachTournament numberOfGames asInteger) * 100) asInteger;
-					height: 20;
-					setPrimaryStyle;
-					yourself);
-				addChildToFoot: (Me5P new
-					text: (eachTournament numberOfPlayedGames asString), ' von ', (eachTournament numberOfGames asString);
-					textAlign: 'center';
-					fontSize: 'larger';
-					yourself);
-				yourself);
-			padding: 15;
-			addCssClassColSm12;
-			addCssClassColMd6;
-			addCssClassColXl4;
-		yourself)]
+		self rowTournaments addChild: (self createTournamentDivWithTournament: eachTournament
+			WithTournamenType: theTournamentType WithMembers: theMembers)]
 ]
 
 { #category : 'Accessing',

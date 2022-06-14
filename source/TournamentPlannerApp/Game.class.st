@@ -5,7 +5,8 @@ Class {
 		'layer',
 		'name',
 		'members',
-		'isBuy'
+		'isBuy',
+		'result'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -93,4 +94,22 @@ Game >> name: aString [
 	"Set the name of the receiver"
 
 	name := aString
+]
+
+{ #category : 'Accessing' }
+Game >> result [
+
+	"<^iOf Result>"
+	"Answer the result of the receiver"
+
+	^result
+]
+
+{ #category : 'Accessing' }
+Game >> result: aResult [
+
+	"<aResult: iOf Result, ^self>"
+	"Set the result of the receiver"
+
+	result := aResult
 ]

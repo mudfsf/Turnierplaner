@@ -52,8 +52,10 @@ KOTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 	self layer = 0
 		ifTrue: [
 			thePowerOf2Number := (theCollectionSize log: 2) asInteger power: 2.
-			theNumberOfBuys := (theCollectionSize - thePowerOf2Number) abs.
-			theBuys := (aCollectionOfMembers first: theNumberOfBuys).
+			thePowerOf2Number < theCollectionSize
+				ifTrue: [thePowerOf2Number := thePowerOf2Number * 2].
+			theNumberOfBuys := (thePowerOf2Number - theCollectionSize).
+			theBuys := (aCollectionOfMembers first: (theNumberOfBuys)).
 			theRecursiveParamListCollectionOfGames addAll: (theBuys).
 			theBuys do: [ :eachMember |
 				self gameCollection add: (Game new
