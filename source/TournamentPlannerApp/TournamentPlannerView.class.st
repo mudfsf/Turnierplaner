@@ -100,25 +100,31 @@ TournamentPlannerView >> createModules [
 { #category : 'Internal' }
 TournamentPlannerView >> dashboardTab [
 
-	| theDashboard theTextNextGame theTextActualTournament theTextActualMatch theTextDateForNextMatch 
+	| theDashboard theTextNextGame theTextActualTournament theTextActualMatch 
 	theTextRunningTournaments theTextBestTeamNowInTheTournament theTextTeamMatchesInTheTournament 
 	theTextBestPlayerNowInTheTournament theTextPlayerMatchesInTheTournament theTextForBets 
-	theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets theTextWithOutcome |
+	theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets theNeededTournament theNeededPlayer theListofGamesfromNeededPlayer theListofGamesfromNeededPlayerPlayed |
 
+	theNeededTournament := TournamentPlannerApp collectionOfTournaments data last.	"ToDo: find not completed Tournaments."
+	theNeededPlayer := theNeededTournament membercollection last.	"ToDo: load logged User. Temporaly not availabe."
 	theTextNextGame := Me5H3 new text: 'N&auml;chstes Spiel f&uuml;r dich'.
-	theTextActualTournament := Me5H5 new text: 'Turnier: Bestes Team'.
-	theTextActualMatch := Me5H5 new text: 'Team Yeah VS Team Nope'.
-	theTextDateForNextMatch := Me5H5 new text: 'In 3 Tagen um 15:30'.
+	theTextActualTournament := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name).
+	theTextActualMatch := Me5H5 new text: ('Spiel: %1' bindWith: theNeededTournament games last name).
 	theTextRunningTournaments := Me5H3 new text: 'Laufende Turniere'.
-	theTextBestTeamNowInTheTournament := Me5H5 new text: 'Turnier: Bestes Team'.
-	theTextTeamMatchesInTheTournament := Me5H6 new text: '5 &Uuml;brige Spiele'.
-	theTextBestPlayerNowInTheTournament := Me5H5 new text: 'Bester Spieler'.
-	theTextPlayerMatchesInTheTournament := Me5H6 new text: '12 &Uuml;brige Spiele'.
-	theTextForBets := Me5H3 new text: 'Wetten'.
+	theTextBestTeamNowInTheTournament := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name).
+	theTextTeamMatchesInTheTournament := Me5H6 new text: ('%1 &uuml;brige Spiele' bindWith: (theNeededTournament games size - theNeededTournament playedGames size) ).
+	theTextBestPlayerNowInTheTournament := Me5H5 new text: ('Spieler: %1' bindWith: theNeededPlayer asString).
+	theListofGamesfromNeededPlayer := theNeededTournament games select: [ :eachGame | 
+		(eachGame memberCollection first asString = theNeededPlayer asString ) or: [ eachGame memberCollection last asString = theNeededPlayer asString ] ].
+	theListofGamesfromNeededPlayerPlayed := theNeededTournament playedGames select: [ :eachGame | 
+		(eachGame memberCollection first asString = theNeededPlayer asString ) or: [ eachGame memberCollection last asString = theNeededPlayer asString ] ].
+
+	theTextPlayerMatchesInTheTournament := Me5H6 new text: ('%1 &uuml;brige Spiele' bindWith: theListofGamesfromNeededPlayer size - theListofGamesfromNeededPlayerPlayed size ) .
+	theTextForBets := Me5H3 new text: 'Wetten'.		"ToDo: implement Bets."
 	theTextWithWageredMoney := Me5H5 new text: '35&euro;'.
 	theTextForRunningBets := Me5H5 new text: 'Laufende Wetten'.
 	theTextWithWageredMoneyForTheBets := Me5H5 new text: '5&euro;'.
-	theTextWithOutcome := Me5H6 new text: 'Team Yeah - 14.6.2022'.
+
 	
 	theDashboard := (Me5Div new
 		addChild: (Me5H2 newWithText: 'HR-Works Turnierplaner');
@@ -127,8 +133,6 @@ TournamentPlannerView >> dashboardTab [
 			addChildToBody: Me5Hr new;
 			addChildToBody: theTextActualTournament;
 			addChildToBody: theTextActualMatch;
-			addChildToBody: Me5Hr new;
-			addChildToBody: theTextDateForNextMatch;
 			yourself);		
 		addChild: (Me5Portlet new
 			addChildToBody: theTextRunningTournaments;
@@ -137,14 +141,14 @@ TournamentPlannerView >> dashboardTab [
 			addChildToBody: theTextTeamMatchesInTheTournament;
 			addChildToBody: (Me5ProgressBar newPrimary
 				addCssClassMProgressLg;
-				value: 50;
+				value: 100 * theNeededTournament playedGames size / theNeededTournament games size;
 				yourself);
 			addChildToBody: Me5Hr new;									
 			addChildToBody: theTextBestPlayerNowInTheTournament;
 			addChildToBody: theTextPlayerMatchesInTheTournament;
 			addChildToBody: (Me5ProgressBar newPrimary
 				addCssClassMProgressLg;
-				value: 50;
+				value: 100 * theListofGamesfromNeededPlayerPlayed size / theListofGamesfromNeededPlayer size;
 				yourself);
 			yourself);
 		addChild: (Me5Portlet new
@@ -154,7 +158,6 @@ TournamentPlannerView >> dashboardTab [
 			addChildToBody: Me5Hr new;									
 			addChildToBody: theTextForRunningBets;
 			addChildToBody: theTextWithWageredMoneyForTheBets;
-			addChildToBody: theTextWithOutcome;
 			yourself);
 		yourself).
 	
