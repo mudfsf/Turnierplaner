@@ -178,8 +178,8 @@ SpecificTournamentView >> createLapsTournament [
 	self tournament games doWithIndex: [ :eachGame  :eachIndex |
 	theTableOfMatches addChildToBody: (Me5TableRow new
 		addTableDataWithText: eachIndex;
-		addTableDataWithText: eachGame members first;
-		addTableDataWithText: eachGame members second;
+		addTableDataWithText: eachGame memberCollection first;
+		addTableDataWithText: eachGame memberCollection second;
 		addTableDataWithText: 'noch nicht ausgetragen';
 		yourself)].	
 	theTableOfRanking
@@ -338,7 +338,7 @@ SpecificTournamentView >> saveWinnerEvent: anEvent [
 		ifTrue: [^self].
 	theMemberName := anEvent component parent children first value.
 	theMemberName = 'Kein Sieger festgelegt'
-		ifTrue: [self showErrorNotificationWithMessage: 'Bitte Sieger auswählen'.
+		ifTrue: [self showErrorNotificationWithMessage: 'Bitte Sieger ausw&auml;hlen'.
 			^self].
 	theWinnerMember := self game memberCollection detect: [:eachMember |
 		eachMember asString = theMemberName] ifNone: [].
