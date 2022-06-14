@@ -24,10 +24,10 @@ SpecificTournamentView >> beforeCreateComponents [
 
 	self offsetX: 40;
 		offsetY: 40;
-		width: 400;
-		height: 260;
+		width: 420;
+		height: 280;
 		rowsSpacing: 20;
-		columnSpacing: 100;
+		columnSpacing: 120;
 		tournament: (TournamentPlannerApp collectionOfTournaments data detect: [ :eachTournament |
 			eachTournament name = (self queryParameters at: 'tournamentName')]);
 		tournamentType: (self queryParameters at: 'tournamentType');
@@ -87,15 +87,16 @@ SpecificTournamentView >> createKOTournament [
 		theGamesOfLayer := self tournament games select: [ :eachGame |
 			eachGame layer = eachLayer].
 			theGamesOfLayer doWithIndex: [ :eachGame :eachIndex |
-				| theTop theLeft theButton |
-				theTop := (((self height + self rowsSpacing) * eachLayer) / 2  + self offsetY) + ((eachIndex - 1) * (self height + self rowsSpacing)).
-				theLeft := self offsetX + ((eachLayer - 1) * (self width + self columnSpacing)).				
-				theScroller addChild: (Me5Portlet newSuccess
+				| theTop theLeft theButton thePortlet |
+				
+				eachLayer = 1
+					ifTrue: [theTop := (eachIndex - 1) * (self height + self rowsSpacing) + self offsetY].
+				theLeft := self offsetX + ((eachLayer - 1) * (self width + self columnSpacing)).
+
+				thePortlet := (Me5Portlet newSuccess
 					title: eachGame name;
 					setPositionToAbsolute;
 					zIndex: 1;
-					top: theTop;
-					left: theLeft;
 					width: self width;
 					addChildToBody: (theButton := Me5Button newSuccess
 						text: 'Ergebnis eintragen';
@@ -105,19 +106,13 @@ SpecificTournamentView >> createKOTournament [
 						text: 'Wetten';
 						yourself);
 					yourself).
-				eachLayer < self tournament games last layer
-					ifTrue: [
-						| theLine |
-						theLine := Array new: 2.
-						theLine at: 1 put: (Point new 
-							x: theLeft;
-							y: theTop;
-							yourself).
-						theLines add: theLine].
+					
 				eachLayer > 1 
 					ifTrue: [
 						| theIndex |
 						theIndex := (eachLayer * (eachLayer - 1)) * eachIndex.
+						theTop := (((theLines at: theIndex -1) at: 1) y + ((theLines at: theIndex) at: 1) y) / 2.
+
 						(theLines at: theIndex - 1)
 							at: 2 put: (Point new
 								x: theLeft;
@@ -131,7 +126,22 @@ SpecificTournamentView >> createKOTournament [
 						"Have prerequisite games already been played"
 						((self tournament games at: theIndex -1) resultCollection size > 0 
 						and: [(self tournament games at: theIndex) resultCollection size > 0])
-							ifFalse: [theButton disable]]]].
+							ifFalse: [theButton disable]].
+							
+				eachLayer < self tournament games last layer
+					ifTrue: [
+						| theLine |
+						theLine := Array new: 2.
+						theLine at: 1 put: (Point new 
+							x: theLeft;
+							y: theTop;
+							yourself).
+						theLines add: theLine].
+						
+				thePortlet top: theTop;
+					left: theLeft;
+					yourself.
+				theScroller addChild: thePortlet]].
 	"draw Lines"
 	theLines do: [ :eachLine |
 		| theFirstPoint theSecondPoint theMaxX theMaxY |
