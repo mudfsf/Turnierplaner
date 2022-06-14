@@ -2,7 +2,7 @@ Class {
 	#name : 'SpecificTournamentView',
 	#superclass : 'Me5BaseView',
 	#instVars : [
-		'form',
+		'tournamentDrawingArea',
 		'selectBoxPlayers',
 		'game',
 		'tournament',
@@ -31,6 +31,7 @@ SpecificTournamentView >> beforeCreateComponents [
 		tournament: (TournamentPlannerApp collectionOfTournaments data detect: [ :eachTournament |
 			eachTournament name = (self queryParameters at: 'tournamentName')]);
 		tournamentType: (self queryParameters at: 'tournamentType');
+		tournamentDrawingArea: Me5Div new;
 		yourself
 ]
 
@@ -65,11 +66,7 @@ SpecificTournamentView >> createComponents [
 			yourself);
 		addChild: Me5Hr new;
 		yourself.
-	self tournamentType = 'KO'
-		ifTrue: [self addChild: self createKOTournament].
-	self tournamentType = 'Runden'
-		ifTrue: [self addChild: self createLapsTournament]
-		
+	self setDrawingArea
 ]
 
 { #category : 'Internal' }
@@ -90,7 +87,7 @@ SpecificTournamentView >> createKOTournament [
 		theGamesOfLayer := self tournament games select: [ :eachGame |
 			eachGame layer = eachLayer].
 			theGamesOfLayer doWithIndex: [ :eachGame :eachIndex |
-				| theTop theLeft |
+				| theTop theLeft theButton |
 				theTop := (((self height + self rowsSpacing) * eachLayer) / 2  + self offsetY) + ((eachIndex - 1) * (self height + self rowsSpacing)).
 				theLeft := self offsetX + ((eachLayer - 1) * (self width + self columnSpacing)).				
 				theScroller addChild: (Me5Portlet newSuccess
@@ -100,7 +97,7 @@ SpecificTournamentView >> createKOTournament [
 					top: theTop;
 					left: theLeft;
 					width: self width;
-					addChildToBody: (Me5Button newSuccess
+					addChildToBody: (theButton := Me5Button newSuccess
 						text: 'Ergebnis eintragen';
 						addClickEventSelector: #setResultEvent:;
 						yourself);
@@ -119,16 +116,22 @@ SpecificTournamentView >> createKOTournament [
 						theLines add: theLine].
 				eachLayer > 1 
 					ifTrue: [
-						(theLines at: ((eachLayer * (eachLayer - 1)) * eachIndex - 1))
+						| theIndex |
+						theIndex := (eachLayer * (eachLayer - 1)) * eachIndex.
+						(theLines at: theIndex - 1)
 							at: 2 put: (Point new
 								x: theLeft;
 								y: theTop;
 								yourself).
-						(theLines at: ((eachLayer * (eachLayer - 1)) * eachIndex))
+						(theLines at: theIndex)
 							at: 2 put: (Point new
 								x: theLeft;
 								y: theTop;
-								yourself)]]].
+								yourself).
+						"Have prerequisite games already been played"
+						((self tournament games at: theIndex -1) resultCollection size > 0 
+						and: [(self tournament games at: theIndex) resultCollection size > 0])
+							ifFalse: [theButton disable]]]].
 	"draw Lines"
 	theLines do: [ :eachLine |
 		| theFirstPoint theSecondPoint theMaxX theMaxY |
@@ -217,24 +220,6 @@ SpecificTournamentView >> createModules [
 	"<^self>"
 
 	super createModules
-]
-
-{ #category : 'Accessing' }
-SpecificTournamentView >> form [
-
-	"<^hOf Me5Form>"
-	"Answer the form of the receiver"
-
-	^form
-]
-
-{ #category : 'Accessing' }
-SpecificTournamentView >> form: aMe5Form [
-
-	"<aMe5Form: hOf Me5Form, ^self>"
-	"Set the form of the receiver"
-
-	form := aMe5Form
 ]
 
 { #category : 'Accessing' }
@@ -336,6 +321,14 @@ SpecificTournamentView >> rowsSpacing: aNumber [
 ]
 
 { #category : 'Events' }
+SpecificTournamentView >> saveKOWinnerEvent: anEvent [
+
+	self saveWinnerEvent: anEvent.
+	self tournamentDrawingArea parent removeChild: self tournamentDrawingArea ifAbsent: [].
+	self setDrawingArea
+]
+
+{ #category : 'Events' }
 SpecificTournamentView >> saveWinnerEvent: anEvent [
 
 	
@@ -357,7 +350,11 @@ SpecificTournamentView >> saveWinnerEvent: anEvent [
 		add: (Result newWithPlayer: theMember first ranking: 2 points: 1);
 		yourself.
 	self game resultCollection removeAll.
-	self game resultCollection addAll: theResultCollection
+	self game resultCollection addAll: theResultCollection.
+	self tournament playedGames remove: self game ifAbsent: [].
+	self tournament playedGames add: self game.
+	TournamentPlannerApp saveCollectionOfTournaments: TournamentPlannerApp collectionOfTournaments data.
+	self showSuccessNotificationWithMessage: ('Sieger %1 wird gespeichert' bindWith: theMemberName)
 ]
 
 { #category : 'Accessing' }
@@ -378,13 +375,26 @@ SpecificTournamentView >> selectBoxPlayers: aMe5SelectBox [
 	selectBoxPlayers := aMe5SelectBox
 ]
 
+{ #category : 'Internal' }
+SpecificTournamentView >> setDrawingArea [
+	
+	"<^self>"
+
+	self tournamentType = 'KO'
+		ifTrue: [self tournamentDrawingArea: self createKOTournament].
+	self tournamentType = 'Runden'
+		ifTrue: [self tournamentDrawingArea: self createLapsTournament].
+		
+	self addChild: self tournamentDrawingArea
+]
+
 { #category : 'Events' }
 SpecificTournamentView >> setResultEvent: anEvent [
 
 	"<^self>"
 	"wip"	
 	
-	| theModalView |
+	| theModalView theButton |
 	
 	self game: (self tournament games detect: [ :eachGame |
 		eachGame name = anEvent component parent parent title] ifNone: []).
@@ -410,11 +420,13 @@ SpecificTournamentView >> setResultEvent: anEvent [
 							eachResult player asString]);
 						yourself);
 					yourself)].
-	theModalView body addChildToBody: (Me5Button newPrimary
-				text: 'Speichern';
-				icon: Me5I newFasSave;
-				addClickEventSelector: #saveWinnerEvent: eventReceiver: self;
-				yourself).
+	theButton := Me5Button newPrimary
+		text: 'Speichern';
+		icon: Me5I newFasSave;
+		yourself.
+	self tournamentType = 'KO'
+		ifTrue: [theButton addClickEventSelector: #saveKOWinnerEvent: eventReceiver: self].
+	theModalView body addChildToBody: theButton.
 		
 	self openModal: theModalView
 ]
@@ -435,6 +447,24 @@ SpecificTournamentView >> tournament: aTournament [
 	"Set the tournament of the receiver"
 
 	tournament := aTournament
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> tournamentDrawingArea [
+
+	"<^hOf Me5Div>"
+	"Answer the tournamentDrawingArea of the receiver"
+
+	^tournamentDrawingArea
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> tournamentDrawingArea: aDiv [
+
+	"<aDiv: hOf Me5Div, ^self>"
+	"Set the tournamentDrawingArea of the receiver"
+
+	tournamentDrawingArea := aDiv
 ]
 
 { #category : 'Accessing' }
