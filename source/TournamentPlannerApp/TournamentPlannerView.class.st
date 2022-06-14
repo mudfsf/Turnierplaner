@@ -118,14 +118,11 @@ TournamentPlannerView >> dashboardTab [
 		(eachGame memberCollection first asString = theNeededPlayer asString ) or: [ eachGame memberCollection last asString = theNeededPlayer asString ] ].
 	theListofGamesfromNeededPlayerPlayed := theNeededTournament playedGames select: [ :eachGame | 
 		(eachGame memberCollection first asString = theNeededPlayer asString ) or: [ eachGame memberCollection last asString = theNeededPlayer asString ] ].
-
 	theTextPlayerMatchesInTheTournament := Me5H6 new text: ('%1 &uuml;brige Spiele' bindWith: theListofGamesfromNeededPlayer size - theListofGamesfromNeededPlayerPlayed size ) .
-	theTextForBets := Me5H3 new text: 'Wetten'.		"ToDo: implement Bets."
+	theTextForBets := Me5H3 new text: 'Wetten'.		"ToDo: connect to implemented Bets."
 	theTextWithWageredMoney := Me5H5 new text: '35&euro;'.
 	theTextForRunningBets := Me5H5 new text: 'Laufende Wetten'.
-	theTextWithWageredMoneyForTheBets := Me5H5 new text: '5&euro;'.
-
-	
+	theTextWithWageredMoneyForTheBets := Me5H5 new text: '5&euro;'.	
 	theDashboard := (Me5Div new
 		addChild: (Me5H2 newWithText: 'HR-Works Turnierplaner');
 		addChild: (Me5Portlet new
