@@ -145,10 +145,18 @@ ManageTournamentsView >> createTournament [
 			member asString = eachSelectable] ifNone: [].
 		theSelectedCollection add: theSelected.
 		theSelectedAsStringCollection add: theSelected asString].
-	theSelectedCollection size < 2
+	theTournamentType class = MixedTournamentType 
 		ifTrue: [
-		self showErrorNotificationWithMessage: ('Turnier hat zu wenig Mitspieler').
-		^self].
+			theSelectedCollection size < 4
+			ifTrue: [
+				self showErrorNotificationWithMessage: ('Turnier hat zu wenig Mitspieler').
+				^self].
+		] ifFalse: [ 
+			theSelectedCollection size < 2
+			ifTrue: [
+				self showErrorNotificationWithMessage: ('Turnier hat zu wenig Mitspieler').
+				^self].
+		].
 	theGames := theTournamentType getCollectionOfGamesWithMembers: theSelectedCollection.
 	theCurrentTournament := (Tournament new
 		name: self textFieldTournamentName value;
