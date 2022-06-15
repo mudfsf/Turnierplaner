@@ -100,25 +100,46 @@ TournamentPlannerView >> createModules [
 { #category : 'Internal' }
 TournamentPlannerView >> dashboardTab [
 
-	| theDashboard theTextNextGame theTextActualTournament theTextActualMatch 
-	theTextRunningTournaments theTextBestTeamNowInTheTournament theTextTeamMatchesInTheTournament 
-	theTextBestPlayerNowInTheTournament theTextPlayerMatchesInTheTournament theTextForBets 
-	theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets theNeededTournament theNeededPlayer theListofGamesfromNeededPlayer theListofGamesfromNeededPlayerPlayed |
+	| theDashboard theTextNextGame theTextActualTournament theTextActualMatch theTextRunningTournaments theTextBestTeamNowInTheTournament theTextTeamMatchesInTheTournament 
+	theTextBestPlayerNowInTheTournament theTextPlayerMatchesInTheTournament theTextForBets theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets 
+	theNeededTournament theNeededPlayer theListofGamesfromNeededPlayer theListofGamesfromNeededPlayerPlayed progressBarTournament progressBarPlayer theCheckIfEmptyList |
 
-	theNeededTournament := TournamentPlannerApp collectionOfTournaments data last.	"ToDo: find not completed Tournaments."
-	theNeededPlayer := theNeededTournament membercollection last.	"ToDo: load logged User. Temporaly not availabe."
+	theCheckIfEmptyList := true. "ToDo: if isEmptyOrNil/isEmpty/isUndefined/etc. works, change to false again"
+	TournamentPlannerApp collectionOfTournaments data isEmpty "ToDo: Inspect why not true when empty/no entries in collectionOfTournaments"
+		ifTrue: [ theNeededTournament := nil.
+			theCheckIfEmptyList = true ]
+		ifFalse: [ theNeededTournament := TournamentPlannerApp collectionOfTournaments data last	"ToDo: find not completed Tournaments." ].
+	theCheckIfEmptyList
+		ifTrue: [ 
+			theNeededPlayer := nil. 
+			theTextActualTournament := Me5H5 new text: ('Turnier: -').
+			theTextActualMatch := Me5H5 new text: ('Spiel: -').
+			theTextBestTeamNowInTheTournament := Me5H5 new text: ('Turnier: -'). 
+			theTextTeamMatchesInTheTournament := Me5H6 new text: ('&Uuml;brige Spiele: -').
+			theTextBestPlayerNowInTheTournament := Me5H5 new text: ('Spieler: -').
+			theListofGamesfromNeededPlayer := 1. 
+			theListofGamesfromNeededPlayerPlayed := 1. 
+			progressBarTournament := 0. 
+			progressBarPlayer := 0 ]
+		ifFalse: [ 
+			theNeededTournament := TournamentPlannerApp collectionOfTournaments data last.	"ToDo: find not completed Tournaments."
+			theNeededPlayer := theNeededTournament membercollection last.	"ToDo: load logged User. Temporaly not availabe."
+			theTextActualTournament := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name). 
+			theTextActualMatch := Me5H5 new text: ('Spiel: %1' bindWith: theNeededTournament games last name).
+			theTextBestTeamNowInTheTournament := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name). 
+			theTextTeamMatchesInTheTournament := Me5H6 new text: ('&Uuml;brige Spiele: %1' bindWith: (theNeededTournament games size - theNeededTournament playedGames size)).
+			theTextBestPlayerNowInTheTournament := Me5H5 new text: ('Spieler: %1' bindWith: theNeededPlayer asString).
+			theListofGamesfromNeededPlayer := theNeededTournament games select: [ :eachGame | 
+				(eachGame memberCollection first asString = theNeededPlayer asString ) or: [ eachGame memberCollection last asString = theNeededPlayer asString ] ]. 
+			theListofGamesfromNeededPlayerPlayed := theNeededTournament playedGames select: [ :eachGame | 
+				(eachGame memberCollection first asString = theNeededPlayer asString ) or: [ eachGame memberCollection last asString = theNeededPlayer asString ] ].
+			progressBarTournament := 100 * theNeededTournament playedGames size / theNeededTournament games size. 
+			progressBarPlayer := 100 * theListofGamesfromNeededPlayerPlayed size / theListofGamesfromNeededPlayer size ].
 	theTextNextGame := Me5H3 new text: 'N&auml;chstes Spiel f&uuml;r dich'.
-	theTextActualTournament := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name).
-	theTextActualMatch := Me5H5 new text: ('Spiel: %1' bindWith: theNeededTournament games last name).
 	theTextRunningTournaments := Me5H3 new text: 'Laufende Turniere'.
-	theTextBestTeamNowInTheTournament := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name).
-	theTextTeamMatchesInTheTournament := Me5H6 new text: ('%1 &uuml;brige Spiele' bindWith: (theNeededTournament games size - theNeededTournament playedGames size) ).
-	theTextBestPlayerNowInTheTournament := Me5H5 new text: ('Spieler: %1' bindWith: theNeededPlayer asString).
-	theListofGamesfromNeededPlayer := theNeededTournament games select: [ :eachGame | 
-		(eachGame memberCollection first asString = theNeededPlayer asString ) or: [ eachGame memberCollection last asString = theNeededPlayer asString ] ].
-	theListofGamesfromNeededPlayerPlayed := theNeededTournament playedGames select: [ :eachGame | 
-		(eachGame memberCollection first asString = theNeededPlayer asString ) or: [ eachGame memberCollection last asString = theNeededPlayer asString ] ].
-	theTextPlayerMatchesInTheTournament := Me5H6 new text: ('%1 &uuml;brige Spiele' bindWith: theListofGamesfromNeededPlayer size - theListofGamesfromNeededPlayerPlayed size ) .
+	
+	
+	theTextPlayerMatchesInTheTournament := Me5H6 new text: ('&Uuml;brige Spiele: %1' bindWith: theListofGamesfromNeededPlayer size - theListofGamesfromNeededPlayerPlayed size ) .
 	theTextForBets := Me5H3 new text: 'Wetten'.		"ToDo: connect to implemented Bets."
 	theTextWithWageredMoney := Me5H5 new text: '35&euro;'.
 	theTextForRunningBets := Me5H5 new text: 'Laufende Wetten'.
@@ -138,14 +159,14 @@ TournamentPlannerView >> dashboardTab [
 			addChildToBody: theTextTeamMatchesInTheTournament;
 			addChildToBody: (Me5ProgressBar newPrimary
 				addCssClassMProgressLg;
-				value: 100 * theNeededTournament playedGames size / theNeededTournament games size;
+				value: progressBarTournament;
 				yourself);
 			addChildToBody: Me5Hr new;									
 			addChildToBody: theTextBestPlayerNowInTheTournament;
 			addChildToBody: theTextPlayerMatchesInTheTournament;
 			addChildToBody: (Me5ProgressBar newPrimary
 				addCssClassMProgressLg;
-				value: 100 * theListofGamesfromNeededPlayerPlayed size / theListofGamesfromNeededPlayer size;
+				value: progressBarPlayer;
 				yourself);
 			yourself);
 		addChild: (Me5Portlet new
