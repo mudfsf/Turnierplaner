@@ -71,13 +71,15 @@ SpecificTournamentView >> createComponents [
 ]
 
 { #category : 'Internal' }
-SpecificTournamentView >> createKOTournament [
+SpecificTournamentView >> createKOTournament: canInitialGamesBePlayedBoolean [
 
 	"<^hOf Me5Div>"
 	"creates Tournaments with KOTournamentType"
 	
-	| theResultDiv theScroller theLines |
-
+	| theResultDiv theScroller theLines theNumberOfLaps |
+	
+	theNumberOfLaps := (self tournament games select: [ :eachGame | 
+		eachGame layer = 0]) size.
 	theLines := OrderedCollection new.
 	"{ spalte { reihe { x1 y1 x2 y2 } reihe {...} reihe {...} reihe {...} } spalte {...} spalte {...} }"
 	theResultDiv := Me5Div new
@@ -107,21 +109,24 @@ SpecificTournamentView >> createKOTournament [
 						text: 'Wetten';
 						yourself);
 					yourself).
+				
+				canInitialGamesBePlayedBoolean
+					ifFalse: [theButton disable].
 					
-				eachGame resultCollection size > 0
+				eachGame resultCollection size > 0 
 					ifTrue: [
 						thePortlet subTitle: ('Sieger: %1' bindWith: eachGame resultCollection first player asString).
 						theButton disable].
 					
-				eachLayer > 1 
+				eachLayer > 1
 					ifTrue: [
 						| theIndex theMember1 theMember2 |
 						
 						theMember1 := '- '.
 						theMember2 := ' - '.
 						
-						theIndex := (eachLayer * (eachLayer - 1)) * eachIndex.
-						theTop := (((theLines at: theIndex -1) at: 1) y + ((theLines at: theIndex) at: 1) y) / 2.
+						theIndex := ((eachLayer * (eachLayer - 1)) * eachIndex) + theNumberOfLaps.
+						theTop := (((theLines at: theIndex -1 - theNumberOfLaps) at: 1) y + ((theLines at: theIndex - theNumberOfLaps) at: 1) y) / 2.
 						
 						eachGame memberCollection removeAll.
 					
@@ -136,12 +141,12 @@ SpecificTournamentView >> createKOTournament [
 							
 						eachGame name: ('%1 vs %2' bindWith: theMember1 with: theMember2).
 												
-						(theLines at: theIndex - 1)
+						(theLines at: theIndex - 1 - theNumberOfLaps)
 							at: 2 put: (Point new
 								x: theLeft;
 								y: theTop;
 								yourself).
-						(theLines at: theIndex)
+						(theLines at: theIndex - theNumberOfLaps)
 							at: 2 put: (Point new
 								x: theLeft;
 								y: theTop;
@@ -221,7 +226,8 @@ SpecificTournamentView >> createLapsTournament [
 			title: 'Auszutragende Spiele';
 			addChildToBody: (Me5AutoLoadingTable new
 				disableShowInfoTableRow;
-				objects: self tournament games;
+				objects: (self tournament games select: [ :eachGame | 
+					eachGame layer = 0]);
 				addTableRowClickedEventSelector: #setLapsResultEvent: ;
 				addColumnDefinition: (Me5ColumnDefinition new
 					title: 'Spieler 1';
@@ -264,150 +270,11 @@ SpecificTournamentView >> createMixedTournament [
 	"<^hOf Me5Div>"
 	"creates the View of the Mixedtournament."
 	
-	| theTableOfMatches theTableOfRanking theScroller theLines |
-	
-	theTableOfMatches := Me5Table new.
-	theTableOfRanking := Me5Table new.
-	theTableOfMatches
-		addChildToHead: (Me5TableRow new
-			addTableHeaderWithText: 'Spiel-Nr.';
-			addTableHeaderWithText: 'Spieler 1';
-			addTableHeaderWithText: 'Spieler 2';
-			addTableHeaderWithText: 'Sieger';
-			yourself).
-	self tournament games doWithIndex: [ :eachGame  :eachIndex |
-	theTableOfMatches addChildToBody: (Me5TableRow new
-		addTableDataWithText: eachIndex;
-		addTableDataWithText: eachGame memberCollection first;
-		addTableDataWithText: eachGame memberCollection second;
-		addTableDataWithText: 'noch nicht ausgetragen';
-		yourself)].	
-	theTableOfRanking
-		addChildToHead: (Me5TableRow new
-			addTableHeaderWithText: 'Platzierung';
-			addTableHeaderWithText: 'Spieler';
-			addTableHeaderWithText: 'Siege';
-			addTableHeaderWithText: 'Niederlagen';
-			yourself).
-	self tournament membercollection doWithIndex: [ :eachMember :eachIndex |
-	theTableOfRanking addChildToBody: (Me5TableRow new
-		addTableDataWithText: eachIndex;
-		addTableDataWithText: eachMember asString;
-		addTableDataWithText: 0;
-		addTableDataWithText: '0';
-		yourself)].
-	
-	
-	
-	
-	theLines := OrderedCollection new.
-	"{ spalte { reihe { x1 y1 x2 y2 } reihe {...} reihe {...} reihe {...} } spalte {...} spalte {...} }"
-	theScroller := (Me5Scroller new
-		height: 2 * self tournament games last layer * (self height + self rowsSpacing )).
-	1 to: self tournament games last layer do: [ :eachLayer |
-		| theGamesOfLayer |
-		theGamesOfLayer := self tournament games select: [ :eachGame |
-			eachGame layer = eachLayer].
-			theGamesOfLayer doWithIndex: [ :eachGame :eachIndex |
-				| theTop theLeft theButton thePortlet |
-				
-				eachLayer = 1
-					ifTrue: [theTop := (eachIndex - 1) * (self height + self rowsSpacing) + self offsetY].
-				theLeft := self offsetX + ((eachLayer - 1) * (self width + self columnSpacing)).
-
-				thePortlet := (Me5Portlet newSuccess
-					title: eachGame name;
-					setPositionToAbsolute;
-					zIndex: 1;
-					width: self width;
-					addChildToBody: (theButton := Me5Button newSuccess
-						text: 'Ergebnis eintragen';
-						addClickEventSelector: #setResultEvent:;
-						yourself);
-					addChildToFoot: (Me5Button newSuccess
-						text: 'Wetten';
-						yourself);
-					yourself).
-					
-				eachLayer > 1 
-					ifTrue: [
-						| theIndex |
-						theIndex := (eachLayer * (eachLayer - 1)) * eachIndex.
-						theTop := (((theLines at: theIndex -1) at: 1) y + ((theLines at: theIndex) at: 1) y) / 2.
-
-						(theLines at: theIndex - 1)
-							at: 2 put: (Point new
-								x: theLeft;
-								y: theTop;
-								yourself).
-						(theLines at: theIndex)
-							at: 2 put: (Point new
-								x: theLeft;
-								y: theTop;
-								yourself).
-						"Have prerequisite games already been played"
-						((self tournament games at: theIndex -1) resultCollection size > 0 
-						and: [(self tournament games at: theIndex) resultCollection size > 0])
-							ifFalse: [theButton disable]].
-							
-				eachLayer < self tournament games last layer
-					ifTrue: [
-						| theLine |
-						theLine := Array new: 2.
-						theLine at: 1 put: (Point new 
-							x: theLeft;
-							y: theTop;
-							yourself).
-						theLines add: theLine].
-						
-				thePortlet top: theTop;
-					left: theLeft;
-					yourself.
-				theScroller addChild: thePortlet]].
-	"draw Lines"
-	theLines do: [ :eachLine |
-		| theFirstPoint theSecondPoint theMaxX theMaxY |
-		theFirstPoint := eachLine at: 1.
-		theSecondPoint := eachLine at: 2.
-		(theFirstPoint x  > theSecondPoint x) 
-			ifTrue: [theMaxX := theFirstPoint x] 
-			ifFalse: [theMaxX := theSecondPoint x].
-		(theFirstPoint y  > theSecondPoint y) 
-			ifTrue: [theMaxY := theFirstPoint y] 
-			ifFalse: [theMaxY := theSecondPoint x].
-		theScroller addChild: (Me5SvgLine new
-			x1: theFirstPoint x + (self width * 0.75);
-			y1: theFirstPoint y+ (self height * 0.5);
-			x2: theSecondPoint x + (self width * 0.25);
-			y2: theSecondPoint y + (self height * 0.5);
-			strokeWidth: 5;
-			stroke: 'lightGrey';
-			svgHeight: theMaxY * 2;
-			svgWidth: theMaxX * 2;
-			svgTop: 0;
-			svgLeft: 0;
-			yourself)].
-	
-	
-	
-	
 	^Me5Div new
 		addChild: (Me5H3 newWithText: 'Rundenturnier');
-		addChild: (Me5Portlet new
-			icon: Me5I newFasTable;
-			title: 'Auszutragende Spiele';
-			addChildToBody: theTableOfMatches;
-			yourself);
-			addChild: (Me5Button newAirPrimary
-				text: 'Ergebnisse melden';
-				yourself);
-		addChild: (Me5Portlet new
-			icon: Me5I newFasTable;
-			title: 'Platzierungstabelle';
-			addChildToBody: theTableOfRanking;
-			yourself);	
+		addChild: self createLapsTournament;
 		addChild: (Me5H3 newWithText: 'KO Turnier');
-		addChild: theScroller;
+		addChild: (self createKOTournament: self haveLapsBeenPlayed);
 		yourself
 ]
 
@@ -436,6 +303,16 @@ SpecificTournamentView >> game: aGame [
 	"Set the game of the receiver"
 
 	game := aGame
+]
+
+{ #category : 'Internal' }
+SpecificTournamentView >> haveLapsBeenPlayed [
+
+	"<^hOf Boolean>"
+	
+	^(self tournament games select: [ :eachGame |
+		eachGame layer = 0]) conform: [ :eachGame | 
+			eachGame resultCollection notEmptyAndNotNil]
 ]
 
 { #category : 'Accessing',
@@ -611,7 +488,7 @@ SpecificTournamentView >> setDrawingArea [
 	"<^self>"
 
 	self tournamentType = 'KO'
-		ifTrue: [self tournamentDrawingArea: self createKOTournament].
+		ifTrue: [self tournamentDrawingArea: (self createKOTournament: true)].
 	self tournamentType = 'Runden'
 		ifTrue: [self tournamentDrawingArea: self createLapsTournament].
 	self tournamentType = 'Mixed'
@@ -674,9 +551,9 @@ SpecificTournamentView >> setResultEvent [
 		text: 'Speichern';
 		icon: Me5I newFasSave;
 		yourself.
-	self tournamentType = 'KO'
+	(self tournamentType = 'KO' or: [self tournamentType = 'Mixed' and: [self haveLapsBeenPlayed]])
 		ifTrue: [theButton addClickEventSelector: #saveKOWinnerEvent: eventReceiver: self].
-	self tournamentType = 'Runden'
+	(self tournamentType = 'Runden' or: [self tournamentType = 'Mixed'  and: [self haveLapsBeenPlayed not]])
 		ifTrue: [theButton addClickEventSelector: #saveLapsWinnerEvent: eventReceiver: self].
 	self resultModal body addChildToBody: theButton.
 		
