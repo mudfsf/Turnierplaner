@@ -104,7 +104,8 @@ TournamentPlannerView >> dashboardTab [
 	theTextBestPlayerNowInTheTournament theTextPlayerMatchesInTheTournament theTextForBets theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets 
 	theNeededTournament theNeededPlayer theListofGamesfromNeededPlayer theListofGamesfromNeededPlayerPlayed progressBarTournament progressBarPlayer theLowestLayerGames theLowestLayerGamesPlayed theCollectionOfNotPlayedGamesFromNeededPlayer theTest2|
 		
-	TournamentPlannerApp collectionOfTournaments data isEmpty
+	"TournamentPlannerApp collectionOfTournaments data isEmpty"
+	true
 		ifTrue: [ 
 			theNeededPlayer := nil. 
 			theTextActualTournament := Me5H5 new text: ('Turnier: -').
@@ -115,10 +116,10 @@ TournamentPlannerView >> dashboardTab [
 			theListofGamesfromNeededPlayer := 1. 
 			theListofGamesfromNeededPlayerPlayed := 1. 
 			progressBarTournament := 0. 
-			progressBarPlayer := 0 ]
-		ifFalse: [ 
-			theNeededTournament := TournamentPlannerApp collectionOfTournaments data last.	"ToDo: find not completed Tournaments."
-			theNeededPlayer := theNeededTournament membercollection last.	"ToDo: load logged User. Temporaly not availabe."
+			progressBarPlayer := 0 ].
+"		ifFalse: [ 
+			theNeededTournament := TournamentPlannerApp collectionOfTournaments data last.	""ToDo: find not completed Tournaments.""
+			theNeededPlayer := theNeededTournament membercollection last.	""ToDo: load logged User. Temporaly not availabe.""
 			theTextActualTournament := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name). 			
 			theTextBestTeamNowInTheTournament := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name). 
 			theTextTeamMatchesInTheTournament := Me5H6 new text: ('&Uuml;brige Spiele: %1' bindWith: (theNeededTournament games size - theNeededTournament playedGames size)).
@@ -140,7 +141,7 @@ TournamentPlannerView >> dashboardTab [
 						ifTrue: [
 							theTextActualMatch := Me5H5 new text: ('Spiel: -').
 						] ifFalse: [
-							theTextActualMatch := Me5H5 new text: ('Spiel: %1' bindWith: theCollectionOfNotPlayedGamesFromNeededPlayer first name)]]].			
+							theTextActualMatch := Me5H5 new text: ('Spiel: %1' bindWith: theCollectionOfNotPlayedGamesFromNeededPlayer first name)]]]."			
 	theTextNextGame := Me5H3 new text: 'N&auml;chstes Spiel f&uuml;r dich'.
 	theTextRunningTournaments := Me5H3 new text: 'Laufende Turniere'.	
 	theTextPlayerMatchesInTheTournament := Me5H6 new text: ('&Uuml;brige Spiele: %1' bindWith: theListofGamesfromNeededPlayer size - theListofGamesfromNeededPlayerPlayed size ) .
