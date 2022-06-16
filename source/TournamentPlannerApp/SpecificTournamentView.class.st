@@ -36,7 +36,8 @@ SpecificTournamentView >> beforeCreateComponents [
 		yourself
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> columnSpacing [
 
 	"<^hOf Number>"
@@ -45,7 +46,8 @@ SpecificTournamentView >> columnSpacing [
 	^columnSpacing
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> columnSpacing: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -99,7 +101,7 @@ SpecificTournamentView >> createKOTournament [
 					width: self width;
 					addChildToBody: (theButton := Me5Button newSuccess
 						text: 'Ergebnis eintragen';
-						addClickEventSelector: #setResultEvent:;
+						addClickEventSelector: #setKOResultEvent:;
 						yourself);
 					addChildToFoot: (Me5Button newSuccess
 						text: 'Wetten';
@@ -113,7 +115,7 @@ SpecificTournamentView >> createKOTournament [
 					
 				eachLayer > 1 
 					ifTrue: [
-						| theIndex theMember1 theMember2 theObjectsOfSelectBox |
+						| theIndex theMember1 theMember2 |
 						
 						theMember1 := '- '.
 						theMember2 := ' - '.
@@ -195,24 +197,9 @@ SpecificTournamentView >> createLapsTournament [
 	"<^hOf Me5Div>"
 	"creates the View of the Lapstournament."
 	
-	| theTableOfMatches theTableOfRanking |
+	| theTableOfRanking |
 	
-	theTableOfMatches := Me5Table new.
 	theTableOfRanking := Me5Table new.
-	theTableOfMatches
-		addChildToHead: (Me5TableRow new
-			addTableHeaderWithText: 'Spiel-Nr.';
-			addTableHeaderWithText: 'Spieler 1';
-			addTableHeaderWithText: 'Spieler 2';
-			addTableHeaderWithText: 'Sieger';
-			yourself).
-	self tournament games doWithIndex: [ :eachGame  :eachIndex |
-	theTableOfMatches addChildToBody: (Me5TableRow new
-		addTableDataWithText: eachIndex;
-		addTableDataWithText: eachGame memberCollection first;
-		addTableDataWithText: eachGame memberCollection second;
-		addTableDataWithText: 'noch nicht ausgetragen';
-		yourself)].	
 	theTableOfRanking
 		addChildToHead: (Me5TableRow new
 			addTableHeaderWithText: 'Platzierung';
@@ -221,22 +208,50 @@ SpecificTournamentView >> createLapsTournament [
 			addTableHeaderWithText: 'Niederlagen';
 			yourself).
 	self tournament membercollection doWithIndex: [ :eachMember :eachIndex |
-	theTableOfRanking addChildToBody: (Me5TableRow new
-		addTableDataWithText: eachIndex;
-		addTableDataWithText: eachMember asString;
-		addTableDataWithText: 0;
-		addTableDataWithText: '0';
-		yourself)].
+		theTableOfRanking addChildToBody: (Me5TableRow new
+			addTableDataWithText: eachIndex;
+			addTableDataWithText: eachMember asString;
+			addTableDataWithText: 0;
+			addTableDataWithText: '0';
+			yourself)].
 	
 	^Me5Div new
 		addChild: (Me5Portlet new
 			icon: Me5I newFasTable;
 			title: 'Auszutragende Spiele';
-			addChildToBody: theTableOfMatches;
-			yourself);
-			addChild: (Me5Button newAirPrimary
+			addChildToBody: (Me5AutoLoadingTable new
+				objects: self tournament games;
+				addTableRowClickedEventSelector: #setLapsResultEvent: ;
+				addColumnDefinition: (Me5ColumnDefinition new
+					title: 'Spieler 1';
+					definitionBlock: [ :theObjecst :theTableData  |
+						theTableData
+							text: theObjecst memberCollection first asString ;
+							yourself];
+					yourself);
+				addColumnDefinition: (Me5ColumnDefinition new
+					title: 'Spieler 2';
+					definitionBlock: [ :theObjecst :theTableData  |
+						theTableData
+							text: theObjecst memberCollection second asString ;
+							yourself];
+					yourself);
+				addColumnDefinition: (Me5ColumnDefinition new
+					title: 'Sieger';
+					definitionBlock: [ :theObjecst :theTableData  |
+						| theText |
+						theText := 'Kein Sieger festgelegt'.
+						theObjecst resultCollection isEmptyOrNil
+							ifFalse: [theText := theObjecst resultCollection first player asString].
+						theTableData
+							text: theText;
+							yourself];
+					yourself);
+				yourself);
+			addChildToFoot: (Me5Button newAirPrimary
 				text: 'Ergebnisse melden';
 				yourself);
+			yourself);
 		addChild: (Me5Portlet new
 			icon: Me5I newFasTable;
 			title: 'Platzierungstabelle';
@@ -403,7 +418,8 @@ SpecificTournamentView >> createModules [
 
 	"<^self>"
 
-	super createModules
+	super createModules.
+	self addModuleByModuleClass: Me5LoadingTableModuleBundle 
 ]
 
 { #category : 'Accessing' }
@@ -424,7 +440,8 @@ SpecificTournamentView >> game: aGame [
 	game := aGame
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> height [
 
 	"<^hOf Number>"
@@ -433,7 +450,8 @@ SpecificTournamentView >> height [
 	^height
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> height: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -442,7 +460,8 @@ SpecificTournamentView >> height: aNumber [
 	height := aNumber
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetX [
 
 	"<^hOf Number>"
@@ -451,7 +470,8 @@ SpecificTournamentView >> offsetX [
 	^offsetX
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetX: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -460,7 +480,8 @@ SpecificTournamentView >> offsetX: aNumber [
 	offsetX := aNumber
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetY [
 
 	"<^hOf Number>"
@@ -469,7 +490,8 @@ SpecificTournamentView >> offsetY [
 	^offsetY
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetY: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -496,7 +518,8 @@ SpecificTournamentView >> resultModal: aModalView [
 	resultModal := aModalView
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> rowsSpacing [
 
 	"<^hOf Number>"
@@ -505,7 +528,8 @@ SpecificTournamentView >> rowsSpacing [
 	^rowsSpacing
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> rowsSpacing: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -516,6 +540,16 @@ SpecificTournamentView >> rowsSpacing: aNumber [
 
 { #category : 'Events' }
 SpecificTournamentView >> saveKOWinnerEvent: anEvent [
+
+	self saveWinnerEvent: anEvent.
+	self tournamentDrawingArea parent removeChild: self tournamentDrawingArea ifAbsent: [].
+	self setDrawingArea.
+	self resultModal closeModal.
+	self reloadViewBySourceView: self
+]
+
+{ #category : 'Events' }
+SpecificTournamentView >> saveLapsWinnerEvent: anEvent [
 
 	self saveWinnerEvent: anEvent.
 	self tournamentDrawingArea parent removeChild: self tournamentDrawingArea ifAbsent: [].
@@ -589,15 +623,33 @@ SpecificTournamentView >> setDrawingArea [
 ]
 
 { #category : 'Events' }
-SpecificTournamentView >> setResultEvent: anEvent [
+SpecificTournamentView >> setKOResultEvent: anEvent [
+
+	"<^self>"
+		
+	self game: (self tournament games detect: [ :eachGame |
+		eachGame name = anEvent component parent parent title] ifNone: []).
+	self setResultEvent
+]
+
+{ #category : 'Events' }
+SpecificTournamentView >> setLapsResultEvent: anEvent [
+
+	"<^self>"
+		
+	self game: anEvent loadingTableTableRowObject.
+	self game resultCollection isEmptyOrNil
+		ifFalse: [^self].
+	self setResultEvent
+]
+
+{ #category : 'Events' }
+SpecificTournamentView >> setResultEvent [
 
 	"<^self>"
 	"wip"	
 	
 	| theButton |
-	
-	self game: (self tournament games detect: [ :eachGame |
-		eachGame name = anEvent component parent parent title] ifNone: []).
 		
 	self resultModal: (ModalView new title: 'Ergebnis').
 	
@@ -626,6 +678,8 @@ SpecificTournamentView >> setResultEvent: anEvent [
 		yourself.
 	self tournamentType = 'KO'
 		ifTrue: [theButton addClickEventSelector: #saveKOWinnerEvent: eventReceiver: self].
+	self tournamentType = 'Runden'
+		ifTrue: [theButton addClickEventSelector: #saveLapsWinnerEvent: eventReceiver: self].
 	self resultModal body addChildToBody: theButton.
 		
 	self openModal: self resultModal
@@ -685,7 +739,8 @@ SpecificTournamentView >> tournamentType: aString [
 	tournamentType := aString
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> width [
 
 	"<^hOf Number>"
@@ -694,7 +749,8 @@ SpecificTournamentView >> width [
 	^width
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> width: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
