@@ -202,7 +202,7 @@ SpecificTournamentView >> createLapsTournament [
 	"<^hOf Me5Div>"
 	"creates the View of the Lapstournament."
 	
-	| theTableOfRanking |
+	| theTableOfRanking theSortedCollection theMemberWinLoseCollection |
 	
 	theTableOfRanking := Me5Table new.
 	theTableOfRanking
@@ -212,12 +212,34 @@ SpecificTournamentView >> createLapsTournament [
 			addTableHeaderWithText: 'Siege';
 			addTableHeaderWithText: 'Niederlagen';
 			yourself).
-	self tournament membercollection doWithIndex: [ :eachMember :eachIndex |
+	
+	theMemberWinLoseCollection := OrderedCollection new.	
+	self tournament membercollection do: [ :eachMember | 
+		| theWins theLoses theSizeOfPlayedGames |
+		theSizeOfPlayedGames := (self tournament playedGames	select: [ :eachGame | 
+				(eachGame memberCollection first asString = eachMember asString ) or: [ eachGame memberCollection last asString = eachMember asString ] ]) size.
+	
+		theWins := (self tournament playedGames select: [ :eachGame |
+					(eachGame resultCollection first player asString = eachMember asString)]) size.
+		theLoses := theSizeOfPlayedGames - theWins.
+		
+		theMemberWinLoseCollection add: (OrderedCollection new
+			add: eachMember;
+			add: theWins;
+			add: theLoses;
+			yourself)].
+		
+	theSortedCollection := theMemberWinLoseCollection asSortedCollection: [ :collection1 :collection2 |
+		(collection1 at: 2) = (collection2 at: 2)
+			ifTrue: [(collection1 at: 3) < (collection2 at: 3)]
+			ifFalse: [(collection1 at: 2) > (collection2 at: 2)]].
+			
+	theSortedCollection doWithIndex: [ :eachCollection :eachIndex |
 		theTableOfRanking addChildToBody: (Me5TableRow new
 			addTableDataWithText: eachIndex;
-			addTableDataWithText: eachMember asString;
-			addTableDataWithText: 0;
-			addTableDataWithText: '0';
+			addTableDataWithText: (eachCollection at: 1) asString;
+			addTableDataWithText: (eachCollection at: 2) asString;
+			addTableDataWithText: (eachCollection at: 3) asString;
 			yourself)].
 	
 	^Me5Div new
