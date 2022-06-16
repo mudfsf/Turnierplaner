@@ -220,6 +220,7 @@ SpecificTournamentView >> createLapsTournament [
 			icon: Me5I newFasTable;
 			title: 'Auszutragende Spiele';
 			addChildToBody: (Me5AutoLoadingTable new
+				disableShowInfoTableRow;
 				objects: self tournament games;
 				addTableRowClickedEventSelector: #setLapsResultEvent: ;
 				addColumnDefinition: (Me5ColumnDefinition new
@@ -247,9 +248,6 @@ SpecificTournamentView >> createLapsTournament [
 							text: theText;
 							yourself];
 					yourself);
-				yourself);
-			addChildToFoot: (Me5Button newAirPrimary
-				text: 'Ergebnisse melden';
 				yourself);
 			yourself);
 		addChild: (Me5Portlet new
