@@ -12,7 +12,8 @@ Class {
 		'width',
 		'height',
 		'rowsSpacing',
-		'columnSpacing'
+		'columnSpacing',
+		'resultModal'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -35,8 +36,7 @@ SpecificTournamentView >> beforeCreateComponents [
 		yourself
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> columnSpacing [
 
 	"<^hOf Number>"
@@ -45,8 +45,7 @@ SpecificTournamentView >> columnSpacing [
 	^columnSpacing
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> columnSpacing: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -425,8 +424,7 @@ SpecificTournamentView >> game: aGame [
 	game := aGame
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> height [
 
 	"<^hOf Number>"
@@ -435,8 +433,7 @@ SpecificTournamentView >> height [
 	^height
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> height: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -445,8 +442,7 @@ SpecificTournamentView >> height: aNumber [
 	height := aNumber
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> offsetX [
 
 	"<^hOf Number>"
@@ -455,8 +451,7 @@ SpecificTournamentView >> offsetX [
 	^offsetX
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> offsetX: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -465,8 +460,7 @@ SpecificTournamentView >> offsetX: aNumber [
 	offsetX := aNumber
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> offsetY [
 
 	"<^hOf Number>"
@@ -475,8 +469,7 @@ SpecificTournamentView >> offsetY [
 	^offsetY
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> offsetY: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -485,8 +478,6 @@ SpecificTournamentView >> offsetY: aNumber [
 	offsetY := aNumber
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
 { #category : 'Accessing' }
 SpecificTournamentView >> resultModal [
 
@@ -505,6 +496,7 @@ SpecificTournamentView >> resultModal: aModalView [
 	resultModal := aModalView
 ]
 
+{ #category : 'Accessing' }
 SpecificTournamentView >> rowsSpacing [
 
 	"<^hOf Number>"
@@ -513,8 +505,7 @@ SpecificTournamentView >> rowsSpacing [
 	^rowsSpacing
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> rowsSpacing: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -561,8 +552,7 @@ SpecificTournamentView >> saveWinnerEvent: anEvent [
 	self tournament playedGames remove: self game ifAbsent: [].
 	self tournament playedGames add: self game.
 	TournamentPlannerApp saveCollectionOfTournaments: TournamentPlannerApp collectionOfTournaments data.
-	self showSuccessNotificationWithMessage: ('Sieger %1 wird gespeichert' bindWith: theMemberName).
-	
+	self showSuccessNotificationWithMessage: ('Sieger %1 wird gespeichert' bindWith: theMemberName)
 ]
 
 { #category : 'Accessing' }
@@ -604,7 +594,7 @@ SpecificTournamentView >> setResultEvent: anEvent [
 	"<^self>"
 	"wip"	
 	
-	| theModalView theButton |
+	| theButton |
 	
 	self game: (self tournament games detect: [ :eachGame |
 		eachGame name = anEvent component parent parent title] ifNone: []).
@@ -695,8 +685,7 @@ SpecificTournamentView >> tournamentType: aString [
 	tournamentType := aString
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> width [
 
 	"<^hOf Number>"
@@ -705,8 +694,7 @@ SpecificTournamentView >> width [
 	^width
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> width: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
