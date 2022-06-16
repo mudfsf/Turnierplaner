@@ -235,7 +235,8 @@ SpecificTournamentView >> createLapsTournament [
 			ifTrue: [(collection1 at: 3) < (collection2 at: 3)]
 			ifFalse: [(collection1 at: 2) > (collection2 at: 2)]].
 	
-	self highestRankedMembers: (theSortedCollection first: 4).
+	self tournamentType = 'Mixed'
+		ifTrue: [self highestRankedMembers: (theSortedCollection first: 4)].
 	
 	theSortedCollection doWithIndex: [ :eachCollection :eachIndex |
 		theTableOfRanking addChildToBody: (Me5TableRow new
