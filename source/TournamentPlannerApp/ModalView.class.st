@@ -48,7 +48,7 @@ ModalView >> createComponents [
 	self modal 
 		title: self title;
 		addChildToHead: (Me5A newButtonIconOnly
-			icon: Me5I newFasArrowCircleUp;
+			icon: Me5I newLaRemove;
 			addClickEventSelector: #closeEvent eventReceiver: self;
 			yourself);
 		yourself.
