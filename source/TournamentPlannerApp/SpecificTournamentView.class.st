@@ -234,7 +234,9 @@ SpecificTournamentView >> createLapsTournament [
 		(collection1 at: 2) = (collection2 at: 2)
 			ifTrue: [(collection1 at: 3) < (collection2 at: 3)]
 			ifFalse: [(collection1 at: 2) > (collection2 at: 2)]].
-			
+	
+	self highestRankedMembers: (theSortedCollection first: 4).
+	
 	theSortedCollection doWithIndex: [ :eachCollection :eachIndex |
 		theTableOfRanking addChildToBody: (Me5TableRow new
 			addTableDataWithText: eachIndex;
@@ -469,21 +471,21 @@ SpecificTournamentView >> saveLapsWinnerEvent: anEvent [
 	self saveWinnerEvent: anEvent.
 	(self tournamentType = 'Mixed' and: [self haveLapsBeenPlayed])
 		ifTrue:[
-		| theNumberOfLaps theGame |
-		
-		theNumberOfLaps := (self tournament games select: [ :eachGame |
-			eachGame layer = 0
-			]) size.
-		theGame := (self tournament games at: (theNumberOfLaps + 1)). 
-		theGame memberCollection removeAll.
-		theGame memberCollection add: ((highestRankedMembers at: 1) at: 1).
-		theGame memberCollection add: ((highestRankedMembers at: 2) at: 1).
-		theGame name: ('%1 vs %2' bindWith: (theGame memberCollection at: 1) asString with: (theGame memberCollection at: 2) asString).
-		theGame := (self tournament games at: (theNumberOfLaps + 2)). 
-		theGame memberCollection removeAll.
-		theGame memberCollection add: ((highestRankedMembers at: 3) at: 1).
-		theGame memberCollection add: ((highestRankedMembers at: 4) at: 1).
-		theGame name: ('%1 vs %2' bindWith: (theGame memberCollection at: 1) asString with: (theGame memberCollection at: 2) asString).].
+			| theNumberOfLaps theGame |
+			
+			theNumberOfLaps := (self tournament games select: [ :eachGame |
+				eachGame layer = 0
+				]) size.
+			theGame := (self tournament games at: (theNumberOfLaps + 1)). 
+			theGame memberCollection removeAll.
+			theGame memberCollection add: ((highestRankedMembers at: 1) at: 1).
+			theGame memberCollection add: ((highestRankedMembers at: 2) at: 1).
+			theGame name: ('%1 vs %2' bindWith: (theGame memberCollection at: 1) asString with: (theGame memberCollection at: 2) asString).
+			theGame := (self tournament games at: (theNumberOfLaps + 2)). 
+			theGame memberCollection removeAll.
+			theGame memberCollection add: ((highestRankedMembers at: 3) at: 1).
+			theGame memberCollection add: ((highestRankedMembers at: 4) at: 1).
+			theGame name: ('%1 vs %2' bindWith: (theGame memberCollection at: 1) asString with: (theGame memberCollection at: 2) asString).].
 		
 	self tournamentDrawingArea parent removeChild: self tournamentDrawingArea ifAbsent: [].
 	self setDrawingArea.
