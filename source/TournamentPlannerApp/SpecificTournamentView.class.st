@@ -487,6 +487,24 @@ SpecificTournamentView >> offsetY: aNumber [
 
 { #category : 'Accessing',
   #vaVisibility : 'private' }
+{ #category : 'Accessing' }
+SpecificTournamentView >> resultModal [
+
+	"<^iOf ModalView>"
+	"Answer the resultModal of the receiver"
+
+	^resultModal
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> resultModal: aModalView [
+
+	"<aModalView: iOf ModalView, ^self>"
+	"Set the resultModal of the receiver"
+
+	resultModal := aModalView
+]
+
 SpecificTournamentView >> rowsSpacing [
 
 	"<^hOf Number>"
@@ -510,7 +528,9 @@ SpecificTournamentView >> saveKOWinnerEvent: anEvent [
 
 	self saveWinnerEvent: anEvent.
 	self tournamentDrawingArea parent removeChild: self tournamentDrawingArea ifAbsent: [].
-	self setDrawingArea
+	self setDrawingArea.
+	self resultModal closeModal.
+	self reloadViewBySourceView: self
 ]
 
 { #category : 'Events' }
@@ -541,7 +561,8 @@ SpecificTournamentView >> saveWinnerEvent: anEvent [
 	self tournament playedGames remove: self game ifAbsent: [].
 	self tournament playedGames add: self game.
 	TournamentPlannerApp saveCollectionOfTournaments: TournamentPlannerApp collectionOfTournaments data.
-	self showSuccessNotificationWithMessage: ('Sieger %1 wird gespeichert' bindWith: theMemberName)
+	self showSuccessNotificationWithMessage: ('Sieger %1 wird gespeichert' bindWith: theMemberName).
+	
 ]
 
 { #category : 'Accessing' }
@@ -588,11 +609,11 @@ SpecificTournamentView >> setResultEvent: anEvent [
 	self game: (self tournament games detect: [ :eachGame |
 		eachGame name = anEvent component parent parent title] ifNone: []).
 		
-	theModalView := ModalView new title: 'Ergebnis'.
+	self resultModal: (ModalView new title: 'Ergebnis').
 	
 	self game resultCollection size = 0
 		ifTrue: [
-			theModalView body: (Me5Form new
+			self resultModal body: (Me5Form new
 				addChildToBody: (Me5SelectBox new
 					text: 'Sieger';
 					noneObject: 'Kein Sieger festgelegt';
@@ -601,7 +622,7 @@ SpecificTournamentView >> setResultEvent: anEvent [
 					yourself);
 				yourself)]
 		ifFalse: [
-				theModalView body: (Me5Form new
+				self resultModal body: (Me5Form new
 					addChildToBody: (Me5SelectBox new
 						text: 'Sieger';
 						disableNoneObject;
@@ -615,9 +636,9 @@ SpecificTournamentView >> setResultEvent: anEvent [
 		yourself.
 	self tournamentType = 'KO'
 		ifTrue: [theButton addClickEventSelector: #saveKOWinnerEvent: eventReceiver: self].
-	theModalView body addChildToBody: theButton.
+	self resultModal body addChildToBody: theButton.
 		
-	self openModal: theModalView
+	self openModal: self resultModal
 ]
 
 { #category : 'Accessing' }
