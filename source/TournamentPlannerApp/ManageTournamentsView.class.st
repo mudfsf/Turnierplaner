@@ -217,6 +217,7 @@ ManageTournamentsView >> createTournamentDivWithTournament: aTournament WithTour
 				fontSize: 'larger';
 				yourself);
 			setTargetBlank;
+			subTitle: (self winnerOfTournament: aTournament);
 			yourself);
 		yourself
 ]
@@ -445,6 +446,33 @@ ManageTournamentsView >> tournaments: aTournamentCollection [
 	"Set the tournaments of the receiver"
 
 	tournaments := aTournamentCollection
+]
+
+{ #category : 'Internal' }
+ManageTournamentsView >> winnerOfTournament: aTournament [
+
+	| theWinner theWinnerDictionary theMaxWins |
+	
+	aTournament playedGames size = aTournament games size 
+		ifTrue: [
+			theMaxWins := 0.
+			aTournament tournamentType class = LapsTournamentType 
+				ifTrue: [
+					theWinnerDictionary := Dictionary new.
+					aTournament playedGames do: [ :eachPlayedGame |
+						| winnerOfGame |
+						winnerOfGame := eachPlayedGame resultCollection first player asString.
+						(theWinnerDictionary at: winnerOfGame ifAbsentPut: 0) 
+							ifNotNil: [
+								theWinnerDictionary at: winnerOfGame put: (theWinnerDictionary at: winnerOfGame) asInteger + 1].
+						theMaxWins < (theWinnerDictionary at: winnerOfGame) asInteger
+							ifTrue: [
+								theMaxWins := (theWinnerDictionary at: winnerOfGame) asInteger.
+								theWinner := 'Sieger: ', winnerOfGame]]]
+				ifFalse: [
+					theWinner := 'Sieger: ', (aTournament playedGames last resultCollection first player asString)].
+		].
+	^theWinner.
 ]
 
 { #category : 'Events' }
