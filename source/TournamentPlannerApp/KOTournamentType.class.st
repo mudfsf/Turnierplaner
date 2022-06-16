@@ -46,7 +46,7 @@ KOTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 	self layer: 0;
 		gameCollection: OrderedCollection new;
 		yourself.
-	^self recGetCollectionOfGamesWithMembers: aCollectionOfMembers
+	^self recGetCollectionOfGamesWithMembers: (aCollectionOfMembers copy)
 ]
 
 { #category : 'API',
@@ -124,17 +124,18 @@ KOTournamentType >> recGetCollectionOfGamesWithMembers: aCollectionOfMembers [
 			memberCollection: OrderedCollection new;
 			name: '';
 			yourself.	
-		theCurrentMember := aCollectionOfMembers at: eachIndex.
+		theCurrentMember := aCollectionOfMembers at: 2 * eachIndex - 1.
 		theCurrentGame memberCollection add: theCurrentMember.
 		theCurrentGame name: ('%1' bindWith: theCurrentMember asString).
 		
-		theCurrentMember := aCollectionOfMembers at: aCollectionOfMembers size +1 - eachIndex.
+		"aCollectionOfMembers size +1 - eachIndex"
+		theCurrentMember := aCollectionOfMembers at: 2 * eachIndex.
 		theCurrentGame memberCollection add: theCurrentMember.
 		theCurrentGame	name: ('%1 vs %2' bindWith: theCurrentGame name with: theCurrentMember asString).
 			
 		self gameCollection add: theCurrentGame.
 		theRecursiveParamListCollectionOfGames add: (theCurrentMember class 
-			newWithName: ('Spiel %1' bindWith:  theCurrentGame name))].
+			newWithName: '-')].
 	
 	theHasToContinueBoolean 
 		ifTrue: [^self recGetCollectionOfGamesWithMembers: theRecursiveParamListCollectionOfGames]

@@ -72,7 +72,7 @@ SpecificTournamentView >> createComponents [
 { #category : 'Internal' }
 SpecificTournamentView >> createKOTournament [
 
-	"<^self>"
+	"<^hOf Me5Div>"
 	"creates Tournaments with KOTournamentType"
 	
 	| theResultDiv theScroller theLines |
@@ -107,12 +107,34 @@ SpecificTournamentView >> createKOTournament [
 						yourself);
 					yourself).
 					
+				eachGame resultCollection size > 0
+					ifTrue: [
+						thePortlet subTitle: ('Sieger: %1' bindWith: eachGame resultCollection first player asString).
+						theButton disable].
+					
 				eachLayer > 1 
 					ifTrue: [
-						| theIndex |
+						| theIndex theMember1 theMember2 theObjectsOfSelectBox |
+						
+						theMember1 := '- '.
+						theMember2 := ' - '.
+						
 						theIndex := (eachLayer * (eachLayer - 1)) * eachIndex.
 						theTop := (((theLines at: theIndex -1) at: 1) y + ((theLines at: theIndex) at: 1) y) / 2.
-
+						
+						eachGame memberCollection removeAll.
+					
+						(self tournament games at: (theIndex - 1) ) resultCollection isEmptyOrNil
+							ifFalse: [
+								theMember1 := (self tournament games at: (theIndex - 1)) resultCollection first player asString.
+								eachGame memberCollection add: (self tournament games at: (theIndex - 1)) resultCollection first player].	
+						(self tournament games at: theIndex) resultCollection isEmptyOrNil
+							ifFalse: [
+								theMember2 := (self tournament games at: theIndex ) resultCollection first player asString.
+								eachGame memberCollection add: (self tournament games at: theIndex) resultCollection first player].
+							
+						eachGame name: ('%1 vs %2' bindWith: theMember1 with: theMember2).
+												
 						(theLines at: theIndex - 1)
 							at: 2 put: (Point new
 								x: theLeft;
@@ -508,6 +530,8 @@ SpecificTournamentView >> saveWinnerEvent: anEvent [
 	theMember := self game memberCollection reject: [:eachMember |
 		eachMember asString = theMemberName].
 		
+	self tournament playedGames add: self game.	
+	
 	theResultCollection := OrderedCollection new	
 		add: (Result newWithPlayer: theWinnerMember ranking: 1 points: 2);
 		add: (Result newWithPlayer: theMember first ranking: 2 points: 1);
