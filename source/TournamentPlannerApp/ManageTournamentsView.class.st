@@ -206,8 +206,8 @@ ManageTournamentsView >> createTournamentDivWithTournament: aTournament WithTour
 				href: ('TurnierplanerView/specificTournament?tournamentName=%1&tournamentType=%2' bindWith: aTournament name with: aString);
 				yourself);
 			addChildToFoot:  (Me5ProgressBar newPrimary
-				value: (aTournament playedGames size 
-					/ aTournament games size * 100) asInteger;
+				value: ((aTournament playedGames size 
+					/ aTournament games size)*100) asInteger;
 				height: 20;
 				setPrimaryStyle;
 				yourself);

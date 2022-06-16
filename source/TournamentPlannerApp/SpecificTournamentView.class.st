@@ -13,7 +13,8 @@ Class {
 		'height',
 		'rowsSpacing',
 		'columnSpacing',
-		'resultModal'
+		'resultModal',
+		'highestRankedMembers'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -357,8 +358,25 @@ SpecificTournamentView >> height: aNumber [
 	height := aNumber
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
+SpecificTournamentView >> highestRankedMembers [
+
+	"<^hOf Collection of: {iOf Member}>"
+	"Answer the highestRankedMembers of the receiver"
+
+	^highestRankedMembers
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> highestRankedMembers: aCollection [
+
+	"<aCollection: hOf Collection of: {iOf Member}, ^self>"
+	"Set the highestRankedMembers of the receiver"
+
+	highestRankedMembers := aCollection
+]
+
+{ #category : 'Accessing' }
 SpecificTournamentView >> offsetX [
 
 	"<^hOf Number>"
@@ -449,6 +467,24 @@ SpecificTournamentView >> saveKOWinnerEvent: anEvent [
 SpecificTournamentView >> saveLapsWinnerEvent: anEvent [
 
 	self saveWinnerEvent: anEvent.
+	(self tournamentType = 'Mixed' and: [self haveLapsBeenPlayed])
+		ifTrue:[
+		| theNumberOfLaps theGame |
+		
+		theNumberOfLaps := (self tournament games select: [ :eachGame |
+			eachGame layer = 0
+			]) size.
+		theGame := (self tournament games at: (theNumberOfLaps + 1)). 
+		theGame memberCollection removeAll.
+		theGame memberCollection add: ((highestRankedMembers at: 1) at: 1).
+		theGame memberCollection add: ((highestRankedMembers at: 2) at: 1).
+		theGame name: ('%1 vs %2' bindWith: (theGame memberCollection at: 1) asString with: (theGame memberCollection at: 2) asString).
+		theGame := (self tournament games at: (theNumberOfLaps + 2)). 
+		theGame memberCollection removeAll.
+		theGame memberCollection add: ((highestRankedMembers at: 3) at: 1).
+		theGame memberCollection add: ((highestRankedMembers at: 4) at: 1).
+		theGame name: ('%1 vs %2' bindWith: (theGame memberCollection at: 1) asString with: (theGame memberCollection at: 2) asString).].
+		
 	self tournamentDrawingArea parent removeChild: self tournamentDrawingArea ifAbsent: [].
 	self setDrawingArea.
 	self resultModal closeModal.

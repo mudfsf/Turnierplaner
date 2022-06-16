@@ -107,7 +107,8 @@ TournamentPlannerView >> dashboardTab [
 	theIndexOfFirstUncompletedTournament := TournamentPlannerApp collectionOfTournaments data findFirst: [ :eachTournament |
 			eachTournament games size ~= eachTournament playedGames size ].
 	
-	(TournamentPlannerApp collectionOfTournaments data isEmpty or: [ theIndexOfFirstUncompletedTournament = 0 ])
+	"(TournamentPlannerApp collectionOfTournaments data isEmpty or: [ theIndexOfFirstUncompletedTournament = 0 ])"
+	true
 		ifTrue: [ 
 			theNeededPlayer := nil. 
 			theTextActualTournament := Me5H5 new text: ('Turnier: -').
