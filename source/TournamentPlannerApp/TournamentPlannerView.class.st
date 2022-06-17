@@ -107,8 +107,7 @@ TournamentPlannerView >> dashboardTab [
 	theIndexOfFirstUncompletedTournament := TournamentPlannerApp collectionOfTournaments data findFirst: [ :eachTournament |
 			eachTournament games size ~= eachTournament playedGames size ].
 	
-	"(TournamentPlannerApp collectionOfTournaments data isEmpty or: [ theIndexOfFirstUncompletedTournament = 0 ])"
-	true
+	(TournamentPlannerApp collectionOfTournaments data isEmpty or: [ theIndexOfFirstUncompletedTournament = 0 ])
 		ifTrue: [ 
 			theNeededPlayer := nil. 
 			theTextActualTournament := Me5H5 new text: ('Turnier: -').
@@ -129,7 +128,7 @@ TournamentPlannerView >> dashboardTab [
 			theTextTeamMatchesInTheTournament := Me5H6 new text: ('&Uuml;brige Spiele: %1' bindWith: (theNeededTournament games size - theNeededTournament playedGames size)).
 			theTextBestPlayerNowInTheTournament := Me5H5 new text: ('Spieler: %1' bindWith: theNeededPlayer asString).
 			theListofGamesfromNeededPlayer := theNeededTournament games select: [ :eachGame | 
-				(eachGame memberCollection first asString = theNeededPlayer asString ) or: [ eachGame memberCollection last asString = theNeededPlayer asString ] ]. 
+				((eachGame memberCollection at: 1 ifAbsent: ['']) asString = theNeededPlayer asString ) or: [(eachGame memberCollection at: 2 ifAbsent: [''])  asString = theNeededPlayer asString ] ]. 
 			theListofGamesfromNeededPlayerPlayed := theNeededTournament playedGames select: [ :eachGame | 
 				(eachGame memberCollection first asString = theNeededPlayer asString ) or: [ eachGame memberCollection last asString = theNeededPlayer asString ] ].
 			progressBarTournament := 100 * theNeededTournament playedGames size / theNeededTournament games size. 
