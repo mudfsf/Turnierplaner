@@ -101,14 +101,19 @@ TournamentPlannerView >> createModules [
 { #category : 'Internal' }
 TournamentPlannerView >> dashboardTab [
 
-	| theDashboard theTextNextGame theTextActualTournament theTextActualMatch theTextRunningTournaments theTextBestTeamNowInTheTournament theTextTeamMatchesInTheTournament 
-	theTextBestPlayerNowInTheTournament theTextPlayerMatchesInTheTournament theTextForBets theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets 
-	theNeededTournament theNeededPlayer theListofGamesfromNeededPlayer theListofGamesfromNeededPlayerPlayed progressBarTournament progressBarPlayer theCollectionOfNotPlayedGamesFromNeededPlayer theIndexOfFirstUncompletedTournament|
+	| theDashboard theTextNextGame theTextActualTournament theTextActualMatch theTextRunningTournaments theTextBestTeamNowInTheTournament theTextTeamMatchesInTheTournament 	theTextBestPlayerNowInTheTournament 
+	theTextPlayerMatchesInTheTournament theTextForBets theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets progressBarTournament progressBarPlayer
+	theNeededTournament theNeededPlayer theListofGamesfromNeededPlayer theListofGamesfromNeededPlayerPlayed theCollectionOfNotPlayedGamesFromNeededPlayer theIndexOfFirstUncompletedTournament theIndexOfThePlayersTournament|
+	
+	theNeededPlayer := TournamentPlannerApp loggedInUser.
 	
 	theIndexOfFirstUncompletedTournament := TournamentPlannerApp collectionOfTournaments data findFirst: [ :eachTournament |
-			eachTournament games size ~= eachTournament playedGames size ].
+			eachTournament games size ~= eachTournament playedGames size].
 	
-	(TournamentPlannerApp collectionOfTournaments data isEmpty or: [ theIndexOfFirstUncompletedTournament = 0 ])
+	theIndexOfThePlayersTournament := TournamentPlannerApp collectionOfTournaments data findFirst: [ :eachTournament |
+			eachTournament games size ~= eachTournament playedGames size and: [ eachTournament membercollection includes: theNeededPlayer] ].
+	
+	(TournamentPlannerApp collectionOfTournaments data isEmpty or: [ theIndexOfThePlayersTournament = 0 ])
 		ifTrue: [ 
 			theNeededPlayer := nil. 
 			theTextActualTournament := Me5H5 new text: ('Turnier: -').
@@ -121,9 +126,8 @@ TournamentPlannerView >> dashboardTab [
 			theListofGamesfromNeededPlayerPlayed := 1. 
 			progressBarTournament := 0. 
 			progressBarPlayer := 0 ]
-		ifFalse: [ 
-			theNeededTournament := TournamentPlannerApp collectionOfTournaments data at: theIndexOfFirstUncompletedTournament.	"ToDo: find not completed Tournaments."
-			theNeededPlayer := theNeededTournament membercollection last.	"ToDo: load logged User. Temporaly not availabe."
+		ifFalse: [ 		
+			theNeededTournament := TournamentPlannerApp collectionOfTournaments data at: theIndexOfThePlayersTournament.			
 			theTextActualTournament := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name). 			
 			theTextBestTeamNowInTheTournament := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name). 
 			theTextTeamMatchesInTheTournament := Me5H6 new text: ('&Uuml;brige Spiele: %1' bindWith: (theNeededTournament games size - theNeededTournament playedGames size)).
@@ -132,21 +136,20 @@ TournamentPlannerView >> dashboardTab [
 				((eachGame memberCollection at: 1 ifAbsent: ['']) asString = theNeededPlayer asString ) or: [(eachGame memberCollection at: 2 ifAbsent: [''])  asString = theNeededPlayer asString ] ]. 
 			theListofGamesfromNeededPlayerPlayed := theNeededTournament playedGames select: [ :eachGame | 
 				(eachGame memberCollection first asString = theNeededPlayer asString ) or: [ eachGame memberCollection last asString = theNeededPlayer asString ] ].
-			progressBarTournament := 100 * theNeededTournament playedGames size / theNeededTournament games size. 
+			progressBarTournament := 100 * theNeededTournament playedGames size / theNeededTournament games size.				
 			progressBarPlayer := 100 * theListofGamesfromNeededPlayerPlayed size / theListofGamesfromNeededPlayer size.
 			theTextPlayerMatchesInTheTournament := Me5H6 new text: ('&Uuml;brige Spiele: %1' bindWith: theListofGamesfromNeededPlayer size - theListofGamesfromNeededPlayerPlayed size ) .
-			theListofGamesfromNeededPlayerPlayed isEmpty
-				ifTrue: [
-					theTextActualMatch := Me5H5 new text: ('Spiel: %1' bindWith: theListofGamesfromNeededPlayer first name)] 
-				ifFalse: [
-					theCollectionOfNotPlayedGamesFromNeededPlayer := theListofGamesfromNeededPlayer select: [ :eachGame |
-						(eachGame name = (theListofGamesfromNeededPlayerPlayed atIndex: (theListofGamesfromNeededPlayerPlayed findFirst: [ :eachGame2 |
-							eachGame name = eachGame2 name])) name) not].
-					theCollectionOfNotPlayedGamesFromNeededPlayer isEmpty
-						ifTrue: [
-							theTextActualMatch := Me5H5 new text: ('Spiel: -').
-						] ifFalse: [
-							theTextActualMatch := Me5H5 new text: ('Spiel: %1' bindWith: theCollectionOfNotPlayedGamesFromNeededPlayer first name)]]].	
+				theListofGamesfromNeededPlayerPlayed isEmpty
+					ifTrue: [
+						theTextActualMatch := Me5H5 new text: ('Spiel: %1' bindWith: theListofGamesfromNeededPlayer first name)] 
+					ifFalse: [
+						theCollectionOfNotPlayedGamesFromNeededPlayer := theListofGamesfromNeededPlayer select: [ :eachGame |
+							(eachGame name = (theListofGamesfromNeededPlayerPlayed atIndex: (theListofGamesfromNeededPlayerPlayed findFirst: [ :eachGame2 |
+								eachGame name = eachGame2 name])) name) not].
+						theCollectionOfNotPlayedGamesFromNeededPlayer isEmpty
+							ifTrue: [theTextActualMatch := Me5H5 new text: ('Spiel: -')] 
+							ifFalse: [
+								theTextActualMatch := Me5H5 new text: ('Spiel: %1' bindWith: theCollectionOfNotPlayedGamesFromNeededPlayer first name)]]].			
 	theTextNextGame := Me5H3 new text: 'N&auml;chstes Spiel f&uuml;r dich'.
 	theTextRunningTournaments := Me5H3 new text: 'Laufende Turniere'.	
 	theTextForBets := Me5H3 new text: 'Wetten'.		"ToDo: connect to implemented Bets."
