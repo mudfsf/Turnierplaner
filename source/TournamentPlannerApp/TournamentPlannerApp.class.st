@@ -3,6 +3,7 @@ Class {
 	#superclass : 'Application',
 	#classVars : [
 		'CollectionOfTournaments',
+		'LoggedInUser',
 		'CollectionOfTeams',
 		'CollectionOfPlayers',
 		'HttpServer'
@@ -119,6 +120,24 @@ TournamentPlannerApp class >> loadAll [
 		data: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat');
 		observerCollection: OrderedCollection new;
 		yourself)
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerApp class >> loggedInUser [
+
+	"<^iOf Player>"
+	"Answer the LoggedInUser of the receiver"
+
+	^LoggedInUser
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerApp class >> loggedInUser: aPlayer [
+
+	"<aPlayer: iOf Player, ^self>"
+	"Set the LoggedInUser of the receiver"
+
+	LoggedInUser := aPlayer
 ]
 
 { #category : 'API' }

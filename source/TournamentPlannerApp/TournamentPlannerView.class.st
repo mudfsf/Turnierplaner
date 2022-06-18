@@ -14,7 +14,8 @@ Class {
 		'modalMultiComboBoxTeamMembers',
 		'removeTeamEvent',
 		'radioGroupGameMode',
-		'radioGroupTournamentType'
+		'radioGroupTournamentType',
+		'playerCombobox'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -231,6 +232,24 @@ TournamentPlannerView >> modalTextFieldTeamName: aTextfield [
 	"Set the modalTextFieldTournamentName of the receiver"
 
 	modalTextFieldTeamName := aTextfield
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> playerCombobox [
+
+	"<^hOf Me5Combobox>"
+	"Answer the playerCombobox of the receiver"
+
+	^playerCombobox
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> playerCombobox: aMe5Combobox [
+
+	"<aMe5Combobox: hOf Me5Combobox, ^self>"
+	"Set the playerCombobox of the receiver"
+
+	playerCombobox := aMe5Combobox
 ]
 
 { #category : 'Accessing' }
@@ -459,18 +478,48 @@ TournamentPlannerView >> user: aPlayer [
 	user := aPlayer
 ]
 
+{ #category : 'Events' }
+TournamentPlannerView >> userSelectedEvent [
+
+	"^self"
+	"Saves the selected player into the logged-in User. This is only used before the log-in is implemented"
+	
+	| theUsername thePlayer|
+	
+	theUsername := self playerCombobox selectedObject.
+	
+	thePlayer := TournamentPlannerApp collectionOfPlayers data at: (TournamentPlannerApp collectionOfPlayers data findFirst: [ :eachPlayer |
+		eachPlayer asString = theUsername]) ifAbsent: [ self showErrorNotificationWithMessage: 'Ein Fehler ist aufgetreten, bitte die Seite neuladen'. ^self].
+
+	
+
+	self user: thePlayer.
+	TournamentPlannerApp loggedInUser: thePlayer.
+	
+	self showSuccessNotificationWithMessage: ('Eingeloggter user: %1' bindWith: thePlayer asString).
+	self reloadViewBySourceView: self
+]
+
 { #category : 'Internal' }
 TournamentPlannerView >> userSettingsTab [
 
 	"<^hOf Me5Div>"
 	"Sends the userSettings Tab to the receiver"
 
-	| thePlayer |
-
-	(self user isNil)
-		ifTrue: [
-			thePlayer := Player newWithFirstName: 'Max' lastName: 'Muster'  email: 'max.muster@gmail.com'.
-			self user:thePlayer].
+	(TournamentPlannerApp loggedInUser isNil)
+		ifTrue: [self user: TournamentPlannerApp collectionOfPlayers data first]
+		ifFalse: [self user: TournamentPlannerApp loggedInUser].
+			
+	self playerCombobox: (Me5ComboBox new
+					text: 'Benutzer ausw&auml;len';			
+					objects: (TournamentPlannerApp collectionOfPlayers data collect: [ :eachPlayer |
+						eachPlayer asString]);
+					selectedObject: self user asString;
+					addChangeEventSelector: #userSelectedEvent eventReceiver: self;
+					addCssClassColLg6;
+					addCssClassCol12;
+					yourself).
+			
 	^Me5Div new
 		addChild: (Me5H1 new 
 			text: 'Einstellungen';
@@ -506,6 +555,7 @@ TournamentPlannerView >> userSettingsTab [
 						addCssClassColLg6;
 						addCssClassCol12;
 						yourself);
+					addChild: self playerCombobox;
 					yourself);
 				addChildToRow: (Me5Button newPrimary
 					text: 'Speichern';
