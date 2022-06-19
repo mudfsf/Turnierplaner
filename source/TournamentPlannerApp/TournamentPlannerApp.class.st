@@ -112,6 +112,8 @@ TournamentPlannerApp class >> loadAll [
 		data: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\players.dat');
 		observerCollection: OrderedCollection new;
 		yourself).
+	self collectionOfPlayers data do: [:eachPlayer |
+		eachPlayer money = nil ifTrue: [eachPlayer money: 20]].
 	self collectionOfTeams: (MemoryData new
 		data: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\teams.dat');
 		observerCollection: OrderedCollection new;

@@ -3,6 +3,7 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'player',
+		'bettor',
 		'guess',
 		'stake'
 	],
@@ -20,6 +21,24 @@ Bet class >> newWithPlayer: aPlayer guess: aMetaResult stake: aDecimal [
 		guess: aMetaResult;
 		stake: aDecimal;
 		yourself
+]
+
+{ #category : 'Accessing' }
+Bet >> bettor [
+
+	"<^iOf Player>"
+	"Answer the bettor of the receiver"
+
+	^bettor
+]
+
+{ #category : 'Accessing' }
+Bet >> bettor: aBettor [
+
+	"<aBettor: iOf Player, ^self>"
+	"Set the bettor of the receiver"
+
+	bettor := aBettor
 ]
 
 { #category : 'Accessing' }

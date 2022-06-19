@@ -5,7 +5,8 @@ Class {
 		'firstName',
 		'lastName',
 		'email',
-		'symbol'
+		'symbol',
+		'money'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -41,7 +42,7 @@ Player >> = anObject [
 	"<anObject: hOf any, ^self>"
 	"Answer if @anObject is equal to the receiver."
 
-	^((self firstName = anObject firstName and: [self lastName = anObject lastName]) and: [self email = anObject email]) and: [self symbol = anObject symbol]
+	^(((self firstName = anObject firstName and: [self lastName = anObject lastName]) and: [self email = anObject email]) and: [self money = anObject money]) and: [self symbol = anObject symbol]
 ]
 
 { #category : 'API' }
@@ -105,6 +106,24 @@ Player >> lastName: aLastName [
 	"Set the lastName of the receiver"
 	
 	lastName := aLastName
+]
+
+{ #category : 'Accessing' }
+Player >> money [
+
+	"<^hOf Integer>"
+	"Answer the money of the receiver"
+
+	^money
+]
+
+{ #category : 'Accessing' }
+Player >> money: anInteger [
+
+	"<anInteger: hOf Integer, ^self>"
+	"Set the money of the receiver"
+
+	money := anInteger
 ]
 
 { #category : 'Accessing' }

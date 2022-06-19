@@ -4,9 +4,11 @@ Class {
 	#instVars : [
 		'layer',
 		'name',
+		'betCollection',
 		'memberCollection',
 		'resultCollection',
-		'isBuyBoolean'
+		'isBuyBoolean',
+		'moneyForWinners'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -22,6 +24,24 @@ Game class >> newWithName: aString layer: aNumber members: aCollection [
 		layer: aNumber;
 		members: aCollection;	
 		yourself
+]
+
+{ #category : 'Accessing' }
+Game >> betCollection [
+
+	"<^hOf Collection of: {iOf Bet}>"
+	"Answer the betCollection of the receiver"
+
+	^betCollection
+]
+
+{ #category : 'Accessing' }
+Game >> betCollection: anObject [
+
+	"<aCollectionOfBets: hOf Collection of: {iOf Bet}, ^self>"
+	"Set the betCollection of the receiver"
+
+	betCollection := anObject
 ]
 
 { #category : 'Accessing' }
@@ -76,6 +96,24 @@ Game >> memberCollection: aCollectionOfMembers [
 	"Set the memberCollection of the receiver"
 
 	memberCollection := aCollectionOfMembers
+]
+
+{ #category : 'Accessing' }
+Game >> moneyForWinners [
+
+	"<^hOf Integer>"
+	"Answer the moneyForWinners of the receiver"
+
+	^moneyForWinners
+]
+
+{ #category : 'Accessing' }
+Game >> moneyForWinners: anInteger [
+
+	"<anInteger: hOf Integer, ^self>"
+	"Set the moneyForWinners of the receiver"
+
+	moneyForWinners := anInteger
 ]
 
 { #category : 'Accessing' }

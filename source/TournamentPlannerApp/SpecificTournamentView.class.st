@@ -2,6 +2,7 @@ Class {
 	#name : 'SpecificTournamentView',
 	#superclass : 'Me5BaseView',
 	#instVars : [
+		'user',
 		'tournamentDrawingArea',
 		'selectBoxPlayers',
 		'game',
@@ -108,6 +109,7 @@ SpecificTournamentView >> createKOTournament: canInitialGamesBePlayedBoolean [
 						yourself);
 					addChildToFoot: (Me5Button newSuccess
 						text: 'Wetten';
+						addClickEventSelector: #setKOBetEvent:;
 						yourself);
 					yourself).
 				
@@ -379,7 +381,8 @@ SpecificTournamentView >> highestRankedMembers: aCollection [
 	highestRankedMembers := aCollection
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetX [
 
 	"<^hOf Number>"
@@ -454,6 +457,39 @@ SpecificTournamentView >> rowsSpacing: aNumber [
 	"Set the rowsSpacing of the receiver"
 
 	rowsSpacing := aNumber
+]
+
+{ #category : 'Events' }
+SpecificTournamentView >> saveBetEvent: anEvent [
+
+	
+	| theMemberName theWinnerMember theResultCollection theStake |
+	
+	self game resultCollection size = 1
+		ifTrue: [^self].
+	theMemberName := anEvent component parent children second value.
+	theMemberName = 'Kein Sieger festgelegt'
+		ifTrue: [self showErrorNotificationWithMessage: 'Bitte Sieger ausw&auml;hlen'.
+			^self].
+	theWinnerMember := self game memberCollection detect: [:eachMember |
+		eachMember asString = theMemberName] ifNone: [].
+	theStake := anEvent component parent children third value.
+	self user money < (theStake asInteger) 
+		ifTrue: [self showErrorNotificationWithMessage: 'Du hast nicht genug Geld'.
+			^self].
+	
+	self game betCollection ifEmptyOrNil: [self game betCollection: OrderedCollection new].
+	self game betCollection add: (Bet new
+		bettor: self user;
+		guess: theWinnerMember;
+		stake: theStake asInteger;
+		yourself).
+	self user money: (self user money) - (theStake asInteger). 
+	
+	TournamentPlannerApp saveCollectionOfPlayers: TournamentPlannerApp collectionOfPlayers data.
+	TournamentPlannerApp saveCollectionOfTournaments: TournamentPlannerApp collectionOfTournaments data.
+	self resultModal closeModal.
+	self showSuccessNotificationWithMessage: ('Wette auf den Spieler %1 wird gespeichert' bindWith: theMemberName)
 ]
 
 { #category : 'Events' }
@@ -543,6 +579,53 @@ SpecificTournamentView >> selectBoxPlayers: aMe5SelectBox [
 	selectBoxPlayers := aMe5SelectBox
 ]
 
+{ #category : 'Events' }
+SpecificTournamentView >> setBetEvent [
+
+	"<^self>"
+	"wip"	
+	
+	| theButton |
+	
+	self user: TournamentPlannerApp loggedInUser.
+	
+	self resultModal: (ModalView new title: 'Wetten').
+	
+	self game resultCollection size = 0
+		ifTrue: [
+			self resultModal body: (Me5Form new
+				addChildToBody: (Me5P new
+					text: ('Guthaben von %1: %2' bindWith: self user asString with: self user money);
+					yourself);
+				addChildToBody: (Me5SelectBox new
+					text: 'Sieger';
+					noneObject: 'Kein Sieger festgelegt';
+					objects: (self game memberCollection collect: [ :eachMember | 
+						eachMember asString]);
+					yourself);
+				addChildToBody: (Me5IntegerField new
+					text: 'Einsatz (in &euro;)';
+					yourself);
+				yourself)]
+		ifFalse: [
+				self resultModal body: (Me5Form new
+					addChildToBody: (Me5SelectBox new
+						text: 'Sieger';
+						disableNoneObject;
+						objects: (self game resultCollection collect: [ :eachResult | 
+							eachResult player asString]);
+						yourself);
+					yourself)].
+	theButton := (Me5Button newPrimary
+		text: 'Speichern';
+		addClickEventSelector: #saveBetEvent: eventReceiver: self;
+		icon: Me5I newFasSave;
+		yourself).
+	self resultModal body addChildToBody: theButton.
+		
+	self openModal: self resultModal
+]
+
 { #category : 'Internal' }
 SpecificTournamentView >> setDrawingArea [
 	
@@ -559,6 +642,16 @@ SpecificTournamentView >> setDrawingArea [
 ]
 
 { #category : 'Events' }
+SpecificTournamentView >> setKOBetEvent: anEvent [
+
+	"<^self>"
+		
+	self game: (self tournament games detect: [ :eachGame |
+		eachGame name = anEvent component parent parent title] ifNone: []).
+	self setBetEvent
+]
+
+{ #category : 'Events' }
 SpecificTournamentView >> setKOResultEvent: anEvent [
 
 	"<^self>"
@@ -566,6 +659,17 @@ SpecificTournamentView >> setKOResultEvent: anEvent [
 	self game: (self tournament games detect: [ :eachGame |
 		eachGame name = anEvent component parent parent title] ifNone: []).
 	self setResultEvent
+]
+
+{ #category : 'Events' }
+SpecificTournamentView >> setLapsBetEvent: anEvent [
+
+	"<^self>"
+		
+	self game: anEvent loadingTableTableRowObject.
+	self game resultCollection isEmptyOrNil
+		ifFalse: [^self].
+	self setBetEvent
 ]
 
 { #category : 'Events' }
@@ -673,6 +777,24 @@ SpecificTournamentView >> tournamentType: aString [
 	"Set the tournamentType of the receiver"
 
 	tournamentType := aString
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> user [
+
+	"<^iOf Player>"
+	"Answer the player of the receiver"
+
+	^user
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> user: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the user of the receiver"
+
+	user := anObject
 ]
 
 { #category : 'Accessing',
