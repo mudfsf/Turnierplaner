@@ -107,7 +107,7 @@ TournamentPlannerView >> dashboardTab [
 	
 	theNeededPlayer := TournamentPlannerApp loggedInUser.
 	
-	theNeededPlayer isEmptyOrNil
+	theNeededPlayer isNil
 		ifTrue: [theNeededPlayer := TournamentPlannerApp collectionOfPlayers data last].
 	
 	theIndexOfFirstUncompletedTournament := TournamentPlannerApp collectionOfTournaments data findFirst: [ :eachTournament |
