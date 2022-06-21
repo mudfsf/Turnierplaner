@@ -101,6 +101,8 @@ TournamentPlannerView >> createModules [
 { #category : 'Internal' }
 TournamentPlannerView >> dashboardTab [
 
+	"<^self>"
+
 	| theDashboard theTextNextGame theTextActualTournament theTextActualMatch theTextRunningTournaments theTextBestTeamNowInTheTournament theTextTeamMatchesInTheTournament 	theTextBestPlayerNowInTheTournament 
 	theTextPlayerMatchesInTheTournament theTextForBets theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets progressBarTournament progressBarPlayer
 	theNeededTournament theNeededPlayer theListofGamesfromNeededPlayer theListofGamesfromNeededPlayerPlayed theCollectionOfNotPlayedGamesFromNeededPlayer theIndexOfFirstUncompletedTournament theIndexOfThePlayersTournament|
@@ -225,7 +227,7 @@ TournamentPlannerView >> modalMultiComboBoxTeamMembers: aMultiComboBox [
 { #category : 'Accessing' }
 TournamentPlannerView >> modalTextFieldTeamName [
 
-	"<^hOf Me5TextField>"
+	"<^iOf Me5TextField>"
 	"Answer the modalTextFieldTournamentName of the receiver"
 
 	^modalTextFieldTeamName
@@ -234,7 +236,7 @@ TournamentPlannerView >> modalTextFieldTeamName [
 { #category : 'Accessing' }
 TournamentPlannerView >> modalTextFieldTeamName: aTextfield [
 
-	"<aTextfield: hOf Me5TextField, ^self>"
+	"<aTextfield: iOf Me5TextField, ^self>"
 	"Set the modalTextFieldTournamentName of the receiver"
 
 	modalTextFieldTeamName := aTextfield
@@ -243,7 +245,7 @@ TournamentPlannerView >> modalTextFieldTeamName: aTextfield [
 { #category : 'Accessing' }
 TournamentPlannerView >> playerCombobox [
 
-	"<^hOf Me5Combobox>"
+	"<^iOf Me5Combobox>"
 	"Answer the playerCombobox of the receiver"
 
 	^playerCombobox
@@ -252,7 +254,7 @@ TournamentPlannerView >> playerCombobox [
 { #category : 'Accessing' }
 TournamentPlannerView >> playerCombobox: aMe5Combobox [
 
-	"<aMe5Combobox: hOf Me5Combobox, ^self>"
+	"<aMe5Combobox: iOf Me5Combobox, ^self>"
 	"Set the playerCombobox of the receiver"
 
 	playerCombobox := aMe5Combobox
@@ -261,7 +263,7 @@ TournamentPlannerView >> playerCombobox: aMe5Combobox [
 { #category : 'Accessing' }
 TournamentPlannerView >> radioGroupGameMode [
 
-	"<^hOf Me5RadioGroup>"
+	"<^iOf Me5RadioGroup>"
 	"Answer the createTournamentRadioGroupGameMode of the receiver"
 
 	^radioGroupGameMode
@@ -270,7 +272,7 @@ TournamentPlannerView >> radioGroupGameMode [
 { #category : 'Accessing' }
 TournamentPlannerView >> radioGroupGameMode: aRadioGroup [
 
-	"<aRadioGroup: hOf Me5RadioGroup, ^self>"
+	"<aRadioGroup: iOf Me5RadioGroup, ^self>"
 	"Set the createTournamentRadioGroupGameMode of the receiver"
 
 	radioGroupGameMode := aRadioGroup
@@ -337,7 +339,7 @@ TournamentPlannerView >> tabsCollection [
 { #category : 'Accessing' }
 TournamentPlannerView >> teamsRow [
 
-	"<^hOf Me5Row>"
+	"<^iOf Me5Row>"
 	"Answer the tournamentRow of the receiver"
 
 	^teamsRow
@@ -346,7 +348,7 @@ TournamentPlannerView >> teamsRow [
 { #category : 'Accessing' }
 TournamentPlannerView >> teamsRow: aRowOfTeams [
 
-	"<aRowOfTeams: hOf Me5Row, ^self>"
+	"<aRowOfTeams: iOf Me5Row, ^self>"
 	"Set the tournamentRow of the receiver"
 
 	teamsRow := aRowOfTeams
@@ -355,7 +357,7 @@ TournamentPlannerView >> teamsRow: aRowOfTeams [
 { #category : 'Internal' }
 TournamentPlannerView >> teamsTab [
 
-	"<^hOf Me5Div>"
+	"<^iOf Me5Div>"
 	"Create the teamsTab where we can see and manage all teams"
 
 	| theTeamMemberDiv theResultDiv theTeamList theCollectionOfTeamMemberCollections thePersons textFieldTeamName multiComboBoxTeamMembers |
@@ -433,7 +435,7 @@ TournamentPlannerView >> teamsTab [
 { #category : 'Accessing' }
 TournamentPlannerView >> tournamentRow [
 
-	"<^hOf Me5Row>"
+	"<^iOf Me5Row>"
 	"Answer the tournamentRow of the receiver"
 
 	^tournamentRow
@@ -442,7 +444,7 @@ TournamentPlannerView >> tournamentRow [
 { #category : 'Accessing' }
 TournamentPlannerView >> tournamentRow: aTournamentRow [
 
-	"<aTournamentRow: hOf Me5Row, ^self>"
+	"<aTournamentRow: iOf Me5Row, ^self>"
 	"Set the tournamentRow of the receiver"
 
 	tournamentRow := aTournamentRow
@@ -509,7 +511,7 @@ TournamentPlannerView >> userSelectedEvent [
 { #category : 'Internal' }
 TournamentPlannerView >> userSettingsTab [
 
-	"<^hOf Me5Div>"
+	"<^iOf Me5Div>"
 	"Sends the userSettings Tab to the receiver"
 
 	(TournamentPlannerApp loggedInUser isNil)

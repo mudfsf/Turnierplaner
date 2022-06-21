@@ -86,7 +86,7 @@ TournamentPlannerApp class >> collectionOfTournaments: aCollectionOfTournaments 
 { #category : 'Accessing' }
 TournamentPlannerApp class >> httpServer [
 
-	"<^hOf HttpServer>"
+	"<^iOf HttpServer>"
 	"Answer the httpServer of the receiver"
 
 	^HttpServer
@@ -95,14 +95,13 @@ TournamentPlannerApp class >> httpServer [
 { #category : 'Accessing' }
 TournamentPlannerApp class >> httpServer: aHttpServer [
 
-	"<aHttpServer: hOf httpServer, ^self>"
+	"<aHttpServer: iOf httpServer, ^self>"
 	"Set the HttpServer of the receiver"
 
 	HttpServer := aHttpServer
 ]
 
-{ #category : 'Initials',
-  #vaVisibility : 'private' }
+{ #category : 'Initials' }
 TournamentPlannerApp class >> loadAll [
 
 	"^self"
