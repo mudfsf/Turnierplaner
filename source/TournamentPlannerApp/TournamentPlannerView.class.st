@@ -337,7 +337,9 @@ TournamentPlannerView >> tabsCollection [
 		add: (Me5Tab new
 			text: 'Teams';
 			icon: Me5FontAwesomeIconSolid newSmile;
-			addChildToTabPane: self teamsTab;
+			addChildToTabPane: (Me5ViewHolder new
+				holdingView: ManageTeamsView new
+				yourself);
 			yourself);
 		add: (Me5Tab new
 			text: 'Einstellungen';
