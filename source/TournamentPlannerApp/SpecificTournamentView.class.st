@@ -38,7 +38,32 @@ SpecificTournamentView >> beforeCreateComponents [
 		yourself
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Internal' }
+SpecificTournamentView >> calculateBetWinnings: aGame withWinner: aWinnerMember [
+
+	"calculates the winnings for each correct bettor and add the winnings to the players money"
+	
+	| theWageragedMoney theWinningBettors theWinningBettorsSize theMoneyForBettors |
+	
+	theWageragedMoney := 0.
+	theWinningBettors := OrderedCollection new.
+	
+	self game betCollection do: [:eachBet |
+		theWageragedMoney := theWageragedMoney + eachBet stake.
+		eachBet guess = aWinnerMember
+			ifTrue: [
+				theWinningBettors add: eachBet bettor]].
+	theWinningBettorsSize := theWinningBettors size.
+	theWinningBettorsSize > 0 ifTrue: [
+		theMoneyForBettors := ((theWageragedMoney / theWinningBettorsSize) - 
+			((theWageragedMoney modulo: theWinningBettorsSize) / theWinningBettorsSize)).
+		theWinningBettors do: [:eachWinningBettor |
+			eachWinningBettor money: eachWinningBettor money + theMoneyForBettors]]
+	
+]
+
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> columnSpacing [
 
 	"<^hOf Number>"
@@ -47,7 +72,8 @@ SpecificTournamentView >> columnSpacing [
 	^columnSpacing
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> columnSpacing: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -341,7 +367,8 @@ SpecificTournamentView >> haveLapsBeenPlayed [
 			eachGame resultCollection notEmptyAndNotNil]
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> height [
 
 	"<^hOf Number>"
@@ -350,7 +377,8 @@ SpecificTournamentView >> height [
 	^height
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> height: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -377,7 +405,8 @@ SpecificTournamentView >> highestRankedMembers: aCollection [
 	highestRankedMembers := aCollection
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetX [
 
 	"<^hOf Number>"
@@ -386,7 +415,8 @@ SpecificTournamentView >> offsetX [
 	^offsetX
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetX: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -395,7 +425,8 @@ SpecificTournamentView >> offsetX: aNumber [
 	offsetX := aNumber
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetY [
 
 	"<^hOf Number>"
@@ -404,7 +435,8 @@ SpecificTournamentView >> offsetY [
 	^offsetY
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetY: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -431,7 +463,8 @@ SpecificTournamentView >> resultModal: aModalView [
 	resultModal := aModalView
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> rowsSpacing [
 
 	"<^hOf Number>"
@@ -440,7 +473,8 @@ SpecificTournamentView >> rowsSpacing [
 	^rowsSpacing
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> rowsSpacing: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -476,7 +510,7 @@ SpecificTournamentView >> saveBetEvent: anEvent [
 		yourself).
 	self user money: (self user money) - (theStake asInteger). 
 	
-	TournamentPlannerApp saveCollectionOfPlayers: TournamentPlannerApp collectionOfPlayers data.
+	"TournamentPlannerApp saveCollectionOfPlayers: TournamentPlannerApp collectionOfPlayers data."
 	TournamentPlannerApp saveCollectionOfTournaments: TournamentPlannerApp collectionOfTournaments data.
 	self resultModal closeModal.
 	self showSuccessNotificationWithMessage: ('Wette auf den Spieler %1 wird gespeichert' bindWith: theMemberName)
@@ -545,6 +579,7 @@ SpecificTournamentView >> saveWinnerEvent: anEvent [
 		yourself.
 	self game resultCollection removeAll.
 	self game resultCollection addAll: theResultCollection.
+	self calculateBetWinnings: self game withWinner: theWinnerMember.
 	self tournament playedGames remove: self game ifAbsent: [].
 	self tournament playedGames add: self game.
 	TournamentPlannerApp saveCollectionOfTournaments: TournamentPlannerApp collectionOfTournaments data.
@@ -787,7 +822,8 @@ SpecificTournamentView >> user: anObject [
 	user := anObject
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> width [
 
 	"<^hOf Number>"
@@ -796,7 +832,8 @@ SpecificTournamentView >> width [
 	^width
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> width: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
