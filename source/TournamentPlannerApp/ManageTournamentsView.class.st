@@ -84,8 +84,9 @@ ManageTournamentsView >> createMe5Form [
 		addChildToBody: self radioGroupTournamentType;
 		addChildToBody: self radioGroupGameMode;
 		addChildToBody: self multiComboBoxRivals;
-		addChildToBody: (Me5Button newPrimary
-			text: 'erstellen';
+		addChildToBody: (Me5Button newSuccess
+			icon: Me5I newFasSave;
+			text: 'Speichern';
 			addClickEventSelector: #createTournament eventReceiver: self;
 			yourself);
 		yourself
