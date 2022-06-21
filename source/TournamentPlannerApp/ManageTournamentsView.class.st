@@ -68,17 +68,20 @@ ManageTournamentsView >> createMe5Form [
 	self radioGroupTournamentType: (Me5RadioGroup new
 		text: 'Turnierart';
 		addObjects: #('KO' 'Runden' 'Mixed');
+		selectObject: 'KO';
 		yourself).
 	self radioGroupGameMode: (Me5RadioGroup new
 		text: 'Spielmodus';
 		addObjects: #('Einzel' 'Team');
+		selectObject: 'Einzel';
 		addChangeEventSelector: #createRivalsMultiComboBox eventReceiver: self;
 		yourself).
 	self multiComboBoxRivals: (Me5Select2MultiSelectBox new
 		text: 'Rivalen';
-		objects: OrderedCollection new;
+		objects: (self getMemberCollection collect: [ :eachPlayer | 
+			eachPlayer asString])
 		yourself).
-		
+			
 	^Me5Form new
 		addChildToBody: self textFieldTournamentName;
 		addChildToBody: self radioGroupTournamentType;
@@ -120,15 +123,21 @@ ManageTournamentsView >> createTournament [
 
 	| theSelectedCollection theCollection theExistingTournament theSelectedAsStringCollection theTournamentType theTournamentTypeAsString theGames theCurrentTournament |
 	
+	 self textFieldTournamentName clearErrorText.
+	 self multiComboBoxRivals clearErrorText.
+	 
+	 self textFieldTournamentName value = ''
+		ifTrue: [self textFieldTournamentName setErrorText: 'Turnier hat keinen Namen'].
+	self multiComboBoxRivals selectedObjects size < 2
+		ifTrue: [self multiComboBoxRivals setErrorText: 'Turnier hat zu wenig Mitspieler'].
+
 	theSelectedAsStringCollection := OrderedCollection new.
 	theSelectedCollection := OrderedCollection new.	
 	theExistingTournament := self tournaments detect: [ :eachTournament |
 		eachTournament name = self textFieldTournamentName value] ifNone: [nil].
 	theExistingTournament 
 		ifNotNil: [
-			self showErrorNotificationWithMessage: ('Das Turnier mit dem Namen %1 exisistiert bereits...'
-				bindWith: theExistingTournament name).
-			^self].
+			self textFieldTournamentName setErrorText: 'Das Turnier exisitert bereits'].
 	self radioGroupGameMode value = 'Einzel'
 		ifTrue: [theCollection := TournamentPlannerApp collectionOfPlayers data].
 	self radioGroupGameMode value = 'Team'
@@ -146,18 +155,12 @@ ManageTournamentsView >> createTournament [
 			member asString = eachSelectable] ifNone: [].
 		theSelectedCollection add: theSelected.
 		theSelectedAsStringCollection add: theSelected asString].
-	theTournamentType class = MixedTournamentType 
-		ifTrue: [
-			theSelectedCollection size < 4
-			ifTrue: [
-				self showErrorNotificationWithMessage: ('Turnier hat zu wenig Mitspieler').
-				^self].
-		] ifFalse: [ 
-			theSelectedCollection size < 2
-			ifTrue: [
-				self showErrorNotificationWithMessage: ('Turnier hat zu wenig Mitspieler').
-				^self].
-		].
+	(theTournamentType class = MixedTournamentType and: [theSelectedCollection size < 4])
+		ifTrue: [			
+			self multiComboBoxRivals clearErrorText.
+			self multiComboBoxRivals setErrorText: 'Turnier hat zu wenig Mitspieler'].
+	(self multiComboBoxRivals hasErrorStyle or: [ self textFieldTournamentName hasErrorStyle])
+		ifTrue: [^self].
 	theGames := theTournamentType getCollectionOfGamesWithMembers: theSelectedCollection.
 	theCurrentTournament := (Tournament new
 		name: self textFieldTournamentName value;
@@ -172,7 +175,10 @@ ManageTournamentsView >> createTournament [
 		WithTournamenType: theTournamentTypeAsString
 		WithMembers: theSelectedAsStringCollection).
 	self tournaments add: theCurrentTournament.
-	TournamentPlannerApp saveCollectionOfTournaments: self tournaments
+	TournamentPlannerApp saveCollectionOfTournaments: self tournaments.
+	self textFieldTournamentName value: ''.
+	self multiComboBoxRivals deselectAllObjects.
+	self showSuccessNotificationWithMessage: ('Turnier %1 wurde erstellt!' bindWith: theCurrentTournament asString)
 ]
 
 { #category : 'Internal' }
@@ -388,7 +394,7 @@ ManageTournamentsView >> resetData [
 	
 	self members: TournamentPlannerApp collectionOfPlayers data.
 	self tournaments: TournamentPlannerApp collectionOfTournaments data.
-	self createRivalsMultiComboBox
+	"self createRivalsMultiComboBox"
 ]
 
 { #category : 'Accessing',
