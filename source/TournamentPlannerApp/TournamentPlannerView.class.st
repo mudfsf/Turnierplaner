@@ -30,15 +30,21 @@ TournamentPlannerView >> buttonNewTeam [
 	
 	theTeamMembers := OrderedCollection new.
 	theSingleTeamDiv := Me5Div new.
+	
+	self modalTextFieldTeamName clearErrorText.
+	self modalMultiComboBoxTeamMembers clearErrorText.
+	
 	self modalTextFieldTeamName value = ''
-		ifTrue: [
-			self showErrorNotificationWithMessage: 'Team hat keinen Namen'.
-			^self].
+		ifTrue: [self modalTextFieldTeamName setErrorText: 'Team hat keinen Namen'].
+	
+	self modalMultiComboBoxTeamMembers selectedObjects size<=0
+		ifTrue: [self modalMultiComboBoxTeamMembers setErrorText: 'Team hat zu wenig Mitglieder'].
+	
 	theExistingTeam := TournamentPlannerApp collectionOfTeams data detect: [ :eachTeam |
 		eachTeam teamName = self modalTextFieldTeamName value] ifNone: [nil].
 	theExistingTeam
 		ifNil: [
-			self modalMultiComboBoxTeamMembers value size>0
+			(self modalMultiComboBoxTeamMembers hasErrorStyle not and: [self modalTextFieldTeamName hasErrorStyle not])
 				ifTrue: [
 					self modalMultiComboBoxTeamMembers value do: [ :eachValue | 	
 						theTeamMembers add: eachValue.
@@ -62,10 +68,10 @@ TournamentPlannerView >> buttonNewTeam [
 						yourself).				
 					theTeam := Team newWithTeamName: (self modalTextFieldTeamName value ) players: theTeamMembers.
 					TournamentPlannerApp collectionOfTeams data add: theTeam.					
-					TournamentPlannerApp saveCollectionOfTeams: (TournamentPlannerApp collectionOfTeams data)]
-				ifFalse: [self showErrorNotificationWithMessage: 'Team hat zu wenig Mitglieder']]
-		ifNotNil: [self showErrorNotificationWithMessage: ('Das Team mit dem Namen %1 exisistiert bereits'
-			bindWith: theExistingTeam teamName)]
+					TournamentPlannerApp saveCollectionOfTeams: (TournamentPlannerApp collectionOfTeams data).
+					self modalTextFieldTeamName value: ''.
+					self modalMultiComboBoxTeamMembers deselectAllObjects]]
+		ifNotNil: [self modalTextFieldTeamName setErrorText: ('Das Team exisistiert bereits')]
 ]
 
 { #category : 'Initial-Events' }
