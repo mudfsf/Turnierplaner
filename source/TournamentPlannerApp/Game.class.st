@@ -14,7 +14,7 @@ Class {
 }
 
 { #category : 'API' }
-Game class >> newWithName: aString layer: aNumber members: aCollection [
+Game class >> newWithName: aString layer: aNumber memberCollection: aCollection [
 
 	"<aString : hOf String, aNumber: hOf Number, aCollection: hOf Collection of: {iOf Team/Players}, ^self>"
 	"Create instance of game with attributes"
@@ -22,7 +22,7 @@ Game class >> newWithName: aString layer: aNumber members: aCollection [
 	^self new
 		name: aString;
 		layer: aNumber;
-		members: aCollection;	
+		memberCollection: aCollection;	
 		yourself
 ]
 
