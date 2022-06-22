@@ -14,7 +14,7 @@ Class {
 { #category : 'API' }
 Player class >> newWithFirstName: aFirstNameString lastName: aLastNameString email: anEmailString [
 
-	"<aFirstNameString : hOF String, aLastNameString : hOF String, anEmailString : hOf String ^self>"
+	"<aFirstNameString : iOF String, aLastNameString : iOF String, anEmailString : iOf String ^self>"
 	"Create instance of game with attributes"
 	
 	^self new
@@ -27,7 +27,7 @@ Player class >> newWithFirstName: aFirstNameString lastName: aLastNameString ema
 { #category : 'API' }
 Player class >> newWithName: aString [
 
-	"<aString : hOF String, ^self>"
+	"<aString : iOF String, ^self>"
 	"Create instance of game with firstName @aString"
 
 	^self new 
@@ -39,7 +39,7 @@ Player class >> newWithName: aString [
 { #category : 'API' }
 Player >> = anObject [
 
-	"<anObject: hOf any, ^self>"
+	"<anObject: iOf any, ^self>"
 	"Answer if @anObject is equal to the receiver."
 
 	^(((self firstName = anObject firstName and: [self lastName = anObject lastName]) and: [self email = anObject email]) and: [self money = anObject money]) and: [self symbol = anObject symbol]
@@ -48,7 +48,7 @@ Player >> = anObject [
 { #category : 'API' }
 Player >> asString [
 
-	"<^hOf String>"
+	"<^iOf String>"
 	"Answer the receiver as a string"
 
 	^'%1 %2' bindWith: self firstName with: self lastName
@@ -57,7 +57,7 @@ Player >> asString [
 { #category : 'Accessing' }
 Player >> email [
 
-	"<^hOf String>"
+	"<^iOf String>"
 	"Answer the email of the receiver"
 	
 	^email
@@ -66,7 +66,7 @@ Player >> email [
 { #category : 'Accessing' }
 Player >> email: anEmail [
 
-	"<anEmail: hOf String, ^self>"
+	"<anEmail: iOf String, ^self>"
 	"Set the email of the receiver"
 
 	email := anEmail
@@ -75,7 +75,7 @@ Player >> email: anEmail [
 { #category : 'Accessing' }
 Player >> firstName [
 
-	"<^hOf String>"
+	"<^iOf String>"
 	"Answer the firstName of the receiver"
 	
 	^firstName
@@ -84,7 +84,7 @@ Player >> firstName [
 { #category : 'Accessing' }
 Player >> firstName: aFirstName [
 
-	"<aFirstName: hOf String, ^self>"
+	"<aFirstName: iOf String, ^self>"
 	"Set the firstName of the receiver"
 
 	firstName := aFirstName
@@ -93,7 +93,7 @@ Player >> firstName: aFirstName [
 { #category : 'Accessing' }
 Player >> lastName [
 
-	"<^hOf String>"
+	"<^iOf String>"
 	"Answer the lastName of the receiver"
 
 	^lastName
@@ -102,7 +102,7 @@ Player >> lastName [
 { #category : 'Accessing' }
 Player >> lastName: aLastName [
 
-	"<aLastName: hOf String, ^self>"
+	"<aLastName: iOf String, ^self>"
 	"Set the lastName of the receiver"
 	
 	lastName := aLastName
@@ -111,7 +111,7 @@ Player >> lastName: aLastName [
 { #category : 'Accessing' }
 Player >> money [
 
-	"<^hOf Integer>"
+	"<^hOf Number>"
 	"Answer the money of the receiver"
 
 	^money
@@ -120,7 +120,7 @@ Player >> money [
 { #category : 'Accessing' }
 Player >> money: anInteger [
 
-	"<anInteger: hOf Integer, ^self>"
+	"<anInteger: hOf Number, ^self>"
 	"Set the money of the receiver"
 
 	money := anInteger
@@ -129,7 +129,7 @@ Player >> money: anInteger [
 { #category : 'Accessing' }
 Player >> symbol [
 
-	"<^hOf Symbol>"
+	"<^iOf Symbol>"
 	"Answer the symbol of the receiver"
 
 	^symbol
@@ -138,7 +138,7 @@ Player >> symbol [
 { #category : 'Accessing' }
 Player >> symbol: aSymbolOrString [
 
-	"<aSymbolOrString: hOf Symbol | hOf String, ^self>"
+	"<aSymbolOrString: iOf Symbol | iOf String, ^self>"
 	"Set the symbol of the receiver"
 	
 	symbol := aSymbolOrString asSymbol

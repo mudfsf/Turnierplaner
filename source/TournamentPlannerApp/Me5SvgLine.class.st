@@ -27,6 +27,8 @@ Me5SvgLine >> htmlElementClass [
 { #category : 'Internal' }
 Me5SvgLine >> setAdditionalAttributesOfHtmlElement: aClwHtmlBaseElement [
 
+	"<^self>"
+
 	| theSvgElement |
 
 	super setAdditionalAttributesOfHtmlElement: aClwHtmlBaseElement.

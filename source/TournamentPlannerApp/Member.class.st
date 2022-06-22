@@ -7,7 +7,7 @@ Class {
 { #category : 'API' }
 Member class >> newWithName: aString [
 
-	"<aFirstNameString : hOF String, aLastNameString : hOF String, anEmailString : hOf String ^self>"
+	"<aFirstNameString : iOF String, aLastNameString : iOF String, anEmailString : iOf String ^self>"
 	"Create instance of game with attributes"
 	
 	^self subclassResponsibility
@@ -16,7 +16,7 @@ Member class >> newWithName: aString [
 { #category : 'API' }
 Member >> asString [
 
-	"<^hOf String>"
+	"<^iOf String>"
 	"Answer the receiver as a string"
 	
 	^self subclassResponsibility

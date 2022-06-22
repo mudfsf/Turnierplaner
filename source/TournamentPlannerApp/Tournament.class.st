@@ -24,7 +24,7 @@ Tournament class >> tournamentType: aTournamentType games: aListOfGames [
 { #category : 'Accessing' }
 Tournament >> gameMode [
 
-	"<^hOf String>"
+	"<^iOf String>"
 	"Answer the gameMode of the receiver"
 
 	^gameMode
@@ -33,7 +33,7 @@ Tournament >> gameMode [
 { #category : 'Accessing' }
 Tournament >> gameMode: aString [
 
-	"<aString: hOf String, ^self>"
+	"<aString: iOf String, ^self>"
 	"Set the gameMode of the receiver"
 
 	gameMode := aString
@@ -78,7 +78,7 @@ Tournament >> membercollection: aMemberCollection [
 { #category : 'Accessing' }
 Tournament >> name [
 
-	"<^hOf String>"
+	"<^iOf String>"
 	"Answer the name of the receiver"
 
 	^name
@@ -87,7 +87,7 @@ Tournament >> name [
 { #category : 'Accessing' }
 Tournament >> name: aString [
 
-	"<aString: hOf String, ^self>"
+	"<aString: iOf String, ^self>"
 	"Set the name of the receiver"
 
 	name := aString

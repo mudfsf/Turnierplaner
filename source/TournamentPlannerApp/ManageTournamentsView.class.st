@@ -58,9 +58,10 @@ ManageTournamentsView >> createComponents [
 		yourself
 ]
 
-{ #category : 'Initial-Events',
-  #vaVisibility : 'private' }
+{ #category : 'Initial-Events' }
 ManageTournamentsView >> createMe5Form [
+	
+	"<^self>"
 	
 	self textFieldTournamentName: (Me5TextField new
 		text: 'Turniername';
@@ -251,21 +252,19 @@ ManageTournamentsView >> createTournamentRows [
 			WithTournamenType: theTournamentType WithMembers: theMembers)]
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 ManageTournamentsView >> divTournamentCreation [
 
-	"<^hOf Me5Div>"
+	"<^iOf Me5Div>"
 	"Answer the divTournamentCreation of the receiver"
 
 	^divTournamentCreation
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 ManageTournamentsView >> divTournamentCreation: aDiv [
 
-	"<aDiv: hOf Me5Div, ^self>"
+	"<aDiv: iOf Me5Div, ^self>"
 	"Set the divTournamentCreation of the receiver"
 
 	divTournamentCreation := aDiv
@@ -302,61 +301,55 @@ ManageTournamentsView >> members: aMemberCollection [
 	members := aMemberCollection
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 ManageTournamentsView >> multiComboBoxRivals [
 
-	"<^hOf Me5MultiComboBox>"
+	"<^iOf Me5MultiComboBox>"
 	"Answer the multiComboBoxRivals of the receiver"
 
 	^multiComboBoxRivals
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 ManageTournamentsView >> multiComboBoxRivals: aMultiComboBox [
 
-	"<aMultiComboBox: hOf Me5MultiComboBox, ^self>"
+	"<aMultiComboBox: iOf Me5MultiComboBox, ^self>"
 	"Set the multiComboBoxRivals of the receiver"
 
 	multiComboBoxRivals := aMultiComboBox
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 ManageTournamentsView >> radioGroupGameMode [
 
-	"<^hOf Me5RadioGroup>"
+	"<^iOf Me5RadioGroup>"
 	"Answer the radioGroupGameMode of the receiver"
 
 	^radioGroupGameMode
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 ManageTournamentsView >> radioGroupGameMode: aRadioGroup [
 
-	"<aRadioGroup: hOf Me5RadioGroup, ^self>"
+	"<aRadioGroup: iOf Me5RadioGroup, ^self>"
 	"Set the radioGroupGameMode of the receiver"
 
 	radioGroupGameMode := aRadioGroup
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 ManageTournamentsView >> radioGroupTournamentType [
 
-	"<^hOf Me5RadioGroup>"
+	"<^iOf Me5RadioGroup>"
 	"Answer the radioGroupTournamentType of the receiver"
 
 	^radioGroupTournamentType
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 ManageTournamentsView >> radioGroupTournamentType: aMe5RadioGroup [
 
-	"<aMe5RadioGroup: hOf Me5RadioGroup, ^self>"
+	"<aMe5RadioGroup: iOf Me5RadioGroup, ^self>"
 	"Set the radioGroupTournamentType of the receiver"
 
 	radioGroupTournamentType := aMe5RadioGroup
@@ -397,41 +390,37 @@ ManageTournamentsView >> resetData [
 	"self createRivalsMultiComboBox"
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 ManageTournamentsView >> rowTournaments [
 
-	"<^hOf Me5Row>"
+	"<^iOf Me5Row>"
 	"Answer the rowTournaments of the receiver"
 
 	^rowTournaments
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 ManageTournamentsView >> rowTournaments: aMe5Row [
 
-	"<aMe5Row: hOf Me5Row, ^self>"
+	"<aMe5Row: iOf Me5Row, ^self>"
 	"Set the rowTournaments of the receiver"
 
 	rowTournaments := aMe5Row
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 ManageTournamentsView >> textFieldTournamentName [
 
-	"<^hOf Me5TextField>"
+	"<^iOf Me5TextField>"
 	"Answer the textFieldTournamentName of the receiver"
 
 	^textFieldTournamentName
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 ManageTournamentsView >> textFieldTournamentName: aMe5TextField [
 
-	"<aMe5TextField: hOf Me5TextField, ^self>"
+	"<aMe5TextField: iOf Me5TextField, ^self>"
 	"Set the textFieldTournamentName of the receiver"
 
 	textFieldTournamentName := aMe5TextField
@@ -457,6 +446,9 @@ ManageTournamentsView >> tournaments: aTournamentCollection [
 
 { #category : 'Internal' }
 ManageTournamentsView >> winnerOfTournament: aTournament [
+
+	"<^self>"
+	"returns the winner of a tournament"
 
 	| theWinner theWinnerDictionary theMaxWins |
 	

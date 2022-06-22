@@ -11,7 +11,7 @@ Class {
 { #category : 'API' }
 Team class >> newWithName: aString [
 
-	"<aString : hOF String, ^self>"
+	"<aString : iOF String, ^self>"
 	"Create instance of game with teamName @aString"
 
 	^self new teamName: aString
@@ -20,7 +20,7 @@ Team class >> newWithName: aString [
 { #category : 'API' }
 Team class >> newWithTeamName: aName players: aPlayerCollection [
 
-	"<aName hOf String,  aPlayer hOf Collection: {iOf Player}, ^self>"
+	"<aName iOf String,  aPlayer hOf Collection: {iOf Player}, ^self>"
 	"Create new Instance with all attributes"
 
 	^self new
@@ -32,7 +32,7 @@ Team class >> newWithTeamName: aName players: aPlayerCollection [
 { #category : 'API' }
 Team >> = anObject [
 
-	"<anObject : hOf any, ^self>"
+	"<anObject : iOf any, ^self>"
 	"Answer if @anObject is equal to the receiver."
 
 	^self members = anObject members and: [self teamName = anObject teamName]
@@ -41,7 +41,7 @@ Team >> = anObject [
 { #category : 'API' }
 Team >> asString [
 
-	"<^hOf String>"
+	"<^iOf String>"
 	"Answer the receiver as a string"
 
 	^self teamName

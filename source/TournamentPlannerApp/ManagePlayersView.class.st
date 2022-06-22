@@ -158,7 +158,7 @@ ManagePlayersView >> data: aPlayerCollection [
 { #category : 'Events' }
 ManagePlayersView >> deletePlayerEvent: anEvent [
 
-	"<anEvent: hOf Me5Event, ^self>"
+	"<anEvent: iOf Me5Event, ^self>"
 	"Deletes Player from listGrid and memory"
 
 	| thePlayer isSuccessfullBoolean |
@@ -181,7 +181,7 @@ ManagePlayersView >> deletePlayerEvent: anEvent [
 { #category : 'Accessing' }
 ManagePlayersView >> listGrid [
 
-	"<^hOf ListGrid>"
+	"<^iOf ListGrid>"
 	"Answer the listGrid of the receiver"
 
 	^listGrid
@@ -190,7 +190,7 @@ ManagePlayersView >> listGrid [
 { #category : 'Accessing' }
 ManagePlayersView >> listGrid: aListGrid [
 
-	"<aListGrid: hOf ListGrid, ^self>"
+	"<aListGrid: iOf ListGrid, ^self>"
 	"Set the listGrid of the receiver"
 
 	listGrid := aListGrid

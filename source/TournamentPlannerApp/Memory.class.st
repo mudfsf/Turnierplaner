@@ -7,7 +7,7 @@ Class {
 { #category : 'API' }
 Memory class >> loadAnObjectFromPath: aPath [
 	
-	"<aPath: hOf String, ^self>"
+	"<aPath: iOf String, ^self>"
 	"Loads an Object from path @aPath"
 	
 	| theStream theLoader theReturn |
@@ -25,7 +25,7 @@ Memory class >> loadAnObjectFromPath: aPath [
 { #category : 'API' }
 Memory class >> saveObject: anObject onPath: aPath [
 	
-	"<anObject: hOf Object, aPath hOf String, ^self>"
+	"<anObject: hOf Object, aPath iOf String, ^self>"
 	"Saves @anObject on @aPath as Binary"
 	
 	| theStream theDumper |
