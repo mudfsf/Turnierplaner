@@ -48,11 +48,12 @@ SpecificTournamentView >> calculateBetWinnings: aGame withWinner: aWinnerMember 
 	theWageragedMoney := 0.
 	theWinningBettors := OrderedCollection new.
 	
-	self game betCollection do: [:eachBet |
+	self game betCollection ifNotNil: [
+		self game betCollection do: [:eachBet |
 		theWageragedMoney := theWageragedMoney + eachBet stake.
 		eachBet guess = aWinnerMember
 			ifTrue: [
-				theWinningBettors add: eachBet bettor]].
+				theWinningBettors add: eachBet bettor]]].
 	theWinningBettorsSize := theWinningBettors size.
 	theWinningBettorsSize > 0 ifTrue: [
 		theMoneyForBettors := ((theWageragedMoney / theWinningBettorsSize) - 
@@ -116,7 +117,7 @@ SpecificTournamentView >> createKOTournament: canInitialGamesBePlayedBoolean [
 		theGamesOfLayer := self tournament games select: [ :eachGame |
 			eachGame layer = eachLayer].
 			theGamesOfLayer doWithIndex: [ :eachGame :eachIndex |
-				| theTop theLeft theButton thePortlet |
+				| theTop theLeft theResultButton theBetButton thePortlet |
 				
 				eachLayer = 1
 					ifTrue: [theTop := (eachIndex - 1) * (self height + self rowsSpacing) + self offsetY].
@@ -127,23 +128,24 @@ SpecificTournamentView >> createKOTournament: canInitialGamesBePlayedBoolean [
 					setPositionToAbsolute;
 					zIndex: 1;
 					width: self width;
-					addChildToBody: (theButton := Me5Button newSuccess
+					addChildToBody: (theResultButton := Me5Button newSuccess
 						text: 'Ergebnis eintragen';
 						addClickEventSelector: #setKOResultEvent:;
 						yourself);
-					addChildToFoot: (Me5Button newSuccess
+					addChildToFoot: (theBetButton := Me5Button newSuccess
 						text: 'Wetten';
 						addClickEventSelector: #setKOBetEvent:;
 						yourself);
 					yourself).
 				
 				canInitialGamesBePlayedBoolean
-					ifFalse: [theButton disable].
+					ifFalse: [theResultButton disable].
 					
 				eachGame resultCollection size > 0 
 					ifTrue: [
 						thePortlet subTitle: ('Sieger: %1' bindWith: eachGame resultCollection first player asString).
-						theButton disable].
+						theResultButton disable.
+						theBetButton disable].
 					
 				eachLayer > 1
 					ifTrue: [
@@ -181,7 +183,9 @@ SpecificTournamentView >> createKOTournament: canInitialGamesBePlayedBoolean [
 						"Have prerequisite games already been played"
 						((self tournament games at: theIndex -1) resultCollection size > 0 
 						and: [(self tournament games at: theIndex) resultCollection size > 0])
-							ifFalse: [theButton disable]].
+							ifFalse: [
+								theResultButton disable.
+								theBetButton disable]].
 							
 				eachLayer < self tournament games last layer
 					ifTrue: [
@@ -487,30 +491,39 @@ SpecificTournamentView >> rowsSpacing: aNumber [
 SpecificTournamentView >> saveBetEvent: anEvent [
 
 	
-	| theMemberName theWinnerMember theResultCollection theStake |
+	| theMemberName theWinnerMember theStake theOwnBet |
 	
 	self game resultCollection size = 1
 		ifTrue: [^self].
-	theMemberName := anEvent component parent children second value.
+	theMemberName := anEvent component parent parent children second children first children first children second value.
 	theMemberName = 'Kein Sieger festgelegt'
 		ifTrue: [self showErrorNotificationWithMessage: 'Bitte Sieger ausw&auml;hlen'.
 			^self].
 	theWinnerMember := self game memberCollection detect: [:eachMember |
 		eachMember asString = theMemberName] ifNone: [].
-	theStake := anEvent component parent children third value.
+	theStake := anEvent component parent parent children second children first children first children third value.
 	self user money < (theStake asInteger) 
 		ifTrue: [self showErrorNotificationWithMessage: 'Du hast nicht genug Geld'.
 			^self].
 	
 	self game betCollection ifEmptyOrNil: [self game betCollection: OrderedCollection new].
-	self game betCollection add: (Bet new
-		bettor: self user;
-		guess: theWinnerMember;
-		stake: theStake asInteger;
-		yourself).
-	self user money: (self user money) - (theStake asInteger). 
+	theOwnBet := self game betCollection detect: [:eachBet |
+		eachBet bettor = self user] ifNone: [].
+	self game betCollection ifNotEmpty: [self game betCollection remove: theOwnBet].
+	theStake > 0 ifTrue: [
+		self game betCollection add: (Bet new
+			bettor: self user;
+			guess: theWinnerMember;
+			stake: theStake asInteger;
+			yourself)].
+	theStake < 0 ifTrue: [theStake := 0].
+	theOwnBet ifNil: [
+		self user money: (self user money) - (theStake asInteger)] 
+		ifNotNil: [
+			self user money: (self user money) - ((theStake asInteger) - theOwnBet stake)].
+	 
 	
-	"TournamentPlannerApp saveCollectionOfPlayers: TournamentPlannerApp collectionOfPlayers data."
+	TournamentPlannerApp saveCollectionOfPlayers: TournamentPlannerApp collectionOfPlayers data.
 	TournamentPlannerApp saveCollectionOfTournaments: TournamentPlannerApp collectionOfTournaments data.
 	self resultModal closeModal.
 	self showSuccessNotificationWithMessage: ('Wette auf den Spieler %1 wird gespeichert' bindWith: theMemberName)
@@ -610,44 +623,43 @@ SpecificTournamentView >> setBetEvent [
 	"<^self>"
 	"wip"	
 	
-	| theButton |
+	| theSaveButton theRemoveButton theSelectBox theIntegerField theOwnBet |
 	
 	self user: TournamentPlannerApp loggedInUser.
 	
 	self resultModal: (ModalView new title: 'Wetten').
 	
-	self game resultCollection size = 0
-		ifTrue: [
-			self resultModal body: (Me5Form new
-				addChildToBody: (Me5P new
-					text: ('Guthaben von %1: %2' bindWith: self user asString with: self user money);
-					yourself);
-				addChildToBody: (Me5SelectBox new
-					text: 'Sieger';
-					noneObject: 'Kein Sieger festgelegt';
-					objects: (self game memberCollection collect: [ :eachMember | 
-						eachMember asString]);
-					yourself);
-				addChildToBody: (Me5IntegerField new
-					text: 'Einsatz (in &euro;)';
-					yourself);
-				yourself)]
-		ifFalse: [
-				self resultModal body: (Me5Form new
-					addChildToBody: (Me5SelectBox new
-						text: 'Sieger';
-						disableNoneObject;
-						objects: (self game resultCollection collect: [ :eachResult | 
-							eachResult player asString]);
-						yourself);
-					yourself)].
-	theButton := (Me5Button newPrimary
+	
+	self resultModal body: (Me5Form new
+		addChildToBody: (Me5P new
+			text: ('Guthaben von %1: %2' bindWith: self user asString with: self user money);
+			yourself);
+		addChildToBody: (theSelectBox := Me5SelectBox new
+			text: 'Sieger';
+			noneObject: 'Kein Sieger festgelegt';
+			objects: (self game memberCollection collect: [ :eachMember | 
+				eachMember asString]);
+			yourself);
+		addChildToBody: (theIntegerField := Me5IntegerField new
+			text: 'Einsatz (in &euro;)';
+			yourself);
+		yourself).
+		
+	theSaveButton := (Me5Button newPrimary
 		text: 'Speichern';
 		addClickEventSelector: #saveBetEvent: eventReceiver: self;
 		icon: Me5I newFasSave;
 		yourself).
-	self resultModal body addChildToBody: theButton.
-		
+	self resultModal foot: (Me5PortletFoot new
+		addChild: theSaveButton).
+	
+	self game betCollection ifNotNil: [
+		theOwnBet := self game betCollection detect: [:eachBet |
+			eachBet bettor = self user] ifNone: [].
+		theOwnBet ifNotNil: [
+			theSelectBox value: theOwnBet guess asString.
+			theIntegerField value: theOwnBet stake]].
+	
 	self openModal: self resultModal
 ]
 
