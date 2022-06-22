@@ -28,6 +28,8 @@ DashboardView >> createComponents [
 				theNeededMember := eachTournament membercollection detect: [ :eachTeam | 
 					(eachTeam members findFirst: [ :eachPlayer | eachPlayer asString = theNeededPlayer asString ]) ~= 0]].
 		eachTournament games size ~= eachTournament playedGames size and: [ eachTournament membercollection includes: theNeededMember] ].
+	progressBarTournament := 0. 
+	progressBarPlayer := 0.
 	
 	(TournamentPlannerApp collectionOfTournaments data isEmpty or: [ theIndexOfThePlayersTournament = 0 ])
 		ifTrue: [ 
@@ -38,9 +40,7 @@ DashboardView >> createComponents [
 			theTextPlayerMatchesInTheTournament := theTextTeamMatchesInTheTournament.
 			theTextBestPlayerNowInTheTournament := Me5H5 new text: ('Spieler: -').
 			theListofGamesfromNeededPlayer := 1. 
-			theListofGamesfromNeededPlayerPlayed := 1. 
-			progressBarTournament := 0. 
-			progressBarPlayer := 0 ]
+			theListofGamesfromNeededPlayerPlayed := 1]
 		ifFalse: [ 		
 			theNeededTournament := TournamentPlannerApp collectionOfTournaments data at: theIndexOfThePlayersTournament.			
 			theTextActualTournament := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name). 			
@@ -51,8 +51,11 @@ DashboardView >> createComponents [
 				((eachGame memberCollection at: 1 ifAbsent: ['']) asString = theNeededMember asString ) or: [(eachGame memberCollection at: 2 ifAbsent: [''])  asString = theNeededMember asString ] ]. 
 			theListofGamesfromNeededPlayerPlayed := theNeededTournament playedGames select: [ :eachGame | 
 				(eachGame memberCollection first asString = theNeededMember asString ) or: [ eachGame memberCollection last asString = theNeededMember asString ] ].
-			progressBarTournament := 100 * theNeededTournament playedGames size / theNeededTournament games size.				
-			progressBarPlayer := 100 * theListofGamesfromNeededPlayerPlayed size / theListofGamesfromNeededPlayer size.
+			theNeededTournament games size ~= 0
+				ifTrue: [progressBarTournament := 100 * theNeededTournament playedGames size / theNeededTournament games size].
+			theListofGamesfromNeededPlayer size ~= 0
+				ifTrue: [progressBarPlayer := 100 * theListofGamesfromNeededPlayerPlayed size / theListofGamesfromNeededPlayer size].
+			
 			theTextPlayerMatchesInTheTournament := Me5H6 new text: ('&Uuml;brige Spiele: %1' bindWith: theListofGamesfromNeededPlayer size - theListofGamesfromNeededPlayerPlayed size ) .
 			theListofGamesfromNeededPlayerPlayed isEmpty
 				ifTrue: [

@@ -56,7 +56,8 @@ TournamentPlannerView >> createComponents [
 			text: 'Turnierplaner';
 			yourself);
 		addChild: (Me5Portlet new	
-			addChildToBody: self buttonDiv;
+			addChildToBody:  self buttonDiv;
+			addBreak15ToBody;
 			addChildToBody: self viewHolder;
 			yourself);
 		yourself.
