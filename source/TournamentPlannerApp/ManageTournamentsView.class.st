@@ -170,7 +170,7 @@ ManageTournamentsView >> createTournament [
 		games: theGames;
 		playedGames: (theGames select: [ :eachGame |
 			eachGame isBuyBoolean]);
-		membercollection: theSelectedCollection;
+		memberCollection: theSelectedCollection;
 		yourself).
 	self rowTournaments addChild: (self createTournamentDivWithTournament: theCurrentTournament 
 		WithTournamenType: theTournamentTypeAsString
@@ -246,7 +246,7 @@ ManageTournamentsView >> createTournamentRows [
 		(eachTournament tournamentType isKindOf: MixedTournamentType)
 			ifTrue: [theTournamentType := 'Mixed'].
 		theMembers := OrderedCollection new.
-		eachTournament membercollection do: [ :eachMember |
+		eachTournament memberCollection do: [ :eachMember |
 			theMembers add: eachMember asString].			
 		self rowTournaments addChild: (self createTournamentDivWithTournament: eachTournament
 			WithTournamenType: theTournamentType WithMembers: theMembers)]

@@ -23,11 +23,11 @@ DashboardView >> createComponents [
 			eachTournament games size ~= eachTournament playedGames size].
 	
 	theIndexOfThePlayersTournament := TournamentPlannerApp collectionOfTournaments data findFirst: [ :eachTournament |
-		(eachTournament membercollection first isMemberOf: Team)
+		(eachTournament memberCollection first isMemberOf: Team)
 			ifTrue: [ 
-				theNeededMember := eachTournament membercollection detect: [ :eachTeam | 
+				theNeededMember := eachTournament memberCollection detect: [ :eachTeam | 
 					(eachTeam members findFirst: [ :eachPlayer | eachPlayer asString = theNeededPlayer asString ]) ~= 0]].
-		eachTournament games size ~= eachTournament playedGames size and: [ eachTournament membercollection includes: theNeededMember] ].
+		eachTournament games size ~= eachTournament playedGames size and: [ eachTournament memberCollection includes: theNeededMember] ].
 	progressBarTournament := 0. 
 	progressBarPlayer := 0.
 	

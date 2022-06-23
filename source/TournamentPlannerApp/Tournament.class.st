@@ -7,7 +7,7 @@ Class {
 		'games',
 		'name',
 		'gameMode',
-		'membercollection'
+		'memberCollection'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -61,21 +61,21 @@ Tournament >> games: aCollection [
 ]
 
 { #category : 'Accessing' }
-Tournament >> membercollection [
+Tournament >> memberCollection [
 
 	"<^hOf Collection of: {iOf Member}>"
-	"Answer the membercollection of the receiver"
+	"Answer the memberCollection of the receiver"
 
-	^membercollection
+	^memberCollection
 ]
 
 { #category : 'Accessing' }
-Tournament >> membercollection: aMemberCollection [
+Tournament >> memberCollection: aCollection [
 
-	"<aMemberCollection: hOf Collection of: {iOf Member}, ^self>"
-	"Set the membercollection of the receiver"
+	"<aCollection: hOf Collection of: {iOf Member}, ^self>"
+	"Set the memberCollection of the receiver"
 
-	membercollection := aMemberCollection
+	memberCollection := aCollection
 ]
 
 { #category : 'Accessing' }
