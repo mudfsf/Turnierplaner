@@ -19,8 +19,7 @@ UserSettingsView >> createComponents [
 
 	(TournamentPlannerApp loggedInUser isNil)
 		ifTrue: [self user: TournamentPlannerApp collectionOfPlayers data first]
-		ifFalse: [self user: TournamentPlannerApp loggedInUser].
-		
+		ifFalse: [self user: TournamentPlannerApp loggedInUser].	
 	self inputFirstName: (Me5TextField new
 		text: 'Vorname';
 		value: self user firstName;
@@ -36,13 +35,12 @@ UserSettingsView >> createComponents [
 		addCssClassCol12;
 		yourself).
 	self inputEmail: (Me5TextField new
-						text: 'E-Mail';
-						value: self user email;
-						placeholder: 'E-Mail';
-						addCssClassColLg6;
-						addCssClassCol12;
-						yourself).
-			
+		text: 'E-Mail';
+		value: self user email;
+		placeholder: 'E-Mail';
+		addCssClassColLg6;
+		addCssClassCol12;
+		yourself).
 	self playerCombobox: (Me5ComboBox new
 					text: 'Benutzer ausw&auml;len';			
 					objects: (TournamentPlannerApp collectionOfPlayers data collect: [ :eachPlayer |
@@ -51,16 +49,16 @@ UserSettingsView >> createComponents [
 					addChangeEventSelector: #userSelectedEvent eventReceiver: self;
 					addCssClassColLg6;
 					addCssClassCol12;
-					yourself).
-			
-	self addChild: (Me5Div new
-		addChild: (Me5H1 new 
-			text: 'Einstellungen';
-			addCssClassTextCenter;
-			yourself);
-		addChild: Me5Hr new;
+					yourself).	
+	self 
+		addChild: (Me5Div new
+			addChild: (Me5H1 new 
+				text: 'Einstellungen';
+				addCssClassTextCenter;
+				yourself);
+			addChild: Me5Hr new;
 			addChild: (Me5Form new
-				addChildToBody: (Me5Row  new
+				addChildToBody: (Me5Row new
 					addChild: self inputFirstName;
 					addChild: self inputLastName;
 					addChild: self inputEmail;
