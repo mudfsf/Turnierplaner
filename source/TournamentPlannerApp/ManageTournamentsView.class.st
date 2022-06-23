@@ -79,8 +79,8 @@ ManageTournamentsView >> createMe5Form [
 		yourself).
 	self multiComboBoxRivals: (Me5Select2MultiSelectBox new
 		text: 'Rivalen';
-		objects: (self getMemberCollection collect: [ :eachPlayer | 
-			eachPlayer asString])
+		objects: (self getMemberCollection collect: [ :eachMember | 
+			eachMember asString])
 		yourself).
 			
 	^Me5Form new
@@ -104,12 +104,13 @@ ManageTournamentsView >> createRivalsMultiComboBox [
 
 	| theMembers |
 	
-	self divTournamentCreation children first children first removeChild: (self multiComboBoxRivals) ifAbsent: [].
+	self multiComboBoxRivals removeComponent.
 	self multiComboBoxRivals: (Me5Select2MultiSelectBox new 
-		text: 'Rivalen').
+		text: 'Rivalen';
+		yourself).
 	theMembers := OrderedCollection new.
-	self getMemberCollection do: [ :eachPlayer | 
-		theMembers add: eachPlayer asString].
+	self getMemberCollection do: [ :eachMember | 
+		theMembers add: eachMember asString].
 	self multiComboBoxRivals objects: theMembers.
 	self divTournamentCreation children first 
 		children first addChild: self multiComboBoxRivals 
