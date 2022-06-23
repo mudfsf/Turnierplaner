@@ -87,7 +87,7 @@ SpecificTournamentView >> createComponents [
 
 	"<^self>"
 	
-	self tournament isEmptyOrNil
+	self tournament isNil
 		ifTrue: [
 			self addChild: (Me5H1 newWithText: 'Kein Turnier gefunden').
 			self addChild: (Me5H2 newWithText: 'Bitte Tab schlie&szlig;en, und &uuml;ber die Hauptseite das Turnier &ouml;ffnen!').
