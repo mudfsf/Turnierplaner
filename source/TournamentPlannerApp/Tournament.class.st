@@ -12,13 +12,16 @@ Class {
 	#category : 'TournamentPlannerApp'
 }
 
-{ #category : 'instance creation' }
-Tournament class >> tournamentType: aTournamentType games: aListOfGames [
+{ #category : 'API' }
+Tournament class >> newWithTournamentType: aTournamentType games: aCollectionOfGames [
 
-	^(self new)
-	tournamentType: aTournamentType;
-	games: aListOfGames;
-	yourself.
+	"<aTournamentType: iOF TournamentType, aCollectionOfGames: hOf Collection {iOf Game}, ^self>"
+	"Create instance of game with teamName @aString"
+
+	^self new
+		tournamentType: aTournamentType;
+		games: aCollectionOfGames;
+		yourself.
 ]
 
 { #category : 'Accessing' }
