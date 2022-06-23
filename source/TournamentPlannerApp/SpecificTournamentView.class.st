@@ -32,7 +32,8 @@ SpecificTournamentView >> beforeCreateComponents [
 		rowsSpacing: 20;
 		columnSpacing: 120;
 		tournament: (TournamentPlannerApp collectionOfTournaments data detect: [ :eachTournament |
-			eachTournament name = (self queryParameters at: 'tournamentName')]);
+			eachTournament name = (self queryParameters at: 'tournamentName')] 
+			ifNone: [^self showErrorNotificationWithMessage: 'Kein Turnier wurde gefunden!']);
 		tournamentType: (self queryParameters at: 'tournamentType');
 		tournamentDrawingArea: Me5Div new;
 		yourself
@@ -85,6 +86,12 @@ SpecificTournamentView >> columnSpacing: aNumber [
 SpecificTournamentView >> createComponents [
 
 	"<^self>"
+	
+	self tournament isEmptyOrNil
+		ifTrue: [
+			self addChild: (Me5H1 newWithText: 'Kein Turnier gefunden').
+			self addChild: (Me5H2 newWithText: 'Bitte Tab schließen, und über die Hauptseite das Turnier öffnen!').
+			^self].
 
 	self addChild: (Me5H1 new
 			addCssClassTextCenter;
