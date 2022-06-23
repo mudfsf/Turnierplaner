@@ -90,7 +90,7 @@ SpecificTournamentView >> createComponents [
 	self tournament isEmptyOrNil
 		ifTrue: [
 			self addChild: (Me5H1 newWithText: 'Kein Turnier gefunden').
-			self addChild: (Me5H2 newWithText: 'Bitte Tab schließen, und über die Hauptseite das Turnier öffnen!').
+			self addChild: (Me5H2 newWithText: 'Bitte Tab schlie&szlig;en, und &uuml;ber die Hauptseite das Turnier &ouml;ffnen!').
 			^self].
 
 	self addChild: (Me5H1 new
@@ -250,7 +250,7 @@ SpecificTournamentView >> createLapsTournament [
 			yourself).
 	
 	theMemberWinLoseCollection := OrderedCollection new.	
-	self tournament membercollection do: [ :eachMember | 
+	self tournament memberCollection do: [ :eachMember | 
 		| theWins theLoses theSizeOfPlayedGames |
 		theSizeOfPlayedGames := (self tournament playedGames	select: [ :eachGame | 
 				(eachGame memberCollection first asString = eachMember asString ) or: [ eachGame memberCollection last asString = eachMember asString ] ]) size.
