@@ -42,7 +42,9 @@ Player >> = anObject [
 	"<anObject: iOf any, ^self>"
 	"Answer if @anObject is equal to the receiver."
 
-	^(((self firstName = anObject firstName and: [self lastName = anObject lastName]) and: [self email = anObject email]) and: [self money = anObject money]) and: [self symbol = anObject symbol]
+	(anObject isMemberOf: Player)
+		ifTrue:[^(((self firstName = anObject firstName and: [self lastName = anObject lastName]) and: [self email = anObject email]) and: [self money = anObject money]) and: [self symbol = anObject symbol]]
+		ifFalse:[^self error: 'The given object is not an instance of player'].
 ]
 
 { #category : 'API' }
