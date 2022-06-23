@@ -12,29 +12,23 @@ LapsTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 	"Creates Games where every Member plays against every other Member"
 	
 	| theCollectionOfGames |
-	
-	theCollectionOfGames := OrderedCollection new.
 
-	1 to: aCollectionOfMembers size - 1 do: [ :eachIndexForFirstPlayer |
-		1 to:  (aCollectionOfMembers size - eachIndexForFirstPlayer) do: [ :eachIndexForSecondPlayer |
-			| theCurrentPlayer theCurrentGame |
-			theCurrentGame := Game new
-				layer: 0;
-				isBuyBoolean: false;
-				resultCollection: OrderedCollection new;
-				memberCollection: OrderedCollection new;
-				name: '';
-				yourself.
-				
-			theCurrentPlayer := aCollectionOfMembers at: eachIndexForFirstPlayer.
-			theCurrentGame	name: ('%1' bindWith: theCurrentPlayer asString).
-			theCurrentGame	memberCollection add: theCurrentPlayer.
-				
-			theCurrentPlayer := aCollectionOfMembers at: (eachIndexForFirstPlayer + eachIndexForSecondPlayer).
-			theCurrentGame name: ('%1 VS %2' bindWith: theCurrentGame name with: theCurrentPlayer asString).
-			theCurrentGame memberCollection add: theCurrentPlayer.
-				
-			theCollectionOfGames add: theCurrentGame]].
-	
+	theCollectionOfGames := OrderedCollection new.
+	aCollectionOfMembers doWithIndex: [ :eachPlayer :eachIndex |
+		aCollectionOfMembers doWithIndex: [ :eachSecondPlayer :eachIndexSecond |
+			eachIndex>=eachIndexSecond
+				ifFalse: [ | theCurrentGame |
+					theCurrentGame := Game new
+						layer: 0;
+						memberCollection: OrderedCollection new;
+						isBuyBoolean: false;
+						resultCollection: OrderedCollection new;
+						yourself.
+					theCurrentGame memberCollection
+						add: eachPlayer;
+						add: eachSecondPlayer;
+						yourself.
+					theCurrentGame name: ('%1 VS %2' bindWith: eachPlayer asString with: eachSecondPlayer asString).
+					theCollectionOfGames add: theCurrentGame]]].	
 	^theCollectionOfGames
 ]
