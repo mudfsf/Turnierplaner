@@ -3,7 +3,10 @@ Class {
 	#superclass : 'Me5BaseView',
 	#instVars : [
 		'user',
-		'playerCombobox'
+		'playerCombobox',
+		'inputFirstName',
+		'inputLastName',
+		'inputEmail'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -17,6 +20,28 @@ UserSettingsView >> createComponents [
 	(TournamentPlannerApp loggedInUser isNil)
 		ifTrue: [self user: TournamentPlannerApp collectionOfPlayers data first]
 		ifFalse: [self user: TournamentPlannerApp loggedInUser].
+		
+	self inputFirstName: (Me5TextField new
+		text: 'Vorname';
+		value: self user firstName;
+		placeholder: 'Vorname';
+		addCssClassCol12;
+		addCssClassColLg6;
+		yourself).
+	self inputLastName: (Me5TextField new
+		text: 'Nachname';
+		value: self user lastName;
+		placeholder: 'Nachname';
+		addCssClassColLg6;
+		addCssClassCol12;
+		yourself).
+	self inputEmail: (Me5TextField new
+						text: 'E-Mail';
+						value: self user email;
+						placeholder: 'E-Mail';
+						addCssClassColLg6;
+						addCssClassCol12;
+						yourself).
 			
 	self playerCombobox: (Me5ComboBox new
 					text: 'Benutzer ausw&auml;len';			
@@ -36,27 +61,9 @@ UserSettingsView >> createComponents [
 		addChild: Me5Hr new;
 			addChild: (Me5Form new
 				addChildToBody: (Me5Row  new
-					addChild: (Me5TextField new
-						text: 'Vorname';
-						value: self user firstName;
-						placeholder: 'Vorname';
-						addCssClassCol12;
-						addCssClassColLg6;
-						yourself);
-					addChild: (Me5TextField new
-						text: 'Nachname';
-						value: self user lastName;
-						placeholder: 'Nachname';
-						addCssClassColLg6;
-						addCssClassCol12;
-						yourself);
-					addChild: (Me5TextField new
-						text: 'E-Mail';
-						value: self user email;
-						placeholder: 'E-Mail';
-						addCssClassColLg6;
-						addCssClassCol12;
-						yourself);
+					addChild: self inputFirstName;
+					addChild: self inputLastName;
+					addChild: self inputEmail;
 					addChild: (Me5PasswordField new
 						text: 'Passwort';
 						placeholder: 'Passwort';
@@ -72,6 +79,60 @@ UserSettingsView >> createComponents [
 					yourself);
 				yourself);
 			yourself)
+]
+
+{ #category : 'Accessing' }
+UserSettingsView >> inputEmail [
+
+	"<^iOf Me5TextField>"
+	"Answer the inputEmail of the receiver"
+
+	^inputEmail
+]
+
+{ #category : 'Accessing' }
+UserSettingsView >> inputEmail: aMe5TextField [
+
+	"<aMe5TextField: iOf Me5TextField, ^self>"
+	"Set the inputEmail of the receiver"
+
+	inputEmail := aMe5TextField
+]
+
+{ #category : 'Accessing' }
+UserSettingsView >> inputFirstName [
+
+	"<^iOf Me5TextField>"
+	"Answer the inputFirstName of the receiver"
+
+	^inputFirstName
+]
+
+{ #category : 'Accessing' }
+UserSettingsView >> inputFirstName: aMe5TextField [
+
+	"<aMe5TextField: iOf Me5TextField, ^self>"
+	"Set the inputFirstName of the receiver"
+
+	inputFirstName := aMe5TextField
+]
+
+{ #category : 'Accessing' }
+UserSettingsView >> inputLastName [
+
+	"<^iOf Me5TextField>"
+	"Answer the inputLastName of the receiver"
+
+	^inputLastName
+]
+
+{ #category : 'Accessing' }
+UserSettingsView >> inputLastName: aMe5TextField [
+
+	"<aMe5TextField: iOf Me5TextField, ^self>"
+	"Set the inputLastName of the receiver"
+
+	inputLastName := aMe5TextField
 ]
 
 { #category : 'Accessing' }
@@ -97,8 +158,24 @@ UserSettingsView >> savePlayer [
 
 	"<^self>"
 	"Change the attributes of the logged in player"
+	
+	self inputFirstName clearErrorText.
+	self inputLastName clearErrorText.
+	self inputEmail clearErrorText.	
+	self inputFirstName value isEmpty
+		ifTrue: [self inputFirstName setErrorText: 'Bitte Vornamen eingeben.'].
+	self inputLastName value isEmpty
+		ifTrue: [self inputLastName setErrorText: 'Bitte Nachnamen eingeben.'].
+	self inputEmail value isEmpty
+		ifTrue: [self inputEmail setErrorText: 'Bitte Email eingeben.'].
+	((self inputFirstName hasErrorStyle or: [self inputLastName hasErrorStyle]) or: [self inputEmail hasErrorStyle])
+		ifTrue: [^self].
+	TournamentPlannerApp loggedInUser firstName: self inputFirstName value.
+	TournamentPlannerApp loggedInUser lastName: self inputLastName value.
+	TournamentPlannerApp loggedInUser email: self inputEmail value.
+	TournamentPlannerApp saveCollectionOfPlayers: TournamentPlannerApp collectionOfPlayers data.
 
-	^self error: 'Message not implemented'
+	self showSuccessNotificationWithMessage: 'Daten erfolgreich gespeichert.'
 ]
 
 { #category : 'Accessing' }
