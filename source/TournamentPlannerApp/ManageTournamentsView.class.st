@@ -173,8 +173,8 @@ ManageTournamentsView >> createTournament [
 		memberCollection: theSelectedCollection;
 		yourself).
 	self rowTournaments addChild: (self createTournamentDivWithTournament: theCurrentTournament 
-		WithTournamenType: theTournamentTypeAsString
-		WithMembers: theSelectedAsStringCollection).
+		withTournamenType: theTournamentTypeAsString
+		withMembers: theSelectedAsStringCollection).
 	self tournaments add: theCurrentTournament.
 	TournamentPlannerApp saveCollectionOfTournaments: self tournaments.
 	self textFieldTournamentName value: ''.
@@ -183,7 +183,7 @@ ManageTournamentsView >> createTournament [
 ]
 
 { #category : 'Internal' }
-ManageTournamentsView >> createTournamentDivWithTournament: aTournament WithTournamenType: aString WithMembers: aCollection [
+ManageTournamentsView >> createTournamentDivWithTournament: aTournament withTournamenType: aString withMembers: aCollection [
 
 	"<aTournament: iOf Tournament, aString: hOf String, aCollection: hOf Collection: {hOf String}, ^Me5Div>"
 	"Answer a Me5Div representing Tournament"
@@ -249,7 +249,7 @@ ManageTournamentsView >> createTournamentRows [
 		eachTournament memberCollection do: [ :eachMember |
 			theMembers add: eachMember asString].			
 		self rowTournaments addChild: (self createTournamentDivWithTournament: eachTournament
-			WithTournamenType: theTournamentType WithMembers: theMembers)]
+			withTournamenType: theTournamentType withMembers: theMembers)]
 ]
 
 { #category : 'Accessing' }
