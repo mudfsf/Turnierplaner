@@ -284,7 +284,7 @@ SpecificTournamentView >> createLapsTournament [
 				disableShowInfoTableRow;
 				objects: (self tournament games select: [ :eachGame | 
 					eachGame layer = 0]);
-				addTableRowClickedEventSelector: #setLapsResultEvent: ;
+				addTableRowClickedEventSelector: #showDecisionResultBetEvent: ;
 				addColumnDefinition: (Me5ColumnDefinition new
 					title: 'Spieler 1';
 					definitionBlock: [ :theObjecst :theTableData  |
@@ -575,7 +575,7 @@ SpecificTournamentView >> saveWinnerEvent: anEvent [
 	
 	self game resultCollection size = 1
 		ifTrue: [^self].
-	theMemberName := anEvent component parent children first value.
+	theMemberName := anEvent component parent parent children second children first children first children first value. "anEvent component parent children first value"
 	theMemberName = 'Kein Sieger festgelegt'
 		ifTrue: [self showErrorNotificationWithMessage: 'Bitte Sieger ausw&auml;hlen'.
 			^self].
@@ -628,7 +628,6 @@ SpecificTournamentView >> setBetEvent [
 	self user: TournamentPlannerApp loggedInUser.
 	
 	self resultModal: (ModalView new title: 'Wetten').
-	
 	
 	self resultModal body: (Me5Form new
 		addChildToBody: (Me5P new
@@ -703,9 +702,7 @@ SpecificTournamentView >> setLapsBetEvent: anEvent [
 
 	"<^self>"
 		
-	self game: anEvent loadingTableTableRowObject.
-	self game resultCollection isEmptyOrNil
-		ifFalse: [^self].
+	
 	self setBetEvent
 ]
 
@@ -714,9 +711,7 @@ SpecificTournamentView >> setLapsResultEvent: anEvent [
 
 	"<^self>"
 		
-	self game: anEvent loadingTableTableRowObject.
-	self game resultCollection isEmptyOrNil
-		ifFalse: [^self].
+	
 	self setResultEvent
 ]
 
@@ -757,9 +752,49 @@ SpecificTournamentView >> setResultEvent [
 		ifTrue: [theButton addClickEventSelector: #saveKOWinnerEvent: eventReceiver: self].
 	(self tournamentType = 'Runden' or: [self tournamentType = 'Mixed'  and: [self haveLapsBeenPlayed not]])
 		ifTrue: [theButton addClickEventSelector: #saveLapsWinnerEvent: eventReceiver: self].
-	self resultModal body addChildToBody: theButton.
+	self resultModal foot: (Me5PortletFoot new
+		addChild: theButton).
 		
 	self openModal: self resultModal
+]
+
+{ #category : 'Events' }
+SpecificTournamentView >> showDecisionResultBetEvent: anEvent [
+
+	"<^self>"
+	"wip"
+	
+	| returnTrueFalse |
+	
+	self game: anEvent loadingTableTableRowObject.
+	self game resultCollection isEmptyOrNil
+		ifFalse: [^self].
+		
+	self resultModal: (ModalView new 
+		title: 'Ergebnis eintragen oder Wetten?';
+		specificTournamentViewView: self;
+		event: anEvent;
+		yourself).
+	
+	self resultModal body: (Me5Div new
+		addChild: (Me5Button newPrimary
+			text: 'Ergebnis eintragen';
+			icon: Me5I newFasSave;
+			addClickEventSelector: #openSetLapsResultEvent;
+			addCssClassCol5;
+			yourself);
+		addChild: (Me5Button newPrimary
+			text: 'Wetten';
+			icon: Me5I newFasMoneyBill;
+			addClickEventSelector: #openSetLapsBetEvent;
+			addCssClassCol5;
+			yourself);
+			display: 'flex';
+			justifyContent: 'space-around';
+		yourself).
+		
+	self openModal: self resultModal.
+	
 ]
 
 { #category : 'Accessing' }
