@@ -38,21 +38,21 @@ UserSettingsView >> createComponents [
 				addChildToBody: (Me5Row  new
 					addChild: (Me5TextField new
 						text: 'Vorname';
-						value: user firstName;
+						value: self user firstName;
 						placeholder: 'Vorname';
 						addCssClassCol12;
 						addCssClassColLg6;
 						yourself);
 					addChild: (Me5TextField new
 						text: 'Nachname';
-						value: user lastName;
+						value: self user lastName;
 						placeholder: 'Nachname';
 						addCssClassColLg6;
 						addCssClassCol12;
 						yourself);
 					addChild: (Me5TextField new
 						text: 'E-Mail';
-						value: user email;
+						value: self user email;
 						placeholder: 'E-Mail';
 						addCssClassColLg6;
 						addCssClassCol12;
