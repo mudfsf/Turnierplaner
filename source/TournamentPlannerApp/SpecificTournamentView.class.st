@@ -125,8 +125,8 @@ SpecificTournamentView >> createKOTournament: canInitialGamesBePlayedBoolean [
 				| theTop theLeft theResultButton theBetButton thePortlet |
 				
 				eachLayer = 1
-					ifTrue: [theTop := (eachIndex - 1) * (self height + self rowsSpacing) + self offsetY].
-				theLeft := self offsetX + ((eachLayer - 1) * (self width + self columnSpacing)).
+					ifTrue: [theTop := eachIndex - 1 * (self height + self rowsSpacing) + self offsetY].
+				theLeft := self offsetX + (eachLayer - 1 * (self width + self columnSpacing)).
 
 				thePortlet := (Me5Portlet newSuccess
 					title: eachGame name;
@@ -159,18 +159,18 @@ SpecificTournamentView >> createKOTournament: canInitialGamesBePlayedBoolean [
 						theMember1 := '- '.
 						theMember2 := ' - '.
 						
-						theIndex := ((eachLayer * (eachLayer - 1)) * eachIndex) + theNumberOfLaps.
-						theTop := (((theLines at: theIndex -1 - theNumberOfLaps) at: 1) y + ((theLines at: theIndex - theNumberOfLaps) at: 1) y) / 2.
+						theIndex := eachLayer * (eachLayer - 1) * eachIndex + theNumberOfLaps.
+						theTop := ((theLines at: theIndex - 1 - theNumberOfLaps) at: 1) y + ((theLines at: theIndex - theNumberOfLaps) at: 1) y / 2.
 						
 						eachGame memberCollection removeAll.
 					
-						(self tournament games at: (theIndex - 1) ) resultCollection isEmptyOrNil
+						(self tournament games at: (theIndex - 1)) resultCollection isEmptyOrNil
 							ifFalse: [
-								theMember1 := (self tournament games at: (theIndex - 1)) resultCollection first player asString.
-								eachGame memberCollection add: (self tournament games at: (theIndex - 1)) resultCollection first player].	
+								theMember1 := (self tournament games at: theIndex - 1) resultCollection first player asString.
+								eachGame memberCollection add: (self tournament games at: theIndex - 1) resultCollection first player].	
 						(self tournament games at: theIndex) resultCollection isEmptyOrNil
 							ifFalse: [
-								theMember2 := (self tournament games at: theIndex ) resultCollection first player asString.
+								theMember2 := (self tournament games at: theIndex) resultCollection first player asString.
 								eachGame memberCollection add: (self tournament games at: theIndex) resultCollection first player].
 							
 						eachGame name: ('%1 vs %2' bindWith: theMember1 with: theMember2).
@@ -186,7 +186,7 @@ SpecificTournamentView >> createKOTournament: canInitialGamesBePlayedBoolean [
 								y: theTop;
 								yourself).
 						"Have prerequisite games already been played"
-						((self tournament games at: theIndex -1) resultCollection size > 0 
+						((self tournament games at: theIndex - 1) resultCollection size > 0 
 						and: [(self tournament games at: theIndex) resultCollection size > 0])
 							ifFalse: [
 								theResultButton disable.
