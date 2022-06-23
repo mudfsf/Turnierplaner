@@ -18,8 +18,8 @@ UserSettingsView >> createComponents [
 	"Sends the userSettings Tab to the receiver"
 
 	(TournamentPlannerApp loggedInUser isNil)
-		ifTrue: [self user: TournamentPlannerApp collectionOfPlayers data first]
-		ifFalse: [self user: TournamentPlannerApp loggedInUser].	
+		ifTrue: [TournamentPlannerApp loggedInUser: TournamentPlannerApp collectionOfPlayers data first].
+	self user: TournamentPlannerApp loggedInUser.	
 	self inputFirstName: (Me5TextField new
 		text: 'Vorname';
 		value: self user firstName;
@@ -42,14 +42,14 @@ UserSettingsView >> createComponents [
 		addCssClassCol12;
 		yourself).
 	self playerCombobox: (Me5ComboBox new
-					text: 'Benutzer ausw&auml;len';			
-					objects: (TournamentPlannerApp collectionOfPlayers data collect: [ :eachPlayer |
-						eachPlayer asString]);
-					selectedObject: self user asString;
-					addChangeEventSelector: #userSelectedEvent eventReceiver: self;
-					addCssClassColLg6;
-					addCssClassCol12;
-					yourself).	
+		text: 'Benutzer ausw&auml;hlen';			
+		objects: (TournamentPlannerApp collectionOfPlayers data collect: [ :eachPlayer |
+			eachPlayer asString]);
+		selectedObject: self user asString;
+		addChangeEventSelector: #userSelectedEvent eventReceiver: self;
+		addCssClassColLg6;
+		addCssClassCol12;
+		yourself).	
 	self 
 		addChild: (Me5Div new
 			addChild: (Me5H1 new 
@@ -172,7 +172,7 @@ UserSettingsView >> savePlayer [
 	TournamentPlannerApp loggedInUser lastName: self inputLastName value.
 	TournamentPlannerApp loggedInUser email: self inputEmail value.
 	TournamentPlannerApp saveCollectionOfPlayers: TournamentPlannerApp collectionOfPlayers data.
-
+	self reloadViewBySourceView: self.
 	self showSuccessNotificationWithMessage: 'Daten erfolgreich gespeichert.'
 ]
 
