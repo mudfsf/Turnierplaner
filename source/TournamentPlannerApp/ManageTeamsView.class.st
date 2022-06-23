@@ -75,7 +75,7 @@ ManageTeamsView >> createComponents [
 					addChildToActions: (Me5Button newSuccess
 						text: 'Speichern';
 						icon: Me5I newFasSave;
-						addClickEventSelector: #newTeamClicked;
+						addClickEventSelector: #newTeamClicked eventReceiver: self;
 						yourself);
 					yourself);
 				yourself);
@@ -84,7 +84,6 @@ ManageTeamsView >> createComponents [
 		yourself.
 	self modalTextFieldTeamName: textFieldTeamName.
 	self modalMultiComboBoxTeamMembers: multiComboBoxTeamMembers.
-	
 	self addChild: theResultDiv
 	
 ]
