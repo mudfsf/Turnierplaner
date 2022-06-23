@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'body',
 		'title',
-		'foot'
+		'foot',
+		'specificTournamentViewView',
+		'event'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -60,6 +62,24 @@ ModalView >> createComponents [
 ]
 
 { #category : 'Accessing' }
+ModalView >> event [
+
+	"<^iOf Object>"
+	"Answer the event of the receiver"
+
+	^event
+]
+
+{ #category : 'Accessing' }
+ModalView >> event: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the event of the receiver"
+
+	event := anObject
+]
+
+{ #category : 'Accessing' }
 ModalView >> foot [
 
 	"<^iOf Me5BaseComponent>"
@@ -75,6 +95,39 @@ ModalView >> foot: aMe5BaseComponent [
 	"Set the foot of the receiver"
 
 	foot := aMe5BaseComponent
+]
+
+{ #category : 'Accessing',
+ #vaCategories : ['Accessing','Events','Initial-Events','Internal'] }
+ModalView >> openSetLapsBetEvent [
+
+	self closeModal.
+	self specificTournamentViewView setLapsBetEvent: self event.
+]
+
+{ #category : 'Internal' }
+ModalView >> openSetLapsResultEvent [
+
+	self closeModal.
+	self specificTournamentViewView setLapsResultEvent: self event.
+]
+
+{ #category : 'Accessing' }
+ModalView >> specificTournamentViewView [
+
+	"<^iOf Object>"
+	"Answer the specificTournamentViewView of the receiver"
+
+	^specificTournamentViewView
+]
+
+{ #category : 'Accessing' }
+ModalView >> specificTournamentViewView: anObject [
+
+	"<anObject: iOf Object, ^self>"
+	"Set the specificTournamentViewView of the receiver"
+
+	specificTournamentViewView := anObject
 ]
 
 { #category : 'Accessing' }
