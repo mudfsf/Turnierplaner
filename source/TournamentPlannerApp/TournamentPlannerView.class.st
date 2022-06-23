@@ -1,22 +1,64 @@
 Class {
 	#name : 'TournamentPlannerView',
 	#superclass : 'Me5BaseView',
+	#instVars : [
+		'viewHolder'
+	],
 	#category : 'TournamentPlannerApp'
 }
+
+{ #category : 'Internal' }
+TournamentPlannerView >> buttonDiv [
+	
+	"<^iOf Me5Div>"
+	"Answer the Div with all buttons"
+	
+	^Me5Div new	
+		addChild: (Me5ButtonGroup newJustified
+			addChild: (Me5A newSecondary
+				text: 'Dashboard';
+				icon: Me5I newFasHome;
+				addClickEventSelector: #navButtonClicked:;
+				yourself);
+			addChild: (Me5A newSecondary
+				text: 'Turniere';
+				icon: Me5I newFasUser;
+				addClickEventSelector: #navButtonClicked:;
+				yourself);
+			addChild: (Me5A newSecondary
+				text: 'Teams';
+				icon: Me5FontAwesomeIconSolid newSmile;
+				addClickEventSelector: #navButtonClicked:;
+				yourself);
+			addChild: (Me5A newSecondary
+				text: 'Einstellungen';
+				icon: Me5FontAwesomeIconSolid newCog;	
+				addClickEventSelector: #navButtonClicked:;				
+				yourself);
+			addChild: (Me5A newSecondary
+				text: 'Admin-Tools';
+				icon: Me5I newFasUser;
+				addClickEventSelector: #navButtonClicked:;
+				yourself);
+			yourself)
+]
 
 { #category : 'Initial-Events' }
 TournamentPlannerView >> createComponents [
 
 	"<^self>"
 
+	self viewHolder: (Me5ViewHolder new
+		holdingView: DashboardView new).
+
 	self addChild: (Me5H1 new
 			addCssClassTextCenter;
 			text: 'Turnierplaner';
 			yourself);
 		addChild: (Me5Portlet new	
-			addChildToBody: (Me5Tabbable newFilled
-				addTabs: self tabsCollection;
-				yourself);				
+			addChildToBody:  self buttonDiv;
+			addBreak15ToBody;
+			addChildToBody: self viewHolder;
 			yourself);
 		yourself.
 ]
@@ -35,47 +77,47 @@ TournamentPlannerView >> createModules [
 ]
 
 { #category : 'Internal' }
-TournamentPlannerView >> tabsCollection [
+TournamentPlannerView >> navButtonClicked: aEvent [
+
+	"<aEvent: iOf Me5Event, ^self>"
+	"Set the viewHolder holdingview"
 	
-	"<^hOf Collection of: {hOf Me5Tab}>"
-	"Answer the Collection of all tabs"
+	| theClickedButton theNewView|
 	
-	^OrderedCollection new
-		add: (Me5Tab new
-			text: 'Dashboard';
-			icon: Me5I newFasHome;
-			addChildToTabPane: (Me5ViewHolder new
-				holdingView: DashboardView new;
-				yourself);
-			activateTab;
-			yourself);
-		add: (Me5Tab new
-			text: 'Turniere';
-			icon: Me5I newFasUser;
-			addChildToTabPane: (Me5ViewHolder new
-				holdingView: ManageTournamentsView new;
-				yourself);
-			yourself);
-		add: (Me5Tab new
-			text: 'Teams';
-			icon: Me5FontAwesomeIconSolid newSmile;
-			addChildToTabPane: (Me5ViewHolder new
-				holdingView: ManageTeamsView new
-				yourself);
-			yourself);
-		add: (Me5Tab new
-			text: 'Einstellungen';
-			icon: Me5FontAwesomeIconSolid newCog;
-			addChildToTabPane: (Me5ViewHolder new
-				holdingView: UserSettingsView new
-				yourself);
-			yourself);
-		add: (Me5Tab new
-			text: 'Admin-Tools';
-			icon: Me5I newFasUser;
-			addChildToTabPane: (Me5ViewHolder new
-				holdingView: ManagePlayersView new
-				yourself);
-			yourself);
-		yourself
+	theClickedButton := aEvent component text.
+	
+	theClickedButton = 'Dashboard'
+		ifTrue: [theNewView := DashboardView new].
+		
+	theClickedButton = 'Turniere'
+		ifTrue: [theNewView := ManageTournamentsView new].
+		
+	theClickedButton = 'Teams'
+		ifTrue: [theNewView := ManageTeamsView new].
+		
+	theClickedButton = 'Einstellungen'
+		ifTrue: [theNewView := UserSettingsView new].
+		
+	theClickedButton = 'Admin-Tools'
+		ifTrue: [theNewView := ManagePlayersView new].
+	
+	self viewHolder holdingView: theNewView.
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> viewHolder [
+
+	"<^iOf Me5ViewHolder>"
+	"Answer the viewHolder of the receiver"
+
+	^viewHolder
+]
+
+{ #category : 'Accessing' }
+TournamentPlannerView >> viewHolder: aMe5ViewHolder [
+
+	"<aMe5ViewHolder: iOf Me5ViewHolder, ^self>"
+	"Set the viewHolder of the receiver"
+
+	viewHolder := aMe5ViewHolder
 ]

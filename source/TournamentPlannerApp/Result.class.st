@@ -25,7 +25,7 @@ Result class >> newWithPlayer: aPlayer ranking: aRank points: aNumber [
 { #category : 'Accessing' }
 Result >> = anObject [
 
-	"<anObject: hOf any, ^self>"
+	"<anObject: iOf any, ^self>"
 	"Answer if @anObject is equal to the receiver."
 	
 	^(self player = anObject player and: [self ranking = anObject ranking]) and: [self points = anObject points]

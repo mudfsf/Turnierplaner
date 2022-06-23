@@ -101,7 +101,7 @@ Game >> memberCollection: aCollectionOfMembers [
 { #category : 'Accessing' }
 Game >> moneyForWinners [
 
-	"<^hOf Integer>"
+	"<^hOf Number>"
 	"Answer the moneyForWinners of the receiver"
 
 	^moneyForWinners
@@ -110,7 +110,7 @@ Game >> moneyForWinners [
 { #category : 'Accessing' }
 Game >> moneyForWinners: anInteger [
 
-	"<anInteger: hOf Integer, ^self>"
+	"<anInteger: hOf Number, ^self>"
 	"Set the moneyForWinners of the receiver"
 
 	moneyForWinners := anInteger

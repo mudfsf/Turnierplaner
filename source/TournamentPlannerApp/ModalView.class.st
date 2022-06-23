@@ -20,7 +20,7 @@ ModalView class >> layoutClass [
 { #category : 'Accessing' }
 ModalView >> body [
 
-	"<^hOf Me5BaseComponent>"
+	"<^iOf Me5BaseComponent>"
 	"Answer the body of the receiver"
 
 	^body
@@ -29,7 +29,7 @@ ModalView >> body [
 { #category : 'Accessing' }
 ModalView >> body: aMe5BaseComponent [
 
-	"<aMe5BaseComponent: hOf Me5BaseComponent, ^self>"
+	"<aMe5BaseComponent: iOf Me5BaseComponent, ^self>"
 	"Set the body of the receiver"
 
 	body := aMe5BaseComponent
@@ -82,7 +82,7 @@ ModalView >> event: anObject [
 { #category : 'Accessing' }
 ModalView >> foot [
 
-	"<^hOf Me5BaseComponent>"
+	"<^iOf Me5BaseComponent>"
 	"Answer the foot of the receiver"
 
 	^foot
@@ -91,7 +91,7 @@ ModalView >> foot [
 { #category : 'Accessing' }
 ModalView >> foot: aMe5BaseComponent [
 
-	"<aMe5BaseComponent: hOf Me5BaseComponent, ^self>"
+	"<aMe5BaseComponent: iOf Me5BaseComponent, ^self>"
 	"Set the foot of the receiver"
 
 	foot := aMe5BaseComponent

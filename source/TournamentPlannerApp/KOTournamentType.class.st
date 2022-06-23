@@ -17,8 +17,7 @@ KOTournamentType class >> new [
 	^super new initialize
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 KOTournamentType >> gameCollection [
 	
 	"<^hOf Collection of: {iOf Game}>"
@@ -27,8 +26,7 @@ KOTournamentType >> gameCollection [
 	^gameCollection
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 KOTournamentType >> gameCollection: aGameCollection [
 
 	"<aGameCollection: hOf Collection of: {iOf Game}, ^self>"
@@ -49,8 +47,7 @@ KOTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 	^self recGetCollectionOfGamesWithMembers: (aCollectionOfMembers copy)
 ]
 
-{ #category : 'API',
-  #vaVisibility : 'private' }
+{ #category : 'API' }
 KOTournamentType >> initialize [
 
 	"Initialize the operation"
@@ -59,8 +56,7 @@ KOTournamentType >> initialize [
 	self gameCollection: OrderedCollection new
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 KOTournamentType >> layer [
 
 	"<^hOf Number>"
@@ -69,8 +65,7 @@ KOTournamentType >> layer [
 	^layer
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 KOTournamentType >> layer: aNumber [
 
 	"<aNumber: hOf Number, ^self>"

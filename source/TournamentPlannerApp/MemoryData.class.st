@@ -29,7 +29,7 @@ MemoryData >> data: aCollection [
 { #category : 'Accessing' }
 MemoryData >> observerCollection [
 
-	"<^hOf Collection of: {hOf Me5BaseView}>"
+	"<^hOf Collection of: {iOf Me5BaseView}>"
 	"Answer the observerCollection of the receiver"
 
 	^observerCollection
@@ -38,7 +38,7 @@ MemoryData >> observerCollection [
 { #category : 'Accessing' }
 MemoryData >> observerCollection: aMe5BaseViewCollection [
 
-	"<aMe5BaseViewCollection: hOf Collection of: {hOf Me5BaseView}, ^self>"
+	"<aMe5BaseViewCollection: hOf Collection of: {iOf Me5BaseView}, ^self>"
 	"Set the observerCollection of the receiver"
 
 	observerCollection := aMe5BaseViewCollection

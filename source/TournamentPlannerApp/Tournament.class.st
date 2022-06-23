@@ -7,24 +7,27 @@ Class {
 		'games',
 		'name',
 		'gameMode',
-		'membercollection'
+		'memberCollection'
 	],
 	#category : 'TournamentPlannerApp'
 }
 
-{ #category : 'instance creation' }
-Tournament class >> tournamentType: aTournamentType games: aListOfGames [
+{ #category : 'API' }
+Tournament class >> newWithTournamentType: aTournamentType games: aCollectionOfGames [
 
-	^(self new)
-	tournamentType: aTournamentType;
-	games: aListOfGames;
-	yourself.
+	"<aTournamentType: iOF TournamentType, aCollectionOfGames: hOf Collection {iOf Game}, ^self>"
+	"Create instance of game with teamName @aString"
+
+	^self new
+		tournamentType: aTournamentType;
+		games: aCollectionOfGames;
+		yourself.
 ]
 
 { #category : 'Accessing' }
 Tournament >> gameMode [
 
-	"<^hOf String>"
+	"<^iOf String>"
 	"Answer the gameMode of the receiver"
 
 	^gameMode
@@ -33,7 +36,7 @@ Tournament >> gameMode [
 { #category : 'Accessing' }
 Tournament >> gameMode: aString [
 
-	"<aString: hOf String, ^self>"
+	"<aString: iOf String, ^self>"
 	"Set the gameMode of the receiver"
 
 	gameMode := aString
@@ -58,27 +61,27 @@ Tournament >> games: aCollection [
 ]
 
 { #category : 'Accessing' }
-Tournament >> membercollection [
+Tournament >> memberCollection [
 
 	"<^hOf Collection of: {iOf Member}>"
-	"Answer the membercollection of the receiver"
+	"Answer the memberCollection of the receiver"
 
-	^membercollection
+	^memberCollection
 ]
 
 { #category : 'Accessing' }
-Tournament >> membercollection: aMemberCollection [
+Tournament >> memberCollection: aCollection [
 
-	"<aMemberCollection: hOf Collection of: {iOf Member}, ^self>"
-	"Set the membercollection of the receiver"
+	"<aCollection: hOf Collection of: {iOf Member}, ^self>"
+	"Set the memberCollection of the receiver"
 
-	membercollection := aMemberCollection
+	memberCollection := aCollection
 ]
 
 { #category : 'Accessing' }
 Tournament >> name [
 
-	"<^hOf String>"
+	"<^iOf String>"
 	"Answer the name of the receiver"
 
 	^name
@@ -87,7 +90,7 @@ Tournament >> name [
 { #category : 'Accessing' }
 Tournament >> name: aString [
 
-	"<aString: hOf String, ^self>"
+	"<aString: iOf String, ^self>"
 	"Set the name of the receiver"
 
 	name := aString

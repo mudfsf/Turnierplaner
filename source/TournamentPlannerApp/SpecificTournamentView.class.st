@@ -32,7 +32,8 @@ SpecificTournamentView >> beforeCreateComponents [
 		rowsSpacing: 20;
 		columnSpacing: 120;
 		tournament: (TournamentPlannerApp collectionOfTournaments data detect: [ :eachTournament |
-			eachTournament name = (self queryParameters at: 'tournamentName')]);
+			eachTournament name = (self queryParameters at: 'tournamentName')] 
+			ifNone: [^self showErrorNotificationWithMessage: 'Kein Turnier wurde gefunden!']);
 		tournamentType: (self queryParameters at: 'tournamentType');
 		tournamentDrawingArea: Me5Div new;
 		yourself
@@ -63,8 +64,7 @@ SpecificTournamentView >> calculateBetWinnings: aGame withWinner: aWinnerMember 
 	
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> columnSpacing [
 
 	"<^hOf Number>"
@@ -73,8 +73,7 @@ SpecificTournamentView >> columnSpacing [
 	^columnSpacing
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> columnSpacing: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -87,6 +86,12 @@ SpecificTournamentView >> columnSpacing: aNumber [
 SpecificTournamentView >> createComponents [
 
 	"<^self>"
+	
+	self tournament isEmptyOrNil
+		ifTrue: [
+			self addChild: (Me5H1 newWithText: 'Kein Turnier gefunden').
+			self addChild: (Me5H2 newWithText: 'Bitte Tab schlie&szlig;en, und &uuml;ber die Hauptseite das Turnier &ouml;ffnen!').
+			^self].
 
 	self addChild: (Me5H1 new
 			addCssClassTextCenter;
@@ -100,7 +105,7 @@ SpecificTournamentView >> createComponents [
 { #category : 'Internal' }
 SpecificTournamentView >> createKOTournament: canInitialGamesBePlayedBoolean [
 
-	"<^hOf Me5Div>"
+	"<^iOf Me5Div>"
 	"creates Tournaments with KOTournamentType"
 	
 	| theResultDiv theScroller theLines theNumberOfLaps |
@@ -230,7 +235,7 @@ SpecificTournamentView >> createKOTournament: canInitialGamesBePlayedBoolean [
 { #category : 'Internal' }
 SpecificTournamentView >> createLapsTournament [
 
-	"<^hOf Me5Div>"
+	"<^iOf Me5Div>"
 	"creates the View of the Lapstournament."
 	
 	| theTableOfRanking theSortedCollection theMemberWinLoseCollection |
@@ -245,7 +250,7 @@ SpecificTournamentView >> createLapsTournament [
 			yourself).
 	
 	theMemberWinLoseCollection := OrderedCollection new.	
-	self tournament membercollection do: [ :eachMember | 
+	self tournament memberCollection do: [ :eachMember | 
 		| theWins theLoses theSizeOfPlayedGames |
 		theSizeOfPlayedGames := (self tournament playedGames	select: [ :eachGame | 
 				(eachGame memberCollection first asString = eachMember asString ) or: [ eachGame memberCollection last asString = eachMember asString ] ]) size.
@@ -323,7 +328,7 @@ SpecificTournamentView >> createLapsTournament [
 { #category : 'Internal' }
 SpecificTournamentView >> createMixedTournament [
 
-	"<^hOf Me5Div>"
+	"<^iOf Me5Div>"
 	"creates the View of the Mixedtournament."
 	
 	^Me5Div new
@@ -364,15 +369,14 @@ SpecificTournamentView >> game: aGame [
 { #category : 'Internal' }
 SpecificTournamentView >> haveLapsBeenPlayed [
 
-	"<^hOf Boolean>"
+	"<^iOf Boolean>"
 	
 	^(self tournament games select: [ :eachGame |
 		eachGame layer = 0]) conform: [ :eachGame | 
 			eachGame resultCollection notEmptyAndNotNil]
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> height [
 
 	"<^hOf Number>"
@@ -381,8 +385,7 @@ SpecificTournamentView >> height [
 	^height
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> height: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -409,8 +412,7 @@ SpecificTournamentView >> highestRankedMembers: aCollection [
 	highestRankedMembers := aCollection
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> offsetX [
 
 	"<^hOf Number>"
@@ -419,8 +421,7 @@ SpecificTournamentView >> offsetX [
 	^offsetX
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> offsetX: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -429,8 +430,7 @@ SpecificTournamentView >> offsetX: aNumber [
 	offsetX := aNumber
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> offsetY [
 
 	"<^hOf Number>"
@@ -439,8 +439,7 @@ SpecificTournamentView >> offsetY [
 	^offsetY
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> offsetY: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -467,8 +466,7 @@ SpecificTournamentView >> resultModal: aModalView [
 	resultModal := aModalView
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> rowsSpacing [
 
 	"<^hOf Number>"
@@ -477,8 +475,7 @@ SpecificTournamentView >> rowsSpacing [
 	^rowsSpacing
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> rowsSpacing: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -602,7 +599,7 @@ SpecificTournamentView >> saveWinnerEvent: anEvent [
 { #category : 'Accessing' }
 SpecificTournamentView >> selectBoxPlayers [
 
-	"<^hOf Me5SelectBox>"
+	"<^iOf Me5SelectBox>"
 	"Answer the selectBoxPlayers of the receiver"
 
 	^selectBoxPlayers
@@ -611,7 +608,7 @@ SpecificTournamentView >> selectBoxPlayers [
 { #category : 'Accessing' }
 SpecificTournamentView >> selectBoxPlayers: aMe5SelectBox [
 
-	"<aMe5SelectBox: hOf Me5SelectBox, ^self>"
+	"<aMe5SelectBox: iOf Me5SelectBox, ^self>"
 	"Set the selectBoxPlayers of the receiver"
 
 	selectBoxPlayers := aMe5SelectBox
@@ -818,7 +815,7 @@ SpecificTournamentView >> tournament: aTournament [
 { #category : 'Accessing' }
 SpecificTournamentView >> tournamentDrawingArea [
 
-	"<^hOf Me5Div>"
+	"<^iOf Me5Div>"
 	"Answer the tournamentDrawingArea of the receiver"
 
 	^tournamentDrawingArea
@@ -827,7 +824,7 @@ SpecificTournamentView >> tournamentDrawingArea [
 { #category : 'Accessing' }
 SpecificTournamentView >> tournamentDrawingArea: aDiv [
 
-	"<aDiv: hOf Me5Div, ^self>"
+	"<aDiv: iOf Me5Div, ^self>"
 	"Set the tournamentDrawingArea of the receiver"
 
 	tournamentDrawingArea := aDiv
@@ -836,7 +833,7 @@ SpecificTournamentView >> tournamentDrawingArea: aDiv [
 { #category : 'Accessing' }
 SpecificTournamentView >> tournamentType [
 
-	"<^hOf String>"
+	"<^iOf String>"
 	"Answer the tournamentType of the receiver"
 
 	^tournamentType
@@ -845,7 +842,7 @@ SpecificTournamentView >> tournamentType [
 { #category : 'Accessing' }
 SpecificTournamentView >> tournamentType: aString [
 
-	"<aString: hOf String, ^self>"
+	"<aString: iOf String, ^self>"
 	"Set the tournamentType of the receiver"
 
 	tournamentType := aString
@@ -869,8 +866,7 @@ SpecificTournamentView >> user: anObject [
 	user := anObject
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> width [
 
 	"<^hOf Number>"
@@ -879,8 +875,7 @@ SpecificTournamentView >> width [
 	^width
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> width: aNumber [
 
 	"<aNumber: hOf Number, ^self>"

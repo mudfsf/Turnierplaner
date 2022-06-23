@@ -19,7 +19,7 @@ ManagePlayersView >> addPlayerEvent [
 		ifFalse: [self data add: self placeholder].
 	self listGrid dataSourceBlock: [self data].
 	self listGrid resetEditedDataGridCells.
-	self showSuccessNotificationWithMessage: ('Added row to save Player...')
+	self showSuccessNotificationWithMessage: ('Leere Zeile eingef&uuml;gt')
 ]
 
 { #category : 'Initial-Events' }
@@ -41,7 +41,7 @@ ManagePlayersView >> clearEvent [
 		ifTrue: [self data remove: self placeholder].
 	self listGrid dataSourceBlock: [self data].
 	self listGrid resetEditedDataGridCells.
-	self showSuccessNotificationWithMessage: ('Cleared Grid...')
+	self showSuccessNotificationWithMessage: ('Tabelle bereinigt')
 ]
 
 { #category : 'Initial-Events' }
@@ -158,7 +158,7 @@ ManagePlayersView >> data: aPlayerCollection [
 { #category : 'Events' }
 ManagePlayersView >> deletePlayerEvent: anEvent [
 
-	"<anEvent: hOf Me5Event, ^self>"
+	"<anEvent: iOf Me5Event, ^self>"
 	"Deletes Player from listGrid and memory"
 
 	| thePlayer isSuccessfullBoolean |
@@ -172,16 +172,16 @@ ManagePlayersView >> deletePlayerEvent: anEvent [
 	self listGrid dataSourceBlock: [self data].
 	self listGrid resetEditedDataGridCells.
 	isSuccessfullBoolean
-		ifTrue: [self showSuccessNotificationWithMessage: ('Deleted Player %1 %2...' 
-			bindWith: thePlayer firstName with: thePlayer lastName)]
-		ifFalse: [self showErrorNotificationWithMessage: ('Can not delete last Player...')].		
+		ifTrue: [self showSuccessNotificationWithMessage: ('Spieler %1 gel&ouml;scht!' 
+			bindWith: thePlayer asString)]
+		ifFalse: [self showErrorNotificationWithMessage: ('Der letzte Spieler kann nicht gel&ouml;scht werden!')].		
 	TournamentPlannerApp saveCollectionOfPlayers: self data
 ]
 
 { #category : 'Accessing' }
 ManagePlayersView >> listGrid [
 
-	"<^hOf ListGrid>"
+	"<^iOf ListGrid>"
 	"Answer the listGrid of the receiver"
 
 	^listGrid
@@ -190,7 +190,7 @@ ManagePlayersView >> listGrid [
 { #category : 'Accessing' }
 ManagePlayersView >> listGrid: aListGrid [
 
-	"<aListGrid: hOf ListGrid, ^self>"
+	"<aListGrid: iOf ListGrid, ^self>"
 	"Set the listGrid of the receiver"
 
 	listGrid := aListGrid
@@ -220,17 +220,15 @@ ManagePlayersView >> saveEvent [
 		theValue := eachEditedDataGridCell value.
 		theValue isEmptyOrNil
 			ifTrue: [
-				(theFieldName at: 1) isVowel
-					ifTrue: [eachEditedDataGridCell errorText: 'Please enter an ', theFieldName]
-					ifFalse: [eachEditedDataGridCell errorText: 'Please enter a ', theFieldName]]].
+					eachEditedDataGridCell errorText: ('Bitte geben sie ein %1 ein' bindWith: theFieldName)]].
 	self listGrid hasValidationError
-		ifTrue: [^self showErrorNotificationWithMessage: 'Validation failed...'].
+		ifTrue: [^self showErrorNotificationWithMessage: 'Validierung fehlgeschlagen...'].
 	self listGrid dataSourceBlock: [self data].
 	self listGrid editedDataGridRows do: [ :eachEditedDataGridRow |
 		eachEditedDataGridRow editedDataGridCells do: [ :eachEditedDataGridCell |
 			eachEditedDataGridCell writeValueToObject]].
 	self listGrid resetEditedDataGridCells.
-	self showSuccessNotificationWithMessage: ('Saved %1 edited row(s)...' 
+	self showSuccessNotificationWithMessage: ('%1 bearbeitete Reihe(n) gespeichert...' 
 		bindWith: theNumberOfEditedDataGridRows).
 	TournamentPlannerApp saveCollectionOfPlayers: self data
 ]

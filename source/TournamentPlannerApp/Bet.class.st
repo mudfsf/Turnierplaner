@@ -80,7 +80,7 @@ Bet >> player: aPlayer [
 { #category : 'Accessing' }
 Bet >> stake [
 
-	"<^hOf Decimal>"
+	"<^hOf Number>"
 	"Answer the stake of the receiver"
 
 	^stake
@@ -89,7 +89,7 @@ Bet >> stake [
 { #category : 'Accessing' }
 Bet >> stake: aDecimal [
 
-	"<aDecimal: hOf Decimal, ^self>"
+	"<aDecimal: hOf Number, ^self>"
 	"Set the stake of the receiver"
 	
 	stake := aDecimal
