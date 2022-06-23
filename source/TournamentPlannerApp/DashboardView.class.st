@@ -15,13 +15,10 @@ DashboardView >> createComponents [
 	
 	theNeededPlayer := TournamentPlannerApp loggedInUser.
 	theNeededMember := theNeededPlayer.
-	
 	theNeededPlayer isNil
 		ifTrue: [theNeededPlayer := TournamentPlannerApp collectionOfPlayers data last].
-	
 	theIndexOfFirstUncompletedTournament := TournamentPlannerApp collectionOfTournaments data findFirst: [ :eachTournament |
-			eachTournament games size ~= eachTournament playedGames size].
-	
+		eachTournament games size ~= eachTournament playedGames size].
 	theIndexOfThePlayersTournament := TournamentPlannerApp collectionOfTournaments data findFirst: [ :eachTournament |
 		(eachTournament memberCollection first isMemberOf: Team)
 			ifTrue: [ 
@@ -30,7 +27,6 @@ DashboardView >> createComponents [
 		eachTournament games size ~= eachTournament playedGames size and: [ eachTournament memberCollection includes: theNeededMember] ].
 	progressBarTournament := 0. 
 	progressBarPlayer := 0.
-	
 	(TournamentPlannerApp collectionOfTournaments data isEmpty or: [ theIndexOfThePlayersTournament = 0 ])
 		ifTrue: [ 
 			theTextActualTournament := Me5H5 new text: ('Turnier: -').
@@ -55,11 +51,9 @@ DashboardView >> createComponents [
 				ifTrue: [progressBarTournament := 100 * theNeededTournament playedGames size / theNeededTournament games size].
 			theListofGamesfromNeededPlayer size ~= 0
 				ifTrue: [progressBarPlayer := 100 * theListofGamesfromNeededPlayerPlayed size / theListofGamesfromNeededPlayer size].
-			
 			theTextPlayerMatchesInTheTournament := Me5H6 new text: ('&Uuml;brige Spiele: %1' bindWith: theListofGamesfromNeededPlayer size - theListofGamesfromNeededPlayerPlayed size ) .
 			theListofGamesfromNeededPlayerPlayed isEmpty
-				ifTrue: [
-					theTextActualMatch := Me5H5 new text: ('Spiel: %1' bindWith: theListofGamesfromNeededPlayer first name)] 
+				ifTrue: [theTextActualMatch := Me5H5 new text: ('Spiel: %1' bindWith: theListofGamesfromNeededPlayer first name)] 
 				ifFalse: [		
 					theCollectionOfNotPlayedGamesFromNeededPlayer := theListofGamesfromNeededPlayer select: [ :eachGame |
 						(theListofGamesfromNeededPlayerPlayed findFirst: [ :eachPlayedGame | eachPlayedGame name = eachGame name]) = 0].							
@@ -72,7 +66,7 @@ DashboardView >> createComponents [
 	theTextWithWageredMoney := Me5H5 new text: ('%1&euro;' bindWith: theNeededPlayer money).
 	theTextForRunningBets := Me5H5 new text: 'Laufende Wetten'.	
 	theCollectionOfIncompletedTournaments := TournamentPlannerApp collectionOfTournaments data select: [ :eachTournament |
-			eachTournament games size ~= eachTournament playedGames size].	
+		eachTournament games size ~= eachTournament playedGames size].	
 	theSumOfBettedMoney := 0.
 	theCollectionOfIncompletedTournaments do: [ :eachTournament |	
 		eachTournament games do: [ :eachGame |
@@ -80,7 +74,7 @@ DashboardView >> createComponents [
 				ifFalse: [
 					eachGame betCollection do: [ :eachBet |
 						(eachBet bettor asString = theNeededPlayer asString) 
-							ifTrue: [theSumOfBettedMoney := theSumOfBettedMoney + eachBet stake ]]]]].		
+							ifTrue: [theSumOfBettedMoney := theSumOfBettedMoney + eachBet stake]]]]].		
 	theTextWithWageredMoneyForTheBets := Me5H5 new text: ('%1&euro;' bindWith: theSumOfBettedMoney).
 	theDashboard := (Me5Div new
 		addChild: (Me5H2 newWithText: 'HR-Works Turnierplaner');
@@ -117,7 +111,8 @@ DashboardView >> createComponents [
 			yourself);
 		yourself).
 		
-	self addChild: (Me5H1 new
+	self 
+		addChild: (Me5H1 new
 			addCssClassTextCenter;
 			text: 'Dashboard';
 			yourself);
