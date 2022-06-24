@@ -180,7 +180,7 @@ ManageTournamentsView >> createTournament [
 	TournamentPlannerApp saveCollectionOfTournaments: self tournaments.
 	self textFieldTournamentName value: ''.
 	self multiComboBoxRivals deselectAllObjects.
-	self showSuccessNotificationWithMessage: ('Turnier %1 wurde erstellt!' bindWith: theCurrentTournament asString)
+	self showSuccessNotificationWithMessage: ('Turnier %1 wurde erstellt!' bindWith: theCurrentTournament name)
 ]
 
 { #category : 'Internal' }
