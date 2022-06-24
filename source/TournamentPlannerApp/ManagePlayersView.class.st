@@ -84,6 +84,13 @@ ManagePlayersView >> createComponents [
 			enableHeaderSort;
 			minWidth: 200;
 			yourself);
+		addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
+			title: 'Guthaben';
+			getterSelector: #money;
+			setterSelector: #money:;
+			enableHeaderSort;
+			minWidth: 200;
+			yourself);
 		addDataGridColumnDefinition: (Me5DataGridComponentsHolderColumnDefinition new
 			title: 'Aktion';
 			setHorizontalAlignmentToRight;

@@ -120,7 +120,8 @@ TournamentPlannerApp class >> loadAll [
 	self collectionOfTournaments: (MemoryData new
 		data: (Memory loadAnObjectFromPath: 'C:\TournamentPlanner\Memory\tournaments.dat');
 		observerCollection: OrderedCollection new;
-		yourself)
+		yourself).
+	self loggedInUser: self collectionOfPlayers data first
 ]
 
 { #category : 'Accessing' }
