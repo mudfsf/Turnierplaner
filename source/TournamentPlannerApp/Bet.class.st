@@ -5,7 +5,8 @@ Class {
 		'player',
 		'bettor',
 		'guess',
-		'stake'
+		'stake',
+		'result'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -75,6 +76,24 @@ Bet >> player: aPlayer [
 	"Set the player of the receiver"
 
 	player := aPlayer
+]
+
+{ #category : 'Accessing' }
+Bet >> result [
+
+	"<^hOf Number>"
+	"Answer the result of the receiver"
+
+	^result
+]
+
+{ #category : 'Accessing' }
+Bet >> result: aNumber [
+
+	"<aNumber: hOf Number, ^self>"
+	"Set the result of the receiver"
+
+	result := aNumber
 ]
 
 { #category : 'Accessing' }

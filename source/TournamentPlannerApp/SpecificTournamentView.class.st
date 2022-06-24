@@ -44,27 +44,31 @@ SpecificTournamentView >> calculateBetWinnings: aGame withWinner: aWinnerMember 
 
 	"calculates the winnings for each correct bettor and add the winnings to the players money"
 	
-	| theWageragedMoney theWinningBettors theWinningBettorsSize theMoneyForBettors |
+	| theWageragedMoney theWinningBets theWinningBetsSize theMoneyForBettors |
 	
 	theWageragedMoney := 0.
-	theWinningBettors := OrderedCollection new.
+	theWinningBets := OrderedCollection new.
 	
 	self game betCollection ifNotNil: [
 		self game betCollection do: [:eachBet |
 		theWageragedMoney := theWageragedMoney + eachBet stake.
 		eachBet guess = aWinnerMember
 			ifTrue: [
-				theWinningBettors add: eachBet bettor]]].
-	theWinningBettorsSize := theWinningBettors size.
-	theWinningBettorsSize > 0 ifTrue: [
-		theMoneyForBettors := ((theWageragedMoney / theWinningBettorsSize) - 
-			((theWageragedMoney modulo: theWinningBettorsSize) / theWinningBettorsSize)).
-		theWinningBettors do: [:eachWinningBettor |
-			eachWinningBettor money: eachWinningBettor money + theMoneyForBettors]]
+				theWinningBets add: eachBet]
+			ifFalse: [
+				eachBet result: (eachBet stake) * (-1)]]].
+	theWinningBetsSize := theWinningBets size.
+	theWinningBetsSize > 0 ifTrue: [
+		theMoneyForBettors := ((theWageragedMoney / theWinningBetsSize) - 
+			((theWageragedMoney modulo: theWinningBetsSize) / theWinningBetsSize)).
+		theWinningBets do: [:eachWinningBet |
+			eachWinningBet bettor money: eachWinningBet bettor money + theMoneyForBettors.
+			eachWinningBet result: theMoneyForBettors]]
 	
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> columnSpacing [
 
 	"<^hOf Number>"
@@ -73,7 +77,8 @@ SpecificTournamentView >> columnSpacing [
 	^columnSpacing
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> columnSpacing: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -376,7 +381,8 @@ SpecificTournamentView >> haveLapsBeenPlayed [
 			eachGame resultCollection notEmptyAndNotNil]
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> height [
 
 	"<^hOf Number>"
@@ -385,7 +391,8 @@ SpecificTournamentView >> height [
 	^height
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> height: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -412,7 +419,8 @@ SpecificTournamentView >> highestRankedMembers: aCollection [
 	highestRankedMembers := aCollection
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetX [
 
 	"<^hOf Number>"
@@ -421,7 +429,8 @@ SpecificTournamentView >> offsetX [
 	^offsetX
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetX: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -430,7 +439,8 @@ SpecificTournamentView >> offsetX: aNumber [
 	offsetX := aNumber
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetY [
 
 	"<^hOf Number>"
@@ -439,7 +449,8 @@ SpecificTournamentView >> offsetY [
 	^offsetY
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> offsetY: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -466,7 +477,8 @@ SpecificTournamentView >> resultModal: aModalView [
 	resultModal := aModalView
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> rowsSpacing [
 
 	"<^hOf Number>"
@@ -475,7 +487,8 @@ SpecificTournamentView >> rowsSpacing [
 	^rowsSpacing
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> rowsSpacing: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -866,7 +879,8 @@ SpecificTournamentView >> user: anObject [
 	user := anObject
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> width [
 
 	"<^hOf Number>"
@@ -875,7 +889,8 @@ SpecificTournamentView >> width [
 	^width
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Accessing',
+  #vaVisibility : 'private' }
 SpecificTournamentView >> width: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
