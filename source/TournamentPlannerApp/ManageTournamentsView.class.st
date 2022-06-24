@@ -128,7 +128,7 @@ ManageTournamentsView >> createTournament [
 	 self textFieldTournamentName clearErrorText.
 	 self multiComboBoxRivals clearErrorText.
 	 
-	 self textFieldTournamentName value = ''
+	 self textFieldTournamentName value isEmpty
 		ifTrue: [self textFieldTournamentName setErrorText: 'Turnier hat keinen Namen'].
 	self multiComboBoxRivals selectedObjects size < 2
 		ifTrue: [self multiComboBoxRivals setErrorText: 'Turnier hat zu wenig Mitspieler'].

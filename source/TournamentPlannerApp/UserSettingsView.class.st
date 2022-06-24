@@ -200,7 +200,7 @@ UserSettingsView >> userSelectedEvent [
 	"^self"
 	"Saves the selected player into the logged-in User. This is only used before the log-in is implemented"
 	
-	| theUsername thePlayer|
+	| theUsername thePlayer |
 	
 	theUsername := self playerCombobox selectedObject.
 	
@@ -210,6 +210,6 @@ UserSettingsView >> userSelectedEvent [
 	self user: thePlayer.
 	TournamentPlannerApp loggedInUser: thePlayer.
 	
-	self showSuccessNotificationWithMessage: ('Eingeloggter user: %1' bindWith: thePlayer asString).
+	self showSuccessNotificationWithMessage: ('Eingeloggter Benutzer: %1' bindWith: thePlayer asString).
 	self reloadViewBySourceView: self
 ]

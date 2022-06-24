@@ -252,7 +252,7 @@ SpecificTournamentView >> createLapsTournament [
 	theMemberWinLoseCollection := OrderedCollection new.	
 	self tournament memberCollection do: [ :eachMember | 
 		| theWins theLoses theSizeOfPlayedGames |
-		theSizeOfPlayedGames := (self tournament playedGames	select: [ :eachGame | 
+		theSizeOfPlayedGames := (self tournament playedGames select: [ :eachGame | 
 				(eachGame memberCollection first asString = eachMember asString ) or: [ eachGame memberCollection last asString = eachMember asString ] ]) size.
 	
 		theWins := (self tournament playedGames select: [ :eachGame |
