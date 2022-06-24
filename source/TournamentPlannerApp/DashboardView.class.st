@@ -12,11 +12,9 @@ DashboardView >> createComponents [
 	| theDashboard theTextNextGame theTextActualTournament theTextActualMatch theTextRunningTournaments theTextBestTeamNowInTheTournament theTextTeamMatchesInTheTournament 	theTextBestPlayerNowInTheTournament theTextPlayerMatchesInTheTournament 
 	theTextForBets theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets progressBarTournament progressBarPlayer theNeededTournament theNeededPlayer theListofGamesfromNeededPlayer theListofGamesfromNeededPlayerPlayed 
 	theCollectionOfNotPlayedGamesFromNeededPlayer theIndexOfFirstUncompletedTournament theIndexOfThePlayersTournament theNeededMember theCollectionOfIncompletedTournaments theSumOfBettedMoney |
-	
+
 	theNeededPlayer := TournamentPlannerApp loggedInUser.
 	theNeededMember := theNeededPlayer.
-	theNeededPlayer isNil
-		ifTrue: [theNeededPlayer := TournamentPlannerApp collectionOfPlayers data last].
 	theIndexOfFirstUncompletedTournament := TournamentPlannerApp collectionOfTournaments data findFirst: [ :eachTournament |
 		eachTournament games size ~= eachTournament playedGames size].
 	theIndexOfThePlayersTournament := TournamentPlannerApp collectionOfTournaments data findFirst: [ :eachTournament |
