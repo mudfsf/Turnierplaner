@@ -106,6 +106,7 @@ DashboardView >> createComponents [
 			addChildToBody: Me5Hr new;									
 			addChildToBody: theTextForRunningBets;
 			addChildToBody: theTextWithWageredMoneyForTheBets;
+			addChildToBody: (self createScrollerBetsForPlayer: theNeededPlayer);
 			yourself);
 		yourself).
 		
@@ -117,4 +118,51 @@ DashboardView >> createComponents [
 		addChild: Me5Hr new;
 		addChild: theDashboard;
 		yourself
+]
+
+{ #category : 'Initial-Events' }
+DashboardView >> createScrollerBetsForPlayer: aPlayer [
+	
+	| theScroller theScrollerRow theBetPortlets |
+	
+	theScroller := (Me5Scroller new
+		suppressScrollY: true;
+		suppressScrollX: false;
+		setWhiteSpaceToNoWrap;
+		addChild: (theScrollerRow := Me5Row new
+			margin: 10;
+			yourself);
+		yourself).
+		
+	theBetPortlets := OrderedCollection new.
+		
+	TournamentPlannerApp collectionOfTournaments data do: [:eachTournament |
+		eachTournament games do: [:eachGame |
+			eachGame betCollection ifNotNil: [
+				eachGame betCollection do: [:eachBet |
+					eachBet bettor = aPlayer ifTrue: [
+						theScrollerRow addChild: (Me5Portlet new
+							title: 'Titel';
+							margin: 10;
+							title: (eachBet result asString);
+							addChildToBody: (Me5H5 newWithText: ('Turnier: %1' bindWith: eachTournament name));
+							addChildToBody: (Me5H5 newWithText: ('Spiel: %1' bindWith: eachGame name));
+							addChildToBody: (Me5H5 newWithText: ('Einsatz: %1&euro;' bindWith: eachBet stake));
+							"addChildToFoot: (Me5H5 newWithText: ('Gewonnen x verloren x: %1' bindWith: eachTournament name));"
+							yourself)]]]]].
+	
+	theScrollerRow children do: [:eachPortlet |
+		| theResultNumber |
+		theResultNumber := eachPortlet title asInteger.
+		theResultNumber negative ifTrue: [
+			eachPortlet title: ((eachPortlet title asNumber abs) asString, '&euro; Verloren').
+			eachPortlet setDangerStyle] 
+			ifFalse: [
+				theResultNumber isZero ifTrue: [
+					eachPortlet title: 'Spiel ausstehend'] 
+					ifFalse: [
+						eachPortlet title: (eachPortlet title, '&euro; Gewonnen').
+						eachPortlet setSuccessStyle]]].
+	
+	^theScroller
 ]
