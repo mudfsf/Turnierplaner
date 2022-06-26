@@ -60,19 +60,19 @@ DashboardView >> createComponents [
 						ifFalse: [theTextActualMatch := Me5H5 new text: ('Spiel: %1' bindWith: theCollectionOfNotPlayedGamesFromNeededPlayer first name)]]].			
 	theTextNextGame := Me5H3 new text: 'N&auml;chstes Spiel f&uuml;r dich'.
 	theTextRunningTournaments := Me5H3 new text: 'Laufende Turniere'.	
-	theTextForBets := Me5H3 new text: 'Wetten'.		"ToDo: connect to implemented Bets."
-	theTextWithWageredMoney := Me5H5 new text: ('%1&euro;' bindWith: theNeededPlayer money).
+	theTextForBets := Me5H3 new text: 'Wetten'.
+	theTextWithWageredMoney := Me5H5 new text: ('Guthaben: %1&euro;' bindWith: theNeededPlayer money).
 	theTextForRunningBets := Me5H5 new text: 'Laufende Wetten'.	
 	theCollectionOfIncompletedTournaments := TournamentPlannerApp collectionOfTournaments data select: [ :eachTournament |
 		eachTournament games size ~= eachTournament playedGames size].	
 	theSumOfBettedMoney := 0.
 	theCollectionOfIncompletedTournaments do: [ :eachTournament |	
 		eachTournament games do: [ :eachGame |
-			eachGame betCollection isNil
-				ifFalse: [
+			eachGame resultCollection ifEmpty: [
+				eachGame betCollection ifNotEmptyAndNotNil: [
 					eachGame betCollection do: [ :eachBet |
 						(eachBet bettor asString = theNeededPlayer asString) 
-							ifTrue: [theSumOfBettedMoney := theSumOfBettedMoney + eachBet stake]]]]].		
+							ifTrue: [theSumOfBettedMoney := theSumOfBettedMoney + eachBet stake]]]]]].		
 	theTextWithWageredMoneyForTheBets := Me5H5 new text: ('%1&euro;' bindWith: theSumOfBettedMoney).
 	theDashboard := (Me5Div new
 		addChild: (Me5H2 newWithText: 'HR-Works Turnierplaner');
