@@ -123,17 +123,16 @@ DashboardView >> createComponents [
 { #category : 'Initial-Events' }
 DashboardView >> createScrollerBetsForPlayer: aPlayer [
 	
-	| theScroller theScrollerRow theBetPortlets |
+	| theReturnDiv theScroller theBetPortlets |
 	
-	theScroller := (Me5Scroller new
-		suppressScrollY: true;
-		suppressScrollX: false;
-		setWhiteSpaceToNoWrap;
-		addChild: (theScrollerRow := Me5Row new
-			margin: 10;
+	theReturnDiv := (Me5Div new
+		addCssClassCol12;
+		overflow: 'hidden';
+		addChild: (theScroller := Me5Scroller new
+			setWhiteSpaceToNoWrap;
 			yourself);
 		yourself).
-		
+	
 	theBetPortlets := OrderedCollection new.
 		
 	TournamentPlannerApp collectionOfTournaments data do: [:eachTournament |
@@ -141,17 +140,17 @@ DashboardView >> createScrollerBetsForPlayer: aPlayer [
 			eachGame betCollection ifNotNil: [
 				eachGame betCollection do: [:eachBet |
 					eachBet bettor = aPlayer ifTrue: [
-						theScrollerRow addChild: (Me5Portlet new
-							title: 'Titel';
+						theScroller addChild: (Me5Portlet new
+							display: 'inline-block';
 							margin: 10;
 							title: (eachBet result asString);
 							addChildToBody: (Me5H5 newWithText: ('Turnier: %1' bindWith: eachTournament name));
-							addChildToBody: (Me5H5 newWithText: ('Spiel: %1' bindWith: eachGame name));
+							addChildToBody: (Me5H5 newWithText: (('Spiel: %1' bindWith: eachGame name) 
+								clwReplaceSubString: (eachBet guess asString) with: ('<<%1>>' bindWith: eachBet guess asString)));
 							addChildToBody: (Me5H5 newWithText: ('Einsatz: %1&euro;' bindWith: eachBet stake));
-							"addChildToFoot: (Me5H5 newWithText: ('Gewonnen x verloren x: %1' bindWith: eachTournament name));"
 							yourself)]]]]].
 	
-	theScrollerRow children do: [:eachPortlet |
+	theScroller children do: [:eachPortlet |
 		| theResultNumber |
 		theResultNumber := eachPortlet title asInteger.
 		theResultNumber negative ifTrue: [
