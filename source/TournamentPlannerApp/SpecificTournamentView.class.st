@@ -519,7 +519,10 @@ SpecificTournamentView >> saveBetEvent: anEvent [
 	self game betCollection ifEmptyOrNil: [self game betCollection: OrderedCollection new].
 	theOwnBet := self game betCollection detect: [:eachBet |
 		eachBet bettor = self user] ifNone: [].
-	self game betCollection ifNotEmpty: [self game betCollection remove: theOwnBet].
+	theOwnBet ifNotNil: [
+		(self game betCollection contains: theOwnBet)
+		ifTrue: [
+			self game betCollection remove: theOwnBet]].
 	theStake > 0 ifTrue: [
 		self game betCollection add: (Bet new
 			bettor: self user;
@@ -527,10 +530,8 @@ SpecificTournamentView >> saveBetEvent: anEvent [
 			stake: theStake asInteger;
 			yourself)].
 	theStake < 0 ifTrue: [theStake := 0].
-	theOwnBet ifNil: [
-		self user money: (self user money) - (theStake asInteger)] 
-		ifNotNil: [
-			self user money: (self user money) - ((theStake asInteger) - theOwnBet stake)].
+	
+	self user money: (self user money - theStake).
 	 
 	
 	TournamentPlannerApp saveCollectionOfPlayers: TournamentPlannerApp collectionOfPlayers data.
