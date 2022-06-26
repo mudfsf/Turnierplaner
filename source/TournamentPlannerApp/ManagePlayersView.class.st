@@ -84,7 +84,7 @@ ManagePlayersView >> createComponents [
 			enableHeaderSort;
 			minWidth: 200;
 			yourself);
-		addDataGridColumnDefinition: (Me5DataGridTextFieldColumnDefinition new
+		addDataGridColumnDefinition: (Me5DataGridIntegerFieldColumnDefinition new
 			title: 'Guthaben';
 			getterSelector: #money;
 			setterSelector: #money:;
@@ -223,9 +223,9 @@ ManagePlayersView >> saveEvent [
 	theNumberOfEditedDataGridRows := self listGrid numberOfEditedDataGridRows.
 	self listGrid validateEditedDataGridCellsForBlock: [ :eachEditedDataGridCell | | theFieldName theValue |
 		theFieldName := (self listGrid dataGridColumnDefinitions at: eachEditedDataGridCell field asNumber) 
-			title lowercaseFirstCharacter.
+			title.
 		theValue := eachEditedDataGridCell value.
-		theValue isEmptyOrNil
+		(theValue isNil or: [((theValue isMemberOf: String) and: [theValue isEmpty])])
 			ifTrue: [
 					eachEditedDataGridCell errorText: ('Bitte geben sie ein %1 ein' bindWith: theFieldName)]].
 	self listGrid hasValidationError
