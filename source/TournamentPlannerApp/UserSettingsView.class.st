@@ -41,7 +41,7 @@ UserSettingsView >> createComponents [
 		addCssClassColLg6;
 		addCssClassCol12;
 		yourself).
-	self playerCombobox: (Me5ComboBox new
+	self playerCombobox: (Me5SelectBox new
 		text: 'Benutzer ausw&auml;hlen';			
 		objects: (TournamentPlannerApp collectionOfPlayers data collect: [ :eachPlayer |
 			eachPlayer asString]);
