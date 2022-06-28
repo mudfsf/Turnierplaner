@@ -16,19 +16,6 @@ Class {
 }
 
 { #category : 'Initial-Events' }
-ManageTournamentsView >> beforeCreateComponents [
-
-	"<^self>"
-	"This method is called before #createComponents.
-	 Sets players and tournaments."
-
-	TournamentPlannerApp collectionOfPlayers observerCollection add: self.
-	TournamentPlannerApp collectionOfTeams observerCollection add: self.
-	self members: TournamentPlannerApp collectionOfPlayers data.
-	self tournaments: TournamentPlannerApp collectionOfTournaments data
-]
-
-{ #category : 'Initial-Events' }
 ManageTournamentsView >> createComponents [
 
 	"<^self>"
@@ -36,7 +23,7 @@ ManageTournamentsView >> createComponents [
 	| thePlayers |
 	
 	thePlayers := OrderedCollection new.
-	self members do: [:eachPlayer |
+	TournamentPlannerApp collectionOfPlayers data do: [:eachPlayer |
 		thePlayers add: eachPlayer asString].
 	self createTournamentRows.
 	self divTournamentCreation: (Me5Div new
@@ -135,7 +122,7 @@ ManageTournamentsView >> createTournament [
 
 	theSelectedAsStringCollection := OrderedCollection new.
 	theSelectedCollection := OrderedCollection new.	
-	theExistingTournament := self tournaments detect: [ :eachTournament |
+	theExistingTournament := TournamentPlannerApp collectionOfTournaments data detect: [ :eachTournament |
 		eachTournament name = self textFieldTournamentName value] ifNone: [nil].
 	theExistingTournament 
 		ifNotNil: [
