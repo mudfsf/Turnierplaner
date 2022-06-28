@@ -186,6 +186,10 @@ TournamentPlannerApp class >> startUp [
 	
 	self loadAll.
 	self httpServer: (Me5SstHttpServer startUpHttpServerOnPort: '9004' serverApplicationClass: self).
-	self httpServer addViewClass: TournamentPlannerView.
+	self httpServer 
+		addViewClass: TournamentPlannerView;
+		pageNotFoundViewClass: TournamentPlannerPageNotFoundView;
+		addRedirectFrom: '/' toViewClass: TournamentPlannerView; 
+		yourself.
 	self addRouteToHttpServer
 ]
