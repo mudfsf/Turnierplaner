@@ -176,10 +176,9 @@ ManageTournamentsView >> createTournament [
 	self rowTournaments addChild: (self createTournamentDivWithTournament: theCurrentTournament 
 		withTournamenType: theTournamentTypeAsString
 		withMembers: theSelectedAsStringCollection).
-	self tournaments add: theCurrentTournament.
-	TournamentPlannerApp saveCollectionOfTournaments: self tournaments.
-	self textFieldTournamentName value: ''.
-	self multiComboBoxRivals deselectAllObjects.
+	TournamentPlannerApp collectionOfTournaments data add: theCurrentTournament.
+	TournamentPlannerApp saveCollectionOfTournaments: TournamentPlannerApp collectionOfTournaments data.
+	self resetTournamentCreation.
 	self showSuccessNotificationWithMessage: ('Turnier %1 wurde erstellt!' bindWith: theCurrentTournament name)
 ]
 
@@ -238,7 +237,7 @@ ManageTournamentsView >> createTournamentRows [
 	"Creates Rows of Tournaments"
 	
 	self rowTournaments: Me5Row new.
-	self tournaments do: [	:eachTournament | 
+	TournamentPlannerApp collectionOfTournaments data do: [	:eachTournament | 
 		| theMembers theTournamentType |
 		(eachTournament tournamentType isKindOf: KOTournamentType)
 			ifTrue: [theTournamentType := 'KO'].
@@ -367,28 +366,33 @@ ManageTournamentsView >> removeTournament: aMe5DialogEvent [
 	theTournamentExistsBoolean := true.
 	theDivTournament := aMe5DialogEvent originalEvent component parent parent parent parent parent parent.	
 	theDivTournament parent removeChild: theDivTournament ifAbsent: [].
-	theTournament := self tournaments detect: [ :eachTournament |
+	theTournament := TournamentPlannerApp collectionOfTournaments data detect: [ :eachTournament |
 		eachTournament name = theDivTournament children first title]
 		ifNone: [
 			self showErrorNotificationWithMessage: 'Turnier exisistiert nicht mehr...'.
 			theTournamentExistsBoolean := false].
 	theTournamentExistsBoolean
 		ifTrue: [
-			self tournaments remove: theTournament ifAbsent: [].
-			TournamentPlannerApp saveCollectionOfTournaments: self tournaments.
+			TournamentPlannerApp collectionOfTournaments data remove: theTournament ifAbsent: [].
+			TournamentPlannerApp saveCollectionOfTournaments: TournamentPlannerApp collectionOfTournaments data.
 			self showSuccessNotificationWithMessage: ('Turnier mit dem Namen %1 gel&ouml;scht' 
 				bindWith: theTournament name)]
 ]
 
-{ #category : 'API' }
-ManageTournamentsView >> resetData [
+{ #category : 'Internal' }
+ManageTournamentsView >> resetTournamentCreation [
+
+	"^self"
+	"Resets the filled in content of the tournament creation"
+
+	| theSelectedObjects |
 	
-	"<^self>"
-	"refreshes all data sources and rebuilds affected classes"
-	
-	self members: TournamentPlannerApp collectionOfPlayers data.
-	self tournaments: TournamentPlannerApp collectionOfTournaments data.
-	"self createRivalsMultiComboBox"
+	self textFieldTournamentName value: ''.
+	theSelectedObjects := self multiComboBoxRivals selectedObjects.	
+	theSelectedObjects do: [ :eachMember |
+		self multiComboBoxRivals deselectObject: eachMember].		
+	self radioGroupTournamentType selectObject: 'KO'.
+	self radioGroupGameMode selectObject: 'Einzel'
 ]
 
 { #category : 'Accessing' }
@@ -425,24 +429,6 @@ ManageTournamentsView >> textFieldTournamentName: aMe5TextField [
 	"Set the textFieldTournamentName of the receiver"
 
 	textFieldTournamentName := aMe5TextField
-]
-
-{ #category : 'Accessing' }
-ManageTournamentsView >> tournaments [
-
-	"<^hOf Collection of: {iOf Tournament}>"
-	"Answer the tournaments of the receiver"
-
-	^tournaments
-]
-
-{ #category : 'Accessing' }
-ManageTournamentsView >> tournaments: aTournamentCollection [
-
-	"<aTournamentCollection: hOf Collection of: {iOf Tournament}, ^self>"
-	"Set the tournaments of the receiver"
-
-	tournaments := aTournamentCollection
 ]
 
 { #category : 'Internal' }

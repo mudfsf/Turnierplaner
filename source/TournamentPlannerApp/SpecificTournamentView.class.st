@@ -32,7 +32,7 @@ SpecificTournamentView >> beforeCreateComponents [
 		rowsSpacing: 20;
 		columnSpacing: 120;
 		tournament: (TournamentPlannerApp collectionOfTournaments data detect: [ :eachTournament |
-			eachTournament name = (self queryParameters at: 'tournamentName')] 
+			eachTournament name = (self queryParameters at: 'tournamentName' ifAbsent: [])] 
 			ifNone: [^self showErrorNotificationWithMessage: 'Kein Turnier wurde gefunden!']);
 		tournamentType: (self queryParameters at: 'tournamentType');
 		tournamentDrawingArea: Me5Div new;
@@ -67,6 +67,12 @@ SpecificTournamentView >> calculateBetWinnings: aGame withWinner: aWinnerMember 
 	
 ]
 
+{ #category : 'Events' }
+SpecificTournamentView >> closeTab [
+
+	Bs4JavaScriptTranscript addJavaScript: ('window.close();')
+]
+
 { #category : 'Accessing' }
 SpecificTournamentView >> columnSpacing [
 
@@ -89,13 +95,16 @@ SpecificTournamentView >> columnSpacing: aNumber [
 SpecificTournamentView >> createComponents [
 
 	"<^self>"
-	
+		
 	self tournament isNil
 		ifTrue: [
 			self addChild: (Me5H1 newWithText: 'Kein Turnier gefunden').
 			self addChild: (Me5H2 newWithText: 'Bitte Tab schlie&szlig;en, und &uuml;ber die Hauptseite das Turnier &ouml;ffnen!').
+			self addChild: (Me5Button newDanger
+				text: 'Tab schlie&szlig;en';
+				addClickEventSelector: #closeTab;
+				yourself).
 			^self].
-
 	self addChild: (Me5H1 new
 			addCssClassTextCenter;
 			text: self tournament name;
