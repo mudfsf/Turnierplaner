@@ -2,15 +2,13 @@ Class {
 	#name : 'ManageTournamentsView',
 	#superclass : 'Me5BaseView',
 	#instVars : [
-		'tournaments',
 		'rowTournaments',
 		'divTournamentCreation',
 		'multiComboBoxRivals',
 		'textFieldTournamentName',
 		'radioGroupTournamentType',
 		'radioGroupGameMode',
-		'removeTournamentEvent',
-		'members'
+		'removeTournamentEvent'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -268,24 +266,6 @@ ManageTournamentsView >> getMemberCollection [
 	self radioGroupGameMode value = 'Team'
 		ifTrue: [^TournamentPlannerApp collectionOfTeams data].
 	^OrderedCollection new
-]
-
-{ #category : 'Accessing' }
-ManageTournamentsView >> members [
-
-	"<^hOf Collection of: {iOf Member}>"
-	"Answer the players of the receiver"
-
-	^members
-]
-
-{ #category : 'Accessing' }
-ManageTournamentsView >> members: aMemberCollection [
-
-	"<aMemberCollection: hOf Collection of: {iOf Member}, ^self>"
-	"Set the players of the receiver"
-
-	members := aMemberCollection
 ]
 
 { #category : 'Accessing' }
