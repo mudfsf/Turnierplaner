@@ -263,6 +263,6 @@ ManageTeamsView >> teamToDelete: aString [
 ManageTeamsView >> yesNoModalRemoveTeam: aMe5Event [
 
 	"<^self>"
-	self tournamentToDelete: aMe5Event component componentObject.
+	self teamToDelete: aMe5Event component componentObject.
 	self showYesNoDialogWithTitle: 'Team l&ouml;schen?' message: '' yesSelector: #removeTeam:
 ]
