@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'teamsRow',
 		'modalTextFieldTeamName',
-		'modalMultiComboBoxTeamMembers'
+		'modalMultiComboBoxTeamMembers',
+		'tournamentToDelete',
+		'dictionaryOfTournaments'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -15,8 +17,9 @@ ManageTeamsView >> createComponents [
 	"<^iOf Me5Div>"
 	"Create the teamsTab where we can see and manage all teams"
 
-	| theTeamMemberDiv theResultDiv theTeamList theCollectionOfTeamMemberCollections thePersons textFieldTeamName multiComboBoxTeamMembers |
+	| theTeamMemberDiv theResultDiv theTeamList theCollectionOfTeamMemberCollections thePersons textFieldTeamName multiComboBoxTeamMembers theTeamDiv |
 
+	self dictionaryOfTournaments: Dictionary new.
 	thePersons := OrderedCollection new.
 	TournamentPlannerApp collectionOfPlayers data do: [ :eachPerson |
 		thePersons add: ('%1 %2' bindWith: eachPerson firstName with: eachPerson lastName)].
@@ -37,21 +40,24 @@ ManageTeamsView >> createComponents [
 			addChild: (Me5P new
 			text: eachPlayer asString;
 			fontSize: 'large';
-			yourself))].
-		self teamsRow addChild: (Me5Div new
+			yourself))].		
+		self teamsRow addChild: (theTeamDiv := Me5Div new
 			padding: 15;
 			addCssClassColSm12;
 			addCssClassColMd6;
 			addCssClassColXl4;
 			addChild: (Me5Portlet newPrimary
-				title: (eachTeam teamName);
+				title: eachTeam teamName;
 				addChildToHeadTools: (Me5A newIconOnlyPrimary
 					icon: Me5I newFasTrash;
+					componentObject: eachTeam teamName;
 					addClickEventSelector: #yesNoModalRemoveTeam: eventReceiver: self;
 					yourself);
 				addChildToBody: theTeamMemberDiv;
 				yourself);
-			yourself)].
+			yourself).
+		self dictionaryOfTournaments add: (Association new
+			key: eachTeam teamName value: theTeamDiv)].
 	theResultDiv := Me5Div new 
 		addChild: (Me5H1 new 
 			text: 'Teams';
@@ -86,6 +92,24 @@ ManageTeamsView >> createComponents [
 	self modalMultiComboBoxTeamMembers: multiComboBoxTeamMembers.
 	self addChild: theResultDiv
 	
+]
+
+{ #category : 'Accessing' }
+ManageTeamsView >> dictionaryOfTournaments [
+
+	"<^hOf Dictionary: {key: iOf String, value: iOf Me5Div}>"
+	"Answer the dictionaryOfTournaments of the receiver"
+
+	^dictionaryOfTournaments
+]
+
+{ #category : 'Accessing' }
+ManageTeamsView >> dictionaryOfTournaments: aDictionary [
+
+	"<aDictionary: hOf Dictionary: {key: iOf String, value: iOf Me5Div}, ^self>"
+	"Set the dictionaryOfTournaments of the receiver"
+
+	dictionaryOfTournaments := aDictionary
 ]
 
 { #category : 'Accessing' }
@@ -130,7 +154,7 @@ ManageTeamsView >> newTeamClicked [
 	"<^self>"
 	"creates new Team"
 	
-	| theSingleTeamDiv theTeamMembers theTeam theExistingTeam|
+	| theSingleTeamDiv theTeamMembers theTeam theExistingTeam theTeamDiv |
 	
 	theTeamMembers := OrderedCollection new.
 	theSingleTeamDiv := Me5Div new.	
@@ -152,11 +176,12 @@ ManageTeamsView >> newTeamClicked [
 							text: eachValue;
 							fontSize: 'large';
 							yourself)].
-					self teamsRow addChild: (Me5Div new
+					self teamsRow addChild: (theTeamDiv := Me5Div new
 						addChild: (Me5Portlet newPrimary
-							title: (self modalTextFieldTeamName value);
+							title: self modalTextFieldTeamName value;
 							addChildToHeadTools: (Me5A newIconOnlyPrimary
 								icon: Me5I newFasTrash;
+								componentObject: self modalTextFieldTeamName value;
 								addClickEventSelector: #yesNoModalRemoveTeam: eventReceiver: self;
 								yourself);
 							addChildToBody: theSingleTeamDiv;
@@ -165,7 +190,9 @@ ManageTeamsView >> newTeamClicked [
 						addCssClassColSm12;
 						addCssClassColMd6;
 						addCssClassColXl4;
-						yourself).				
+						yourself).
+					self dictionaryOfTournaments add: (Association new
+						key: self modalTextFieldTeamName value value: theTeamDiv).
 					theTeam := Team newWithTeamName: (self modalTextFieldTeamName value ) players: theTeamMembers.
 					TournamentPlannerApp collectionOfTeams data add: theTeam.					
 					TournamentPlannerApp saveCollectionOfTeams: (TournamentPlannerApp collectionOfTeams data).
@@ -184,12 +211,13 @@ ManageTeamsView >> removeTeam: aMe5DialogEvent [
 
 	| theDivTeam theTeam |
 	
-	theDivTeam := aMe5DialogEvent originalEvent component parent parent parent parent parent parent.
-	theDivTeam parent removeChild: theDivTeam ifAbsent: [].	
+	theDivTeam := self dictionaryOfTournaments at: self tournamentToDelete ifAbsent: [^self showErrorNotificationWithMessage: 'Team wurde nicht gefunden!'].	
+	theDivTeam removeComponent.	
 	theTeam := TournamentPlannerApp collectionOfTeams data detect: [ :eachTeam |
-		eachTeam teamName = theDivTeam children first title] ifNone: [].
-	TournamentPlannerApp collectionOfTeams data remove: theTeam ifAbsent: [].
+		eachTeam teamName = self tournamentToDelete] ifNone: [].
+	TournamentPlannerApp collectionOfTeams data remove: theTeam ifAbsent: [^self showErrorNotificationWithMessage: 'Team wurde nicht gefunden!'].
 	TournamentPlannerApp saveCollectionOfTeams: TournamentPlannerApp collectionOfTeams data.
+	self dictionaryOfTournaments removeKey: self tournamentToDelete ifAbsent: [^self showErrorNotificationWithMessage: 'Team wurde nicht gefunden!'].
 	self showSuccessNotificationWithMessage: ('Team %1 gel&ouml;scht' bindWith: theTeam asString)
 ]
 
@@ -211,10 +239,28 @@ ManageTeamsView >> teamsRow: aMe5Div [
 	teamsRow := aMe5Div
 ]
 
+{ #category : 'Accessing' }
+ManageTeamsView >> tournamentToDelete [
+
+	"<^iOf Me5Div>"
+	"Answer the tournamentToDelete of the receiver"
+
+	^tournamentToDelete
+]
+
+{ #category : 'Accessing' }
+ManageTeamsView >> tournamentToDelete: aMe5Div [
+
+	"<aMe5Div: iOf Me5Div, ^self>"
+	"Set the tournamentToDelete of the receiver"
+
+	tournamentToDelete := aMe5Div
+]
+
 { #category : 'Events' }
 ManageTeamsView >> yesNoModalRemoveTeam: aMe5Event [
 
 	"<^self>"
-
+	self tournamentToDelete: aMe5Event component componentObject.
 	self showYesNoDialogWithTitle: 'Team l&ouml;schen?' message: '' yesSelector: #removeTeam:
 ]
