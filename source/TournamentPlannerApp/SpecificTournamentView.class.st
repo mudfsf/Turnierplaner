@@ -67,8 +67,7 @@ SpecificTournamentView >> calculateBetWinnings: aGame withWinner: aWinnerMember 
 	
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> columnSpacing [
 
 	"<^hOf Number>"
@@ -77,8 +76,7 @@ SpecificTournamentView >> columnSpacing [
 	^columnSpacing
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> columnSpacing: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -381,8 +379,7 @@ SpecificTournamentView >> haveLapsBeenPlayed [
 			eachGame resultCollection notEmptyAndNotNil]
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> height [
 
 	"<^hOf Number>"
@@ -391,8 +388,7 @@ SpecificTournamentView >> height [
 	^height
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> height: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -419,8 +415,7 @@ SpecificTournamentView >> highestRankedMembers: aCollection [
 	highestRankedMembers := aCollection
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> offsetX [
 
 	"<^hOf Number>"
@@ -429,8 +424,7 @@ SpecificTournamentView >> offsetX [
 	^offsetX
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> offsetX: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -439,8 +433,7 @@ SpecificTournamentView >> offsetX: aNumber [
 	offsetX := aNumber
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> offsetY [
 
 	"<^hOf Number>"
@@ -449,8 +442,7 @@ SpecificTournamentView >> offsetY [
 	^offsetY
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> offsetY: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -477,8 +469,7 @@ SpecificTournamentView >> resultModal: aModalView [
 	resultModal := aModalView
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> rowsSpacing [
 
 	"<^hOf Number>"
@@ -487,8 +478,7 @@ SpecificTournamentView >> rowsSpacing [
 	^rowsSpacing
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> rowsSpacing: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
@@ -880,8 +870,7 @@ SpecificTournamentView >> user: anObject [
 	user := anObject
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> width [
 
 	"<^hOf Number>"
@@ -890,8 +879,7 @@ SpecificTournamentView >> width [
 	^width
 ]
 
-{ #category : 'Accessing',
-  #vaVisibility : 'private' }
+{ #category : 'Accessing' }
 SpecificTournamentView >> width: aNumber [
 
 	"<aNumber: hOf Number, ^self>"
