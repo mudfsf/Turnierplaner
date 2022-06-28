@@ -98,6 +98,7 @@ ManagePlayersView >> createComponents [
 				:theDataGridComponentsHolderCell :theDataGridComponentsHoldingParameters |
 				theDataGridComponentsHolderCell
 				addChild: (Me5Button newDanger
+					icon: Me5I newFasTrash;
 					text: 'L&ouml;schen';
 					addClickEventSelector: #deletePlayerEvent: eventReceiver: self;
 					yourself);
