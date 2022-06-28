@@ -154,8 +154,9 @@ ManageTeamsView >> newTeamClicked [
 	"<^self>"
 	"creates new Team"
 	
-	| theSingleTeamDiv theTeamMembers theTeam theExistingTeam theTeamDiv |
+	| theSingleTeamDiv theTeamMembers theTeam theExistingTeam theTeamDiv theSelectedObjects |
 	
+	theSelectedObjects := self modalMultiComboBoxTeamMembers selectedObjects.
 	theTeamMembers := OrderedCollection new.
 	theSingleTeamDiv := Me5Div new.	
 	self modalTextFieldTeamName clearErrorText.
@@ -197,7 +198,8 @@ ManageTeamsView >> newTeamClicked [
 					TournamentPlannerApp collectionOfTeams data add: theTeam.					
 					TournamentPlannerApp saveCollectionOfTeams: (TournamentPlannerApp collectionOfTeams data).
 					self modalTextFieldTeamName value: ''.
-					self modalMultiComboBoxTeamMembers deselectAllObjects.
+					theSelectedObjects do: [ :eachMember |
+						self modalMultiComboBoxTeamMembers deselectObject: eachMember].
 					self showSuccessNotificationWithMessage: ('Team %1 wurde erstellt!' bindWith: theTeam asString)
 					]]
 		ifNotNil: [self modalTextFieldTeamName setErrorText: ('Das Team exisistiert bereits')]
