@@ -359,7 +359,8 @@ ManageTournamentsView >> resetTournamentCreation [
 	theSelectedObjects do: [ :eachMember |
 		self multiComboBoxRivals deselectObject: eachMember].		
 	self radioGroupTournamentType selectObject: 'KO'.
-	self radioGroupGameMode selectObject: 'Einzel'
+	self radioGroupGameMode selectObject: 'Einzel'.
+	self createRivalsMultiComboBox
 ]
 
 { #category : 'Accessing' }
