@@ -5,8 +5,8 @@ Class {
 		'teamsRow',
 		'modalTextFieldTeamName',
 		'modalMultiComboBoxTeamMembers',
-		'tournamentToDelete',
-		'dictionaryOfTournaments'
+		'teamToDelete',
+		'dictionaryOfTeamDivs'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -19,7 +19,7 @@ ManageTeamsView >> createComponents [
 
 	| theTeamMemberDiv theResultDiv theTeamList theCollectionOfTeamMemberCollections thePersons textFieldTeamName multiComboBoxTeamMembers theTeamDiv |
 
-	self dictionaryOfTournaments: Dictionary new.
+	self dictionaryOfTeamDivs: Dictionary new.
 	thePersons := OrderedCollection new.
 	TournamentPlannerApp collectionOfPlayers data do: [ :eachPerson |
 		thePersons add: ('%1 %2' bindWith: eachPerson firstName with: eachPerson lastName)].
@@ -56,7 +56,7 @@ ManageTeamsView >> createComponents [
 				addChildToBody: theTeamMemberDiv;
 				yourself);
 			yourself).
-		self dictionaryOfTournaments add: (Association new
+		self dictionaryOfTeamDivs add: (Association new
 			key: eachTeam teamName value: theTeamDiv)].
 	theResultDiv := Me5Div new 
 		addChild: (Me5H1 new 
@@ -95,21 +95,21 @@ ManageTeamsView >> createComponents [
 ]
 
 { #category : 'Accessing' }
-ManageTeamsView >> dictionaryOfTournaments [
+ManageTeamsView >> dictionaryOfTeamDivs [
 
 	"<^hOf Dictionary: {key: iOf String, value: iOf Me5Div}>"
-	"Answer the dictionaryOfTournaments of the receiver"
+	"Answer the dictionaryOfTeamDivs of the receiver"
 
-	^dictionaryOfTournaments
+	^dictionaryOfTeamDivs
 ]
 
 { #category : 'Accessing' }
-ManageTeamsView >> dictionaryOfTournaments: aDictionary [
+ManageTeamsView >> dictionaryOfTeamDivs: aDictionary [
 
 	"<aDictionary: hOf Dictionary: {key: iOf String, value: iOf Me5Div}, ^self>"
-	"Set the dictionaryOfTournaments of the receiver"
+	"Set the dictionaryOfTeamDivs of the receiver"
 
-	dictionaryOfTournaments := aDictionary
+	dictionaryOfTeamDivs := aDictionary
 ]
 
 { #category : 'Accessing' }
@@ -192,7 +192,7 @@ ManageTeamsView >> newTeamClicked [
 						addCssClassColMd6;
 						addCssClassColXl4;
 						yourself).
-					self dictionaryOfTournaments add: (Association new
+					self dictionaryOfTeamDivs add: (Association new
 						key: self modalTextFieldTeamName value value: theTeamDiv).
 					theTeam := Team newWithTeamName: (self modalTextFieldTeamName value ) players: theTeamMembers.
 					TournamentPlannerApp collectionOfTeams data add: theTeam.					
@@ -213,13 +213,13 @@ ManageTeamsView >> removeTeam: aMe5DialogEvent [
 
 	| theDivTeam theTeam |
 	
-	theDivTeam := self dictionaryOfTournaments at: self tournamentToDelete ifAbsent: [^self showErrorNotificationWithMessage: 'Team wurde nicht gefunden!'].	
+	theDivTeam := self dictionaryOfTeamDivs at: self teamToDelete ifAbsent: [^self showErrorNotificationWithMessage: 'Team wurde nicht gefunden!'].	
 	theDivTeam removeComponent.	
 	theTeam := TournamentPlannerApp collectionOfTeams data detect: [ :eachTeam |
-		eachTeam teamName = self tournamentToDelete] ifNone: [].
+		eachTeam teamName = self teamToDelete] ifNone: [].
 	TournamentPlannerApp collectionOfTeams data remove: theTeam ifAbsent: [^self showErrorNotificationWithMessage: 'Team wurde nicht gefunden!'].
 	TournamentPlannerApp saveCollectionOfTeams: TournamentPlannerApp collectionOfTeams data.
-	self dictionaryOfTournaments removeKey: self tournamentToDelete ifAbsent: [^self showErrorNotificationWithMessage: 'Team wurde nicht gefunden!'].
+	self dictionaryOfTeamDivs removeKey: self teamToDelete ifAbsent: [^self showErrorNotificationWithMessage: 'Team wurde nicht gefunden!'].
 	self showSuccessNotificationWithMessage: ('Team %1 gel&ouml;scht' bindWith: theTeam asString)
 ]
 
@@ -242,21 +242,21 @@ ManageTeamsView >> teamsRow: aMe5Div [
 ]
 
 { #category : 'Accessing' }
-ManageTeamsView >> tournamentToDelete [
+ManageTeamsView >> teamToDelete [
 
-	"<^iOf Me5Div>"
-	"Answer the tournamentToDelete of the receiver"
+	"<^iOf String>"
+	"Answer the teamToDelete of the receiver"
 
-	^tournamentToDelete
+	^teamToDelete
 ]
 
 { #category : 'Accessing' }
-ManageTeamsView >> tournamentToDelete: aMe5Div [
+ManageTeamsView >> teamToDelete: aString [
 
-	"<aMe5Div: iOf Me5Div, ^self>"
-	"Set the tournamentToDelete of the receiver"
+	"<aString: iOf String, ^self>"
+	"Set the teamToDelete of the receiver"
 
-	tournamentToDelete := aMe5Div
+	teamToDelete := aString
 ]
 
 { #category : 'Events' }
