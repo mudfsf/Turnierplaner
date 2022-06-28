@@ -8,7 +8,9 @@ Class {
 		'textFieldTournamentName',
 		'radioGroupTournamentType',
 		'radioGroupGameMode',
-		'removeTournamentEvent'
+		'removeTournamentEvent',
+		'tournamentToDelete',
+		'dictionaryOfTournamentDivs'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -20,6 +22,7 @@ ManageTournamentsView >> createComponents [
 
 	| thePlayers |
 	
+	self dictionaryOfTournamentDivs: Dictionary new.
 	thePlayers := OrderedCollection new.
 	TournamentPlannerApp collectionOfPlayers data do: [:eachPlayer |
 		thePlayers add: eachPlayer asString].
@@ -108,7 +111,7 @@ ManageTournamentsView >> createTournament [
 	"<^self>"
 	"creates and saves Tournament"
 
-	| theSelectedCollection theCollection theExistingTournament theSelectedAsStringCollection theTournamentType theTournamentTypeAsString theGames theCurrentTournament |
+	| theSelectedCollection theCollection theExistingTournament theSelectedAsStringCollection theTournamentType theTournamentTypeAsString theGames theCurrentTournament theTournamentDiv |
 	
 	 self textFieldTournamentName clearErrorText.
 	 self multiComboBoxRivals clearErrorText.
@@ -158,10 +161,12 @@ ManageTournamentsView >> createTournament [
 			eachGame isBuyBoolean]);
 		memberCollection: theSelectedCollection;
 		yourself).
-	self rowTournaments addChild: (self createTournamentDivWithTournament: theCurrentTournament 
+	self rowTournaments addChild: (theTournamentDiv := self createTournamentDivWithTournament: theCurrentTournament 
 		withTournamenType: theTournamentTypeAsString
 		withMembers: theSelectedAsStringCollection).
 	TournamentPlannerApp collectionOfTournaments data add: theCurrentTournament.
+	self dictionaryOfTournamentDivs add: (Association new 
+		key: theCurrentTournament name value: theTournamentDiv).
 	TournamentPlannerApp saveCollectionOfTournaments: TournamentPlannerApp collectionOfTournaments data.
 	self resetTournamentCreation.
 	self showSuccessNotificationWithMessage: ('Turnier %1 wurde erstellt!' bindWith: theCurrentTournament name)
@@ -182,6 +187,7 @@ ManageTournamentsView >> createTournamentDivWithTournament: aTournament withTour
 			title: aTournament name;
 			addChildToHeadTools: (Me5A newIconOnlyPrimary
 				icon: Me5I newFasTrash;
+				componentObject: aTournament name;
 				addClickEventSelector: #yesNoModalRemoveTournament: eventReceiver: self;
 				yourself);
 			addChildToBody: (Me5P new
@@ -222,8 +228,8 @@ ManageTournamentsView >> createTournamentRows [
 	"Creates Rows of Tournaments"
 	
 	self rowTournaments: Me5Row new.
-	TournamentPlannerApp collectionOfTournaments data do: [	:eachTournament | 
-		| theMembers theTournamentType |
+	TournamentPlannerApp collectionOfTournaments data do: [ :eachTournament | 
+		| theMembers theTournamentDiv theTournamentType |
 		(eachTournament tournamentType isKindOf: KOTournamentType)
 			ifTrue: [theTournamentType := 'KO'].
 		(eachTournament tournamentType isKindOf: LapsTournamentType)
@@ -233,8 +239,28 @@ ManageTournamentsView >> createTournamentRows [
 		theMembers := OrderedCollection new.
 		eachTournament memberCollection do: [ :eachMember |
 			theMembers add: eachMember asString].			
-		self rowTournaments addChild: (self createTournamentDivWithTournament: eachTournament
-			withTournamenType: theTournamentType withMembers: theMembers)]
+		self rowTournaments addChild: (theTournamentDiv := self createTournamentDivWithTournament: eachTournament
+			withTournamenType: theTournamentType withMembers: theMembers).
+		self dictionaryOfTournamentDivs add: (Association new
+			key: eachTournament name value: theTournamentDiv)]
+]
+
+{ #category : 'Accessing' }
+ManageTournamentsView >> dictionaryOfTournamentDivs [
+
+	"<^hOf Dictionary: {key: iOf String, value: iOf Me5Div}>"
+	"Answer the dictionaryOfTournamentDivs of the receiver"
+
+	^dictionaryOfTournamentDivs
+]
+
+{ #category : 'Accessing' }
+ManageTournamentsView >> dictionaryOfTournamentDivs: aDictionary [
+
+	"<aDictionary: hOf Dictionary: {key: iOf String, value: iOf Me5Div}, ^self>"
+	"Set the dictionaryOfTournamentDivs of the receiver"
+
+	dictionaryOfTournamentDivs := aDictionary
 ]
 
 { #category : 'Accessing' }
@@ -331,10 +357,10 @@ ManageTournamentsView >> removeTournament: aMe5DialogEvent [
 	| theDivTournament theTournament theTournamentExistsBoolean|
 	
 	theTournamentExistsBoolean := true.
-	theDivTournament := aMe5DialogEvent originalEvent component parent parent parent parent parent parent.	
-	theDivTournament parent removeChild: theDivTournament ifAbsent: [].
+	theDivTournament := self dictionaryOfTournamentDivs at: self tournamentToDelete ifAbsent: [^self showErrorNotificationWithMessage: 'Turnier wurde nicht gefunden!'].	
+	theDivTournament removeComponent.
 	theTournament := TournamentPlannerApp collectionOfTournaments data detect: [ :eachTournament |
-		eachTournament name = theDivTournament children first title]
+		eachTournament name = self tournamentToDelete]
 		ifNone: [
 			self showErrorNotificationWithMessage: 'Turnier exisistiert nicht mehr...'.
 			theTournamentExistsBoolean := false].
@@ -399,6 +425,24 @@ ManageTournamentsView >> textFieldTournamentName: aMe5TextField [
 	textFieldTournamentName := aMe5TextField
 ]
 
+{ #category : 'Accessing' }
+ManageTournamentsView >> tournamentToDelete [
+
+	"<^iOf String>"
+	"Answer the tournamentToDelete of the receiver"
+
+	^tournamentToDelete
+]
+
+{ #category : 'Accessing' }
+ManageTournamentsView >> tournamentToDelete: aString [
+
+	"<aString: iOf String, ^self>"
+	"Set the tournamentToDelete of the receiver"
+
+	tournamentToDelete := aString
+]
+
 { #category : 'Internal' }
 ManageTournamentsView >> winnerOfTournament: aTournament [
 
@@ -434,6 +478,7 @@ ManageTournamentsView >> yesNoModalRemoveTournament: aMe5Event [
 
 	"<^self>"
 	"confirmation to delete Tournament"
-
+	
+	self tournamentToDelete: aMe5Event component componentObject.
 	self showYesNoDialogWithTitle: 'Turnier l&ouml;schen?' message: '' yesSelector: #removeTournament:
 ]
