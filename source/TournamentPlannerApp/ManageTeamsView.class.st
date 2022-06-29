@@ -228,7 +228,7 @@ ManageTeamsView >> teamIsMemberInTournament: aTeam [
 
 	"Return true if aTeam is currently playing in a Tournament,
 	 otherwise return false"
-	
+
 	TournamentPlannerApp collectionOfTournaments data do: [:eachTournament |
 		eachTournament gameMode = 'Team' ifTrue: [
 			eachTournament memberCollection do: [:eachMember |

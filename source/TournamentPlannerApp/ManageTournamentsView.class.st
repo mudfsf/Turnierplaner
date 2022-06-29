@@ -465,12 +465,14 @@ ManageTournamentsView >> winnerOfTournament: aTournament [
 								theWinnerDictionary at: winnerOfGame put: (theWinnerDictionary at: winnerOfGame) asInteger + 1].
 						theMaxWins < (theWinnerDictionary at: winnerOfGame) asInteger
 							ifTrue: [
-								theMaxWins := (theWinnerDictionary at: winnerOfGame) asInteger.
-								theWinner := 'Sieger: ', winnerOfGame]]]
+								theMaxWins := (theWinnerDictionary at: winnerOfGame) asInteger]].
+					theWinner := (theWinnerDictionary select: [:eachWinner |
+						eachWinner = theMaxWins]).
+					theWinner := 'Sieger: ', (theWinner keys asArray joinUsing: ', ') asString]
 				ifFalse: [
-					theWinner := 'Sieger: ', (aTournament playedGames last resultCollection first player asString)].
+					theWinner := 'Sieger: ', (aTournament playedGames last resultCollection first player asString)]
 		].
-	^theWinner.
+	^theWinner
 ]
 
 { #category : 'Events' }
