@@ -280,7 +280,7 @@ ManageTeamsView >> yesNoModalRemoveTeam: aMe5Event [
 	self teamToDelete: aMe5Event component componentObject.
 	(self teamIsMemberInTournament: self teamToDelete) 
 		ifTrue: [
-			self showDangerNotificationWithMessage: 'Dieses Team ist gerade noch Mitglied eines Turniers und kann deshalb nicht gelöscht werden.']
+			self showDangerNotificationWithMessage: 'Dieses Team ist gerade noch Mitglied eines Turniers und kann deshalb nicht gel&ouml;scht werden.']
 		ifFalse: [
 			self showYesNoDialogWithTitle: 'Team l&ouml;schen?' message: '' yesSelector: #removeTeam:]
 ]
