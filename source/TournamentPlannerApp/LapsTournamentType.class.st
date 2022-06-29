@@ -5,6 +5,15 @@ Class {
 }
 
 { #category : 'API' }
+LapsTournamentType >> asString [
+
+	"<^iOf String>"
+	"Answer the receiver as a string"
+
+	^'Runden'
+]
+
+{ #category : 'API' }
 LapsTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 
 	"<aCollectionOfMembers hOf Collection of: iOf Member, ^self>"

@@ -17,6 +17,15 @@ KOTournamentType class >> new [
 	^super new initialize
 ]
 
+{ #category : 'API' }
+KOTournamentType >> asString [
+
+	"<^iOf String>"
+	"Answer the receiver as a string"
+
+	^'KO'
+]
+
 { #category : 'Accessing' }
 KOTournamentType >> gameCollection [
 	

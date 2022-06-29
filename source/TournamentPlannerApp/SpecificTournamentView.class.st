@@ -34,7 +34,7 @@ SpecificTournamentView >> beforeCreateComponents [
 		tournament: (TournamentPlannerApp collectionOfTournaments data detect: [ :eachTournament |
 			eachTournament name = (self queryParameters at: 'tournamentName' ifAbsent: [])] 
 			ifNone: [^self showErrorNotificationWithMessage: 'Kein Turnier wurde gefunden!']);
-		tournamentType: (self queryParameters at: 'tournamentType');
+		tournamentType: (self queryParameters at: 'tournamentType' ifAbsent: []);
 		tournamentDrawingArea: Me5Div new;
 		yourself
 ]
@@ -95,16 +95,26 @@ SpecificTournamentView >> columnSpacing: aNumber [
 SpecificTournamentView >> createComponents [
 
 	"<^self>"
-		
+	
+	| theValidTypeStrings |
+	
+	theValidTypeStrings := OrderedCollection  new
+		add: 'KO';
+		add: 'Mixed';
+		add: 'Runden';
+		yourself.
 	self tournament isNil
 		ifTrue: [
-			self addChild: (Me5H1 newWithText: 'Kein Turnier gefunden').
-			self addChild: (Me5H2 newWithText: 'Bitte Tab schlie&szlig;en, und &uuml;ber die Hauptseite das Turnier &ouml;ffnen!').
-			self addChild: (Me5Button newDanger
-				text: 'Tab schlie&szlig;en';
-				addClickEventSelector: #closeTab;
-				yourself).
+			self createErrorViewWithTitle: 'Kein Turnier gefunden'.			
 			^self].
+	(self tournamentType isEmptyOrNil or: [(theValidTypeStrings includes: self tournamentType) not]) 
+		ifTrue: [
+			self createErrorViewWithTitle: 'Falscher Turniertyp'.			
+			^self].
+	(self tournament tournamentType asString ~= self tournamentType )
+		ifTrue: [
+			self createErrorViewWithTitle: 'Turnier und Turniertyp passen nicht zusammen'.
+			^self].	
 	self addChild: (Me5H1 new
 			addCssClassTextCenter;
 			text: self tournament name;
@@ -112,6 +122,21 @@ SpecificTournamentView >> createComponents [
 		addChild: Me5Hr new;
 		yourself.
 	self setDrawingArea
+]
+
+{ #category : 'Internal' }
+SpecificTournamentView >> createErrorViewWithTitle: aTitle [
+	
+	"<^self>"
+		
+	self addChild: (Me5H1 newWithText: aTitle).
+	self addChild: (Me5H2 newWithText: 'Bitte Tab schlie&szlig;en, und &uuml;ber die Hauptseite das Turnier &ouml;ffnen!').
+	self addChild: (Me5Button newDanger
+		text: 'Tab schlie&szlig;en';
+		addClickEventSelector: #closeTab;
+		yourself).
+	^self
+	
 ]
 
 { #category : 'Internal' }

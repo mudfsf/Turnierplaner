@@ -5,6 +5,15 @@ Class {
 }
 
 { #category : 'API' }
+MixedTournamentType >> asString [
+
+	"<^iOf String>"
+	"Answer the receiver as a string"
+
+	^'Mixed'
+]
+
+{ #category : 'API' }
 MixedTournamentType >> getCollectionOfGamesWithMembers: aCollectionOfMembers [
 	
 	"<aCollectionOfPlayers hOf Collection of: iOf Member>"
