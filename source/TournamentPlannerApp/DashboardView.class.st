@@ -9,61 +9,56 @@ DashboardView >> createComponents [
 
 	"<^self>"
 
-	| theDashboard theTextNextGame theTextActualTournament theTextActualMatch theTextRunningTournaments theTextBestTeamNowInTheTournament theTextTeamMatchesInTheTournament 	theTextBestPlayerNowInTheTournament theTextPlayerMatchesInTheTournament 
-	theTextForBets theTextWithWageredMoney theTextForRunningBets theTextWithWageredMoneyForTheBets progressBarTournament progressBarPlayer theNeededTournament theNeededPlayer theListofGamesfromNeededPlayer theListofGamesfromNeededPlayerPlayed 
-	theCollectionOfNotPlayedGamesFromNeededPlayer theIndexOfFirstUncompletedTournament theIndexOfThePlayersTournament theNeededMember theCollectionOfIncompletedTournaments theSumOfBettedMoney |
+	| theDashboardDiv theCurrentTournamentText theCurrentMatchText thePlayersCurrentTournamentText theRemainingGamesInTournamentText theCurrentPlayerText theRemainingGamesForThePlayerText 
+	thePlayerMoneyText theWageredMoneyText theTournamentProgressBar thePlayerProgressBar theNeededTournament theNeededPlayer theListOfGamesFromNeededPlayer theListOfGamesFromNeededPlayerPlayed 
+	theCollectionOfNotPlayedGamesFromNeededPlayer theIndexOfThePlayersTournament theNeededMember theCollectionOfIncompletedTournaments theSumOfBettedMoney |
 
 	theNeededPlayer := TournamentPlannerApp loggedInUser.
 	theNeededMember := theNeededPlayer.
-	theIndexOfFirstUncompletedTournament := TournamentPlannerApp collectionOfTournaments data findFirst: [ :eachTournament |
-		eachTournament games size ~= eachTournament playedGames size].
 	theIndexOfThePlayersTournament := TournamentPlannerApp collectionOfTournaments data findFirst: [ :eachTournament |
 		(eachTournament memberCollection first isMemberOf: Team)
 			ifTrue: [ 
 				theNeededMember := eachTournament memberCollection at: (eachTournament memberCollection findFirst: [ :eachTeam | 
 					(eachTeam members findFirst: [ :eachPlayer | eachPlayer asString = theNeededPlayer asString ]) ~= 0]) ifAbsent: [Team new]]
 			ifFalse: [theNeededMember := theNeededPlayer].
-		eachTournament games size ~= eachTournament playedGames size and: [ eachTournament memberCollection includes: theNeededMember] ].
-	progressBarTournament := 0. 
-	progressBarPlayer := 0.
+		eachTournament games size ~= eachTournament playedGames size and: [(eachTournament memberCollection findFirst: [ :eachMember |
+			eachMember asString = theNeededMember asString]) ~= 0]].
+	theTournamentProgressBar := 0. 
+	thePlayerProgressBar := 0.
 	(TournamentPlannerApp collectionOfTournaments data isEmpty or: [ theIndexOfThePlayersTournament = 0 ])
 		ifTrue: [ 
-			theTextActualTournament := Me5H5 new text: ('Turnier: -').
-			theTextActualMatch := Me5H5 new text: ('Spiel: -').
-			theTextBestTeamNowInTheTournament := Me5H5 new text: ('Turnier: -'). 
-			theTextTeamMatchesInTheTournament := Me5H6 new text: ('&Uuml;brige Spiele: -').
-			theTextPlayerMatchesInTheTournament := theTextTeamMatchesInTheTournament.
-			theTextBestPlayerNowInTheTournament := Me5H5 new text: ('Spieler: -').
-			theListofGamesfromNeededPlayer := 1. 
-			theListofGamesfromNeededPlayerPlayed := 1]
+			theCurrentTournamentText := Me5H5 new text: ('Turnier: -').
+			theCurrentMatchText := Me5H5 new text: ('Spiel: -').
+			thePlayersCurrentTournamentText := Me5H5 new text: ('Turnier: -'). 
+			theRemainingGamesInTournamentText := Me5H6 new text: ('&Uuml;brige Spiele: -').
+			theRemainingGamesForThePlayerText := theRemainingGamesInTournamentText.
+			theCurrentPlayerText := Me5H5 new text: ('Spieler: -').
+			theListOfGamesFromNeededPlayer := 1. 
+			theListOfGamesFromNeededPlayerPlayed := 1]
 		ifFalse: [ 		
 			theNeededTournament := TournamentPlannerApp collectionOfTournaments data at: theIndexOfThePlayersTournament.			
-			theTextActualTournament := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name). 			
-			theTextBestTeamNowInTheTournament := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name). 
-			theTextTeamMatchesInTheTournament := Me5H6 new text: ('&Uuml;brige Spiele: %1' bindWith: (theNeededTournament games size - theNeededTournament playedGames size)).
-			theTextBestPlayerNowInTheTournament := Me5H5 new text: ('Spieler: %1' bindWith: theNeededPlayer asString).
-			theListofGamesfromNeededPlayer := theNeededTournament games select: [ :eachGame | 
+			theCurrentTournamentText := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name). 			
+			thePlayersCurrentTournamentText := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name). 
+			theRemainingGamesInTournamentText := Me5H6 new text: ('&Uuml;brige Spiele: %1' bindWith: (theNeededTournament games size - theNeededTournament playedGames size)).
+			theCurrentPlayerText := Me5H5 new text: ('Spieler: %1' bindWith: theNeededPlayer asString).
+			theListOfGamesFromNeededPlayer := theNeededTournament games select: [ :eachGame | 
 				((eachGame memberCollection at: 1 ifAbsent: ['']) asString = theNeededMember asString ) or: [(eachGame memberCollection at: 2 ifAbsent: [''])  asString = theNeededMember asString ] ]. 
-			theListofGamesfromNeededPlayerPlayed := theNeededTournament playedGames select: [ :eachGame | 
+			theListOfGamesFromNeededPlayerPlayed := theNeededTournament playedGames select: [ :eachGame | 
 				(eachGame memberCollection first asString = theNeededMember asString ) or: [ eachGame memberCollection last asString = theNeededMember asString ] ].
 			theNeededTournament games size ~= 0
-				ifTrue: [progressBarTournament := 100 * theNeededTournament playedGames size / theNeededTournament games size].
-			theListofGamesfromNeededPlayer size ~= 0
-				ifTrue: [progressBarPlayer := 100 * theListofGamesfromNeededPlayerPlayed size / theListofGamesfromNeededPlayer size].
-			theTextPlayerMatchesInTheTournament := Me5H6 new text: ('&Uuml;brige Spiele: %1' bindWith: theListofGamesfromNeededPlayer size - theListofGamesfromNeededPlayerPlayed size ) .
-			theListofGamesfromNeededPlayerPlayed isEmpty
-				ifTrue: [theTextActualMatch := Me5H5 new text: ('Spiel: %1' bindWith: theListofGamesfromNeededPlayer first name)] 
+				ifTrue: [theTournamentProgressBar := 100 * theNeededTournament playedGames size / theNeededTournament games size].
+			theListOfGamesFromNeededPlayer size ~= 0
+				ifTrue: [thePlayerProgressBar := 100 * theListOfGamesFromNeededPlayerPlayed size / theListOfGamesFromNeededPlayer size].
+			theRemainingGamesForThePlayerText := Me5H6 new text: ('&Uuml;brige Spiele: %1' bindWith: theListOfGamesFromNeededPlayer size - theListOfGamesFromNeededPlayerPlayed size ) .
+			theListOfGamesFromNeededPlayerPlayed isEmpty
+				ifTrue: [theCurrentMatchText := Me5H5 new text: ('Spiel: %1' bindWith: theListOfGamesFromNeededPlayer first name)] 
 				ifFalse: [		
-					theCollectionOfNotPlayedGamesFromNeededPlayer := theListofGamesfromNeededPlayer select: [ :eachGame |
-						(theListofGamesfromNeededPlayerPlayed findFirst: [ :eachPlayedGame | eachPlayedGame name = eachGame name]) = 0].							
+					theCollectionOfNotPlayedGamesFromNeededPlayer := theListOfGamesFromNeededPlayer select: [ :eachGame |
+						(theListOfGamesFromNeededPlayerPlayed findFirst: [ :eachPlayedGame | eachPlayedGame name = eachGame name]) = 0].							
 					theCollectionOfNotPlayedGamesFromNeededPlayer isEmpty
-						ifTrue: [theTextActualMatch := Me5H5 new text: ('Spiel: -')] 
-						ifFalse: [theTextActualMatch := Me5H5 new text: ('Spiel: %1' bindWith: theCollectionOfNotPlayedGamesFromNeededPlayer first name)]]].			
-	theTextNextGame := Me5H3 new text: 'N&auml;chstes Spiel f&uuml;r dich'.
-	theTextRunningTournaments := Me5H3 new text: 'Laufende Turniere'.	
-	theTextForBets := Me5H3 new text: 'Wetten'.
-	theTextWithWageredMoney := Me5H5 new text: ('Guthaben: %1&euro;' bindWith: theNeededPlayer money).
-	theTextForRunningBets := Me5H5 new text: 'Laufende Wetten'.	
+						ifTrue: [theCurrentMatchText := Me5H5 new text: ('Spiel: -')] 
+						ifFalse: [theCurrentMatchText := Me5H5 new text: ('Spiel: %1' bindWith: theCollectionOfNotPlayedGamesFromNeededPlayer first name)]]].
+	thePlayerMoneyText := Me5H5 new text: ('Guthaben: %1&euro;' bindWith: theNeededPlayer money).
 	theCollectionOfIncompletedTournaments := TournamentPlannerApp collectionOfTournaments data select: [ :eachTournament |
 		eachTournament games size ~= eachTournament playedGames size].	
 	theSumOfBettedMoney := 0.
@@ -74,50 +69,49 @@ DashboardView >> createComponents [
 					eachGame betCollection do: [ :eachBet |
 						(eachBet bettor asString = theNeededPlayer asString) 
 							ifTrue: [theSumOfBettedMoney := theSumOfBettedMoney + eachBet stake]]]]]].		
-	theTextWithWageredMoneyForTheBets := Me5H5 new text: ('%1&euro;' bindWith: theSumOfBettedMoney).
-	theDashboard := (Me5Div new
+	theWageredMoneyText := Me5H5 new text: ('%1&euro;' bindWith: theSumOfBettedMoney).
+	theDashboardDiv := (Me5Div new
 		addChild: (Me5H2 newWithText: 'HR-Works Turnierplaner');
 		addChild: (Me5Portlet new
-			addChildToBody: theTextNextGame;
+			addChildToBody: (Me5H3 new text: 'N&auml;chstes Spiel f&uuml;r dich');
 			addChildToBody: Me5Hr new;
-			addChildToBody: theTextActualTournament;
-			addChildToBody: theTextActualMatch;
+			addChildToBody: theCurrentTournamentText;
+			addChildToBody: theCurrentMatchText;
 			yourself);		
 		addChild: (Me5Portlet new
-			addChildToBody: theTextRunningTournaments;
+			addChildToBody: (Me5H3 new text: 'Laufende Turniere');
 			addChildToBody: Me5Hr new;
-			addChildToBody: theTextBestTeamNowInTheTournament;
-			addChildToBody: theTextTeamMatchesInTheTournament;
+			addChildToBody: thePlayersCurrentTournamentText;
+			addChildToBody: theRemainingGamesInTournamentText;
 			addChildToBody: (Me5ProgressBar newPrimary
 				addCssClassMProgressLg;
-				value: progressBarTournament;
+				value: theTournamentProgressBar;
 				yourself);
 			addChildToBody: Me5Hr new;									
-			addChildToBody: theTextBestPlayerNowInTheTournament;
-			addChildToBody: theTextPlayerMatchesInTheTournament;
+			addChildToBody: theCurrentPlayerText;
+			addChildToBody: theRemainingGamesForThePlayerText;
 			addChildToBody: (Me5ProgressBar newPrimary
 				addCssClassMProgressLg;
-				value: progressBarPlayer;
+				value: thePlayerProgressBar;
 				yourself);
 			yourself);
 		addChild: (Me5Portlet new
-			addChildToBody: theTextForBets;
+			addChildToBody: (Me5H3 new text: 'Wetten');
 			addChildToBody: Me5Hr new;
-			addChildToBody: theTextWithWageredMoney;
+			addChildToBody: thePlayerMoneyText;
 			addChildToBody: Me5Hr new;									
-			addChildToBody: theTextForRunningBets;
-			addChildToBody: theTextWithWageredMoneyForTheBets;
+			addChildToBody: (Me5H5 new text: 'Laufende Wetten');
+			addChildToBody: theWageredMoneyText;
 			addChildToBody: (self createScrollerBetsForPlayer: theNeededPlayer);
 			yourself);
-		yourself).
-		
+		yourself).		
 	self 
 		addChild: (Me5H1 new
 			addCssClassTextCenter;
 			text: 'Dashboard';
 			yourself);
 		addChild: Me5Hr new;
-		addChild: theDashboard;
+		addChild: theDashboardDiv;
 		yourself
 ]
 
