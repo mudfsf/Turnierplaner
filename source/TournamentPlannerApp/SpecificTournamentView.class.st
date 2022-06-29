@@ -28,7 +28,7 @@ SpecificTournamentView >> beforeCreateComponents [
 	self offsetX: 40;
 		offsetY: 40;
 		width: 420;
-		height: 280;
+		height: 220;
 		rowsSpacing: 20;
 		columnSpacing: 120;
 		tournament: (TournamentPlannerApp collectionOfTournaments data detect: [ :eachTournament |
@@ -65,6 +65,45 @@ SpecificTournamentView >> calculateBetWinnings: aGame withWinner: aWinnerMember 
 			eachWinningBet bettor money: eachWinningBet bettor money + theMoneyForBettors.
 			eachWinningBet result: theMoneyForBettors]]
 	
+]
+
+{ #category : 'Events' }
+SpecificTournamentView >> calculateTotalStake: aGame [
+
+	"Add up all Bets for every member and return as Array"
+	
+	| addUpStake returnArray firstMember secondMember |
+	
+	returnArray := Array new: 4.
+	firstMember := aGame memberCollection first.
+	secondMember := aGame memberCollection second.
+	addUpStake := 0.
+	
+	aGame betCollection ifNotNil: [
+		|  betsFirstMember betsSecondMember |
+		betsFirstMember := aGame betCollection select: [:eachBet |
+			eachBet guess = firstMember].
+		betsSecondMember := aGame betCollection select: [:eachBet |
+			eachBet guess = secondMember].
+		
+		betsFirstMember do: [:eachBet |
+			addUpStake := addUpStake + (eachBet stake)].
+		returnArray at: 1 put: firstMember asString.
+		returnArray at: 2 put: addUpStake.
+		
+		addUpStake := 0.
+		betsSecondMember do: [:eachBet |
+			addUpStake := addUpStake + (eachBet stake)].
+		returnArray at: 3 put: secondMember asString.
+		returnArray at: 4 put: addUpStake] 
+	ifNil: [
+		returnArray at: 1 put: firstMember asString.
+		returnArray at: 2 put: 0.
+		returnArray at: 3 put: secondMember asString.
+		returnArray at: 4 put: 0
+	].
+	
+	^returnArray
 ]
 
 { #category : 'Events' }
@@ -170,13 +209,19 @@ SpecificTournamentView >> createKOTournament: canInitialGamesBePlayedBoolean [
 					setPositionToAbsolute;
 					zIndex: 1;
 					width: self width;
-					addChildToBody: (theResultButton := Me5Button newSuccess
-						text: 'Ergebnis eintragen';
-						addClickEventSelector: #setKOResultEvent:;
-						yourself);
-					addChildToFoot: (theBetButton := Me5Button newSuccess
-						text: 'Wetten';
-						addClickEventSelector: #setKOBetEvent:;
+					addChildToBody: (Me5Div new
+						display: 'flex';
+						justifyContent: 'space-around';
+						addChild: (theResultButton := Me5Button newSuccess
+							addCssClassCol5;
+							text: 'Ergebnis eintragen';
+							addClickEventSelector: #setKOResultEvent:;
+							yourself);
+						addChild: (theBetButton := Me5Button newSuccess
+							addCssClassCol5;
+							text: 'Wetten';
+							addClickEventSelector: #setKOBetEvent:;
+							yourself);
 						yourself);
 					yourself).
 				
@@ -544,9 +589,12 @@ SpecificTournamentView >> saveBetEvent: anEvent [
 	theOwnBet := self game betCollection detect: [:eachBet |
 		eachBet bettor = self user] ifNone: [].
 	theOwnBet ifNotNil: [
-		(self game betCollection contains: theOwnBet)
+		(self game betCollection includes: theOwnBet)
 		ifTrue: [
-			self game betCollection remove: theOwnBet]].
+			self game betCollection remove: theOwnBet.
+			self user money: (self user money - (theStake - theOwnBet stake))]]
+	ifNil: [
+		self user money: (self user money - theStake)].
 	theStake > 0 ifTrue: [
 		self game betCollection add: (Bet new
 			bettor: self user;
@@ -555,7 +603,7 @@ SpecificTournamentView >> saveBetEvent: anEvent [
 			yourself)].
 	theStake < 0 ifTrue: [theStake := 0].
 	
-	self user money: (self user money - theStake).
+	
 	 
 	
 	TournamentPlannerApp saveCollectionOfPlayers: TournamentPlannerApp collectionOfPlayers data.
@@ -658,14 +706,15 @@ SpecificTournamentView >> setBetEvent [
 	"<^self>"
 	"wip"	
 	
-	| theSaveButton theRemoveButton theSelectBox theIntegerField theOwnBet |
+	| theSaveButton theSelectBox theIntegerField theOwnBet theCurrentStakes |
 	
 	self user: TournamentPlannerApp loggedInUser.
+	theCurrentStakes := self calculateTotalStake: self game.
 	
 	self resultModal: (ModalView new title: 'Wetten').
 	
 	self resultModal body: (Me5Form new
-		addChildToBody: (Me5P new
+		addChildToBody: (Me5H5 new
 			text: ('Guthaben von %1: %2' bindWith: self user asString with: self user money);
 			yourself);
 		addChildToBody: (theSelectBox := Me5SelectBox new
@@ -676,6 +725,18 @@ SpecificTournamentView >> setBetEvent [
 			yourself);
 		addChildToBody: (theIntegerField := Me5IntegerField new
 			text: 'Einsatz (in &euro;)';
+			yourself);
+		addChildToBody: (Me5Div new
+			display: 'flex';
+			justifyContent: 'space-around';
+			addChild: (Me5P newWithText: (theCurrentStakes at: 1));
+			addChild: (Me5P newWithText: (theCurrentStakes at: 3));
+			yourself);
+		addChildToBody: (Me5Div new
+			display: 'flex';
+			justifyContent: 'space-around';
+			addChild: (Me5H4 newWithText: ('%1&euro;' bindWith: (theCurrentStakes at: 2)));
+			addChild: (Me5H4 newWithText: ('%1&euro;' bindWith: (theCurrentStakes at: 4)));
 			yourself);
 		yourself).
 		
@@ -718,7 +779,7 @@ SpecificTournamentView >> setKOBetEvent: anEvent [
 	"<^self>"
 		
 	self game: (self tournament games detect: [ :eachGame |
-		eachGame name = anEvent component parent parent title] ifNone: []).
+		eachGame name = anEvent component parent parent parent title] ifNone: []).
 	self setBetEvent
 ]
 
@@ -728,7 +789,7 @@ SpecificTournamentView >> setKOResultEvent: anEvent [
 	"<^self>"
 		
 	self game: (self tournament games detect: [ :eachGame |
-		eachGame name = anEvent component parent parent title] ifNone: []).
+		eachGame name = anEvent component parent parent parent title] ifNone: []).
 	self setResultEvent
 ]
 
@@ -824,8 +885,8 @@ SpecificTournamentView >> showDecisionResultBetEvent: anEvent [
 			addClickEventSelector: #openSetLapsBetEvent;
 			addCssClassCol5;
 			yourself);
-			display: 'flex';
-			justifyContent: 'space-around';
+		display: 'flex';
+		justifyContent: 'space-around';
 		yourself).
 		
 	self openModal: self resultModal.
