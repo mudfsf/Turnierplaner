@@ -20,8 +20,9 @@ DashboardView >> createComponents [
 	theIndexOfThePlayersTournament := TournamentPlannerApp collectionOfTournaments data findFirst: [ :eachTournament |
 		(eachTournament memberCollection first isMemberOf: Team)
 			ifTrue: [ 
-				theNeededMember := eachTournament memberCollection detect: [ :eachTeam | 
-					(eachTeam members findFirst: [ :eachPlayer | eachPlayer asString = theNeededPlayer asString ]) ~= 0]].
+				theNeededMember := eachTournament memberCollection at: (eachTournament memberCollection findFirst: [ :eachTeam | 
+					(eachTeam members findFirst: [ :eachPlayer | eachPlayer asString = theNeededPlayer asString ]) ~= 0]) ifAbsent: [Team new]]
+			ifFalse: [theNeededMember := theNeededPlayer].
 		eachTournament games size ~= eachTournament playedGames size and: [ eachTournament memberCollection includes: theNeededMember] ].
 	progressBarTournament := 0. 
 	progressBarPlayer := 0.
@@ -40,7 +41,7 @@ DashboardView >> createComponents [
 			theTextActualTournament := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name). 			
 			theTextBestTeamNowInTheTournament := Me5H5 new text: ('Turnier: %1' bindWith: theNeededTournament name). 
 			theTextTeamMatchesInTheTournament := Me5H6 new text: ('&Uuml;brige Spiele: %1' bindWith: (theNeededTournament games size - theNeededTournament playedGames size)).
-			theTextBestPlayerNowInTheTournament := Me5H5 new text: ('Spieler: %1' bindWith: theNeededMember asString).
+			theTextBestPlayerNowInTheTournament := Me5H5 new text: ('Spieler: %1' bindWith: theNeededPlayer asString).
 			theListofGamesfromNeededPlayer := theNeededTournament games select: [ :eachGame | 
 				((eachGame memberCollection at: 1 ifAbsent: ['']) asString = theNeededMember asString ) or: [(eachGame memberCollection at: 2 ifAbsent: [''])  asString = theNeededMember asString ] ]. 
 			theListofGamesfromNeededPlayerPlayed := theNeededTournament playedGames select: [ :eachGame | 
