@@ -223,6 +223,20 @@ ManageTeamsView >> removeTeam: aMe5DialogEvent [
 	self showSuccessNotificationWithMessage: ('Team %1 gel&ouml;scht' bindWith: theTeam asString)
 ]
 
+{ #category : 'Internal' }
+ManageTeamsView >> teamIsMemberInTournament: aTeam [
+
+	"Return true if aTeam is currently playing in a Tournament,
+	 otherwise return false"
+	
+	TournamentPlannerApp collectionOfTournaments data do: [:eachTournament |
+		eachTournament gameMode = 'Team' ifTrue: [
+			eachTournament memberCollection do: [:eachMember |
+				eachMember teamName = aTeam ifTrue: [
+					^true]]]].
+	^false
+]
+
 { #category : 'Accessing' }
 ManageTeamsView >> teamsRow [
 
@@ -264,5 +278,9 @@ ManageTeamsView >> yesNoModalRemoveTeam: aMe5Event [
 
 	"<^self>"
 	self teamToDelete: aMe5Event component componentObject.
-	self showYesNoDialogWithTitle: 'Team l&ouml;schen?' message: '' yesSelector: #removeTeam:
+	(self teamIsMemberInTournament: self teamToDelete) 
+		ifTrue: [
+			self showDangerNotificationWithMessage: 'Dieses Team ist gerade noch Mitglied eines Turniers und kann deshalb nicht gelöscht werden.']
+		ifFalse: [
+			self showYesNoDialogWithTitle: 'Team l&ouml;schen?' message: '' yesSelector: #removeTeam:]
 ]
