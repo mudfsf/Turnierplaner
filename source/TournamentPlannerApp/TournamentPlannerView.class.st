@@ -23,8 +23,7 @@ TournamentPlannerView >> buttonDiv [
 		addCssClassActive;
 		icon: Me5I newFasHome;
 		addClickEventSelector: #navButtonClicked:;
-		yourself).
-	
+		yourself).	
 	self tournamentButton: (Me5A newSecondary
 		text: 'Turniere';
 		icon: Me5I newFasUser;
@@ -44,8 +43,7 @@ TournamentPlannerView >> buttonDiv [
 		text: 'Admin-Tools';
 		icon: Me5I newFasUser;
 		addClickEventSelector: #navButtonClicked:;
-		yourself).
-		
+		yourself).		
 	^Me5Div new	
 		addChild: (Me5ButtonGroup newJustified
 			addChild: self dashboardButton;
