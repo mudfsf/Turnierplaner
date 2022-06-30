@@ -44,7 +44,7 @@ Player >> = anObject [
 
 	(anObject isMemberOf: Player)
 		ifTrue:[^(((self firstName = anObject firstName and: [self lastName = anObject lastName]) and: [self email = anObject email]) and: [self money = anObject money]) and: [self symbol = anObject symbol]]
-		ifFalse:[^self error: 'The given object is not an instance of player'].
+		ifFalse:[^false].
 ]
 
 { #category : 'API' }
