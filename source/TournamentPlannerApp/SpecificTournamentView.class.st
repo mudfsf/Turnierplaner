@@ -250,7 +250,8 @@ SpecificTournamentView >> createKOTournament: canInitialGamesBePlayedBoolean [
 					yourself).
 				
 				canInitialGamesBePlayedBoolean
-					ifFalse: [theResultButton disable].
+					ifFalse: [theResultButton disable.
+						theBetButton disable].
 					
 				eachGame resultCollection size > 0 
 					ifTrue: [
