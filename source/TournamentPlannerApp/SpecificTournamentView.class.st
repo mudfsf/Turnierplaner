@@ -15,7 +15,8 @@ Class {
 		'rowsSpacing',
 		'columnSpacing',
 		'resultModal',
-		'highestRankedMembers'
+		'highestRankedMembers',
+		'winnerSelectBox'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -214,11 +215,13 @@ SpecificTournamentView >> createKOTournament: canInitialGamesBePlayedBoolean [
 						justifyContent: 'space-around';
 						addChild: (theResultButton := Me5Button newSuccess
 							addCssClassCol5;
+							componentObject: eachGame name;
 							text: 'Ergebnis eintragen';
 							addClickEventSelector: #setKOResultEvent:;
 							yourself);
 						addChild: (theBetButton := Me5Button newSuccess
 							addCssClassCol5;
+							componentObject: eachGame name;
 							text: 'Wetten';
 							addClickEventSelector: #setKOBetEvent:;
 							yourself);
@@ -658,17 +661,15 @@ SpecificTournamentView >> saveWinnerEvent: anEvent [
 	
 	self game resultCollection size = 1
 		ifTrue: [^self].
-	theMemberName := anEvent component parent parent children second children first children first children first value. "anEvent component parent children first value"
-	theMemberName = 'Kein Sieger festgelegt'
+	theMemberName := self winnerSelectBox value.
+	(theMemberName = 'Kein Sieger festgelegt' or: [theMemberName isEmptyOrNil])
 		ifTrue: [self showErrorNotificationWithMessage: 'Bitte Sieger ausw&auml;hlen'.
 			^self].
 	theWinnerMember := self game memberCollection detect: [:eachMember |
 		eachMember asString = theMemberName] ifNone: [].
 	theMember := self game memberCollection reject: [:eachMember |
-		eachMember asString = theMemberName].
-		
+		eachMember asString = theMemberName].		
 	self tournament playedGames add: self game.	
-	
 	theResultCollection := OrderedCollection new	
 		add: (Result newWithPlayer: theWinnerMember ranking: 1 points: 2);
 		add: (Result newWithPlayer: theMember first ranking: 2 points: 1);
@@ -779,7 +780,7 @@ SpecificTournamentView >> setKOBetEvent: anEvent [
 	"<^self>"
 		
 	self game: (self tournament games detect: [ :eachGame |
-		eachGame name = anEvent component parent parent parent title] ifNone: []).
+		eachGame name = anEvent component componentObject ] ifNone: []).
 	self setBetEvent
 ]
 
@@ -789,7 +790,7 @@ SpecificTournamentView >> setKOResultEvent: anEvent [
 	"<^self>"
 		
 	self game: (self tournament games detect: [ :eachGame |
-		eachGame name = anEvent component parent parent parent title] ifNone: []).
+		eachGame name = anEvent component componentObject ] ifNone: []).
 	self setResultEvent
 ]
 
@@ -817,29 +818,30 @@ SpecificTournamentView >> setResultEvent [
 	"<^self>"
 	"wip"	
 	
-	| theButton |
+	| theButton theSelectBox |
 		
 	self resultModal: (ModalView new title: 'Ergebnis').
 	
 	self game resultCollection size = 0
 		ifTrue: [
 			self resultModal body: (Me5Form new
-				addChildToBody: (Me5SelectBox new
+				addChildToBody: (theSelectBox := (Me5SelectBox new
 					text: 'Sieger';
 					noneObject: 'Kein Sieger festgelegt';
 					objects: (self game memberCollection collect: [ :eachMember | 
 						eachMember asString]);
-					yourself);
+					yourself));
 				yourself)]
 		ifFalse: [
 				self resultModal body: (Me5Form new
-					addChildToBody: (Me5SelectBox new
+					addChildToBody: (theSelectBox := (Me5SelectBox new
 						text: 'Sieger';
 						disableNoneObject;
 						objects: (self game resultCollection collect: [ :eachResult | 
 							eachResult player asString]);
-						yourself);
+						yourself));
 					yourself)].
+	self winnerSelectBox: theSelectBox.
 	theButton := Me5Button newPrimary
 		text: 'Speichern';
 		icon: Me5I newFasSave;
@@ -981,4 +983,22 @@ SpecificTournamentView >> width: aNumber [
 	"Set the width of the receiver"
 
 	width := aNumber
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> winnerSelectBox [
+
+	"<^iOf Me5SelectBox>"
+	"Answer the winnerSelectBox of the receiver"
+
+	^winnerSelectBox
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> winnerSelectBox: aMe5SelectBox [
+
+	"<aMe5SelectBox: iOf Me5SelectBox, ^self>"
+	"Set the winnerSelectBox of the receiver"
+
+	winnerSelectBox := aMe5SelectBox
 ]
