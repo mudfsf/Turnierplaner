@@ -16,7 +16,8 @@ Class {
 		'columnSpacing',
 		'resultModal',
 		'highestRankedMembers',
-		'winnerSelectBox'
+		'winnerSelectBox',
+		'bettedWinnerSelectBox'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -38,6 +39,24 @@ SpecificTournamentView >> beforeCreateComponents [
 		tournamentType: (self queryParameters at: 'tournamentType' ifAbsent: []);
 		tournamentDrawingArea: Me5Div new;
 		yourself
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> bettedWinnerSelectBox [
+
+	"<^iOf Me5SelectBox>"
+	"Answer the bettedWinnerSelectBox of the receiver"
+
+	^bettedWinnerSelectBox
+]
+
+{ #category : 'Accessing' }
+SpecificTournamentView >> bettedWinnerSelectBox: aMe5SelectBox [
+
+	"<aMe5SelectBox: iOf Me5SelectBox, ^self>"
+	"Set the bettedWinnerSelectBox of the receiver"
+
+	bettedWinnerSelectBox := aMe5SelectBox
 ]
 
 { #category : 'Internal' }
@@ -214,8 +233,9 @@ SpecificTournamentView >> createKOTournament: canInitialGamesBePlayedBoolean [
 						display: 'flex';
 						justifyContent: 'space-around';
 						addChild: (theResultButton := Me5Button newSuccess
-							addCssClassCol5;
+							addCssClassCol6;
 							componentObject: eachGame name;
+							icon: Me5I newFasSave;
 							text: 'Ergebnis eintragen';
 							addClickEventSelector: #setKOResultEvent:;
 							yourself);
@@ -223,6 +243,7 @@ SpecificTournamentView >> createKOTournament: canInitialGamesBePlayedBoolean [
 							addCssClassCol5;
 							componentObject: eachGame name;
 							text: 'Wetten';
+							icon: Me5I newFasMoneyBill;
 							addClickEventSelector: #setKOBetEvent:;
 							yourself);
 						yourself);
@@ -577,17 +598,16 @@ SpecificTournamentView >> saveBetEvent: anEvent [
 	
 	self game resultCollection size = 1
 		ifTrue: [^self].
-	theMemberName := anEvent component parent parent children second children first children first children second value.
-	theMemberName = 'Kein Sieger festgelegt'
+	theMemberName := self bettedWinnerSelectBox value.
+	(theMemberName = 'Kein Sieger festgelegt' or: [theMemberName isEmptyOrNil])
 		ifTrue: [self showErrorNotificationWithMessage: 'Bitte Sieger ausw&auml;hlen'.
 			^self].
 	theWinnerMember := self game memberCollection detect: [:eachMember |
 		eachMember asString = theMemberName] ifNone: [].
-	theStake := anEvent component parent parent children second children first children first children third value.
-	self user money < (theStake asInteger) 
+	theStake := anEvent component componentObject value asInteger.
+	self user money < theStake 
 		ifTrue: [self showErrorNotificationWithMessage: 'Du hast nicht genug Geld'.
-			^self].
-	
+			^self].	
 	self game betCollection ifEmptyOrNil: [self game betCollection: OrderedCollection new].
 	theOwnBet := self game betCollection detect: [:eachBet |
 		eachBet bettor = self user] ifNone: [].
@@ -604,15 +624,11 @@ SpecificTournamentView >> saveBetEvent: anEvent [
 			guess: theWinnerMember;
 			stake: theStake asInteger;
 			yourself)].
-	theStake < 0 ifTrue: [theStake := 0].
-	
-	
-	 
-	
+	theStake < 0 ifTrue: [theStake := 0].		
 	TournamentPlannerApp saveCollectionOfPlayers: TournamentPlannerApp collectionOfPlayers data.
 	TournamentPlannerApp saveCollectionOfTournaments: TournamentPlannerApp collectionOfTournaments data.
 	self resultModal closeModal.
-	self showSuccessNotificationWithMessage: ('Wette auf den Spieler %1 wird gespeichert' bindWith: theMemberName)
+	self showSuccessNotificationWithMessage: ('Wette auf %1 wurde gespeichert' bindWith: theMemberName)
 ]
 
 { #category : 'Events' }
@@ -740,11 +756,12 @@ SpecificTournamentView >> setBetEvent [
 			addChild: (Me5H4 newWithText: ('%1&euro;' bindWith: (theCurrentStakes at: 4)));
 			yourself);
 		yourself).
-		
+	self bettedWinnerSelectBox: theSelectBox.	
 	theSaveButton := (Me5Button newPrimary
 		text: 'Speichern';
 		addClickEventSelector: #saveBetEvent: eventReceiver: self;
 		icon: Me5I newFasSave;
+		componentObject: theIntegerField;
 		yourself).
 	self resultModal foot: (Me5PortletFoot new
 		addChild: theSaveButton).
