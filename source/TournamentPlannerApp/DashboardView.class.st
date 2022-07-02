@@ -134,7 +134,7 @@ DashboardView >> createScrollerBetsForPlayer: aPlayer [
 		eachTournament games do: [:eachGame |
 			eachGame betCollection ifNotNil: [
 				eachGame betCollection do: [:eachBet |
-					eachBet bettor = aPlayer ifTrue: [
+					eachBet bettor asString = (aPlayer asString) ifTrue: [
 						theScroller addChild: (Me5Portlet new
 							display: 'inline-block';
 							margin: 10;

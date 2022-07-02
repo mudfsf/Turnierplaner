@@ -190,10 +190,10 @@ SpecificTournamentView >> createErrorViewWithTitle: aTitle [
 		
 	self addChild: (Me5H1 newWithText: aTitle).
 	self addChild: (Me5H2 newWithText: 'Bitte Tab schlie&szlig;en, und &uuml;ber die Hauptseite das Turnier &ouml;ffnen!').
-	self addChild: (Me5Button newDanger
+"	self addChild: (Me5Button newDanger
 		text: 'Tab schlie&szlig;en';
 		addClickEventSelector: #closeTab;
-		yourself).
+		yourself)."
 	^self
 	
 ]
@@ -733,7 +733,7 @@ SpecificTournamentView >> setBetEvent [
 	
 	self resultModal body: (Me5Form new
 		addChildToBody: (Me5H5 new
-			text: ('Guthaben von %1: %2' bindWith: self user asString with: self user money);
+			text: ('Guthaben von %1: %2&euro;' bindWith: self user asString with: self user money);
 			yourself);
 		addChildToBody: (theSelectBox := Me5SelectBox new
 			text: 'Sieger';
