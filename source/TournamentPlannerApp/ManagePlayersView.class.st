@@ -4,7 +4,13 @@ Class {
 	#instVars : [
 		'listGrid',
 		'data',
-		'placeholder'
+		'placeholder',
+		'newPlayerModal',
+		'firstNameField',
+		'lastNameField',
+		'emailField',
+		'symbolField',
+		'moneyField'
 	],
 	#category : 'TournamentPlannerApp'
 }
@@ -14,12 +20,97 @@ ManagePlayersView >> addPlayerEvent [
 	
 	"<^self>"
 	"Adds empty row to listGrid"
+	
+	| theFirstNameField theLastNameField theEmailField theSymbolField theMoneyField |
+	
+	self newPlayerModal: (ModalView new title: 'Neuer Spieler').
+	
+	self newPlayerModal body: (Me5Form new
+		addChildToBody: (theFirstNameField := (Me5TextField new
+			text: 'Vorname';
+			placeholder: 'Vorname';
+			yourself));
+		addChildToBody: (theLastNameField := (Me5TextField new
+			text: 'Nachname';
+			placeholder: 'Nachname';
+			yourself));
+	addChildToBody: (theEmailField := (Me5TextField new
+			text: 'E-Mail';
+			placeholder: 'E-Mail';
+			yourself));
+		addChildToBody: (theSymbolField := (Me5TextField new
+			text: 'Kürzel';
+			placeholder: 'Kürzel';
+			yourself));
+		addChildToBody: (theMoneyField := (Me5TextField new
+			text: 'Guthaben';
+			placeholder: 'Guthaben';
+			yourself));
+		yourself).
+	self newPlayerModal foot: (Me5Button newPrimary
+		text: 'Speichern';
+		addClickEventSelector: #addPlayerSaveEvent: eventReceiver: self;
+		icon: Me5I newFasSave;
+		yourself).		
+	
+	self
+		firstNameField: theFirstNameField;
+		lastNameField:  theLastNameField;
+		emailField: theEmailField;
+		symbolField: theSymbolField;
+		moneyField: theMoneyField;
+		yourself.
+	
+	self openModal: self newPlayerModal
+]
 
-	(self data includes: self placeholder)
-		ifFalse: [self data add: self placeholder].
-	self listGrid dataSourceBlock: [self data].
-	self listGrid resetEditedDataGridCells.
-	self showSuccessNotificationWithMessage: ('Leere Zeile eingef&uuml;gt')
+{ #category : 'Events' }
+ManagePlayersView >> addPlayerSaveEvent: anEvent [
+
+	"<anEvent: iOf Me5Event, ^self>"
+	"Adds player to collection"
+
+	| thePlayer |
+	
+	self firstNameField clearErrorText.
+	self lastNameField clearErrorText.
+	self emailField clearErrorText.
+	self symbolField clearErrorText.
+	self moneyField clearErrorText.
+		
+	self firstNameField value isEmpty
+		ifTrue: [self firstNameField setErrorText: 'Bitte Vorname angegeben!'].
+	self lastNameField value isEmpty
+		ifTrue: [self lastNameField setErrorText: 'Bitte Nachname angegeben!'].
+	self emailField value isEmpty
+		ifTrue: [self emailField setErrorText: 'Bitte E-Mail angegeben!'].	
+	self symbolField value isEmpty
+		ifTrue: [self symbolField setErrorText: 'Bitte K&uuml;rzel angegeben!'].	
+	thePlayer := Player new.
+	thePlayer 
+		firstName: self firstNameField value;
+		lastName:  self lastNameField value;
+		email:  self emailField value;
+		symbol: self symbolField value;		
+		yourself.
+	(self moneyField value isEmpty or: [(self isValidMoney: self moneyField value) not])
+		ifTrue: [self moneyField setErrorText: 'Bitte ein Guthaben angegeben!']
+		ifFalse: [thePlayer money:  self moneyField value asInteger].
+	(self playerAlreadyExist: thePlayer)
+		ifTrue:[
+			^self showErrorNotificationWithMessage: 'Spieler existiert bereits!'].
+	(thePlayer isValid and: [(self playerAlreadyExist: thePlayer) not])
+		ifTrue: [
+			self data add: thePlayer.
+			self listGrid dataSourceBlock: [self data].
+			self listGrid resetEditedDataGridCells.
+			TournamentPlannerApp saveCollectionOfPlayers: self data.
+			self newPlayerModal closeModal].
+
+			
+
+	
+
 ]
 
 { #category : 'Initial-Events' }
@@ -37,11 +128,9 @@ ManagePlayersView >> clearEvent [
 	"<^self>"
 	"Removes empty row from listGrid"
 
-	(self data includes: self placeholder)
-		ifTrue: [self data remove: self placeholder].
 	self listGrid dataSourceBlock: [self data].
 	self listGrid resetEditedDataGridCells.
-	self showSuccessNotificationWithMessage: ('Tabelle bereinigt')
+	self showSuccessNotificationWithMessage: ('&Auml;nderungen zur&uuml;ckgesetzt')
 ]
 
 { #category : 'Initial-Events' }
@@ -126,7 +215,7 @@ ManagePlayersView >> createComponents [
 				yourself);
 			addChildToFootButtonGroup: (Me5Button newWarning
 				icon: Me5I newFasUndo;
-				text: 'Reinigen';
+				text: 'Zur&uuml;cksetzen';
 				addClickEventSelector: #clearEvent eventReceiver: self;
 				yourself);
 			yourself);
@@ -187,6 +276,74 @@ ManagePlayersView >> deletePlayerEvent: anEvent [
 ]
 
 { #category : 'Accessing' }
+ManagePlayersView >> emailField [
+
+	"<^iOf Me5TextField>"
+	"Answer the emailField of the receiver"
+
+	^emailField
+]
+
+{ #category : 'Accessing' }
+ManagePlayersView >> emailField: aMe5TextField [
+
+	"<aMe5TextField: iOf Me5TextField, ^self>"
+	"Set the emailField of the receiver"
+
+	emailField := aMe5TextField
+]
+
+{ #category : 'Accessing' }
+ManagePlayersView >> firstNameField [
+
+	"<^iOf Me5TextField>"
+	"Answer the firstNameField of the receiver"
+
+	^firstNameField
+]
+
+{ #category : 'Accessing' }
+ManagePlayersView >> firstNameField: aMe5TextField [
+
+	"<aMe5TextField: iOf Me5TextField, ^self>"
+	"Set the firstNameField of the receiver"
+
+	firstNameField := aMe5TextField
+]
+
+{ #category : 'Internal' }
+ManagePlayersView >> isValidMoney: aMoneyString [
+
+	"^iof Boolean"
+	"Validates the MoneyString"
+	
+	aMoneyString doWithIndex: [ :eachLetter :eachIndex |
+		(eachIndex=1 and: [(eachLetter=$+ or: [eachLetter=$-])])
+			ifFalse: [
+				eachLetter isDigit
+					ifFalse: [^false]]].
+	^true
+]
+
+{ #category : 'Accessing' }
+ManagePlayersView >> lastNameField [
+
+	"<^iOf Me5TextField>"
+	"Answer the lastNameField of the receiver"
+
+	^lastNameField
+]
+
+{ #category : 'Accessing' }
+ManagePlayersView >> lastNameField: aMe5TextField [
+
+	"<aMe5TextField: iOf Me5TextField, ^self>"
+	"Set the lastNameField of the receiver"
+
+	lastNameField := aMe5TextField
+]
+
+{ #category : 'Accessing' }
 ManagePlayersView >> listGrid [
 
 	"<^iOf ListGrid>"
@@ -205,12 +362,52 @@ ManagePlayersView >> listGrid: aListGrid [
 ]
 
 { #category : 'Accessing' }
-ManagePlayersView >> placeholder [
-	
-	"<^iOf Player>"
-	"Answer the placeholder of the receiver"
+ManagePlayersView >> moneyField [
 
-	^Player newWithFirstName: ''  lastName: ''  email: '' 
+	"<^iOf Me5TextField>"
+	"Answer the moneyField of the receiver"
+
+	^moneyField
+]
+
+{ #category : 'Accessing' }
+ManagePlayersView >> moneyField: aMe5TextField [
+
+	"<aMe5TextField: iOf Me5TextField, ^self>"
+	"Set the moneyField of the receiver"
+
+	moneyField := aMe5TextField
+]
+
+{ #category : 'Accessing' }
+ManagePlayersView >> newPlayerModal [
+
+	"<^iOf ModalView>"
+	"Answer the newPlayerModal of the receiver"
+
+	^newPlayerModal
+]
+
+{ #category : 'Accessing' }
+ManagePlayersView >> newPlayerModal: aModalView [
+
+	"<aModalView: iOf ModalView, ^self>"
+	"Set the newPlayerModal of the receiver"
+
+	newPlayerModal := aModalView
+]
+
+{ #category : 'Internal' }
+ManagePlayersView >> playerAlreadyExist: aPlayer [
+
+	"^iof Boolean"
+	"Checks if aPlayer exists"
+	
+	TournamentPlannerApp collectionOfPlayers data do: [ :eachPlayer |
+		eachPlayer asString = aPlayer asString 
+			ifTrue: [^true]].
+	^false
+	
 ]
 
 { #category : 'Events' }
@@ -223,12 +420,11 @@ ManagePlayersView >> saveEvent [
 
 	theNumberOfEditedDataGridRows := self listGrid numberOfEditedDataGridRows.
 	self listGrid validateEditedDataGridCellsForBlock: [ :eachEditedDataGridCell | | theFieldName theValue |
-		theFieldName := (self listGrid dataGridColumnDefinitions at: eachEditedDataGridCell field asNumber) 
-			title.
+		theFieldName := (self listGrid dataGridColumnDefinitions at: eachEditedDataGridCell field asNumber) title.
 		theValue := eachEditedDataGridCell value.
 		(theValue isNil or: [((theValue isMemberOf: String) and: [theValue isEmpty])])
 			ifTrue: [
-					eachEditedDataGridCell errorText: ('Bitte geben sie ein %1 ein' bindWith: theFieldName)]].
+				eachEditedDataGridCell errorText: ('Bitte geben sie ein %1 ein' bindWith: theFieldName)]].
 	self listGrid hasValidationError
 		ifTrue: [^self showErrorNotificationWithMessage: 'Validierung fehlgeschlagen...'].
 	self listGrid dataSourceBlock: [self data].
@@ -239,4 +435,22 @@ ManagePlayersView >> saveEvent [
 	self showSuccessNotificationWithMessage: ('%1 bearbeitete Reihe(n) gespeichert...' 
 		bindWith: theNumberOfEditedDataGridRows).
 	TournamentPlannerApp saveCollectionOfPlayers: self data
+]
+
+{ #category : 'Accessing' }
+ManagePlayersView >> symbolField [
+
+	"<^iOf Me5TextField>"
+	"Answer the symbolField of the receiver"
+
+	^symbolField
+]
+
+{ #category : 'Accessing' }
+ManagePlayersView >> symbolField: aMe5TextField [
+
+	"<aMe5TextField: iOf Me5TextField, ^self>"
+	"Set the symbolField of the receiver"
+
+	symbolField := aMe5TextField
 ]

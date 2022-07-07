@@ -92,6 +92,17 @@ Player >> firstName: aFirstName [
 	firstName := aFirstName
 ]
 
+{ #category : 'API' }
+Player >> isValid [
+
+	"<^iOf Boolean>"
+	"Answer the receiver as a string"
+
+	((((self firstName isEmpty or: [self lastName isEmpty]) or: [self email isEmpty]) or: [self symbol isEmpty]) or: [self money isNil])
+		ifTrue:[^false]
+		ifFalse:[^true].
+]
+
 { #category : 'Accessing' }
 Player >> lastName [
 
