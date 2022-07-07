@@ -53,6 +53,7 @@ ManageTournamentsView >> createMe5Form [
 	
 	self textFieldTournamentName: (Me5TextField new
 		text: 'Turniername';
+		maxLength: 50;
 		yourself).
 	self radioGroupTournamentType: (Me5RadioGroup new
 		text: 'Turnierart';

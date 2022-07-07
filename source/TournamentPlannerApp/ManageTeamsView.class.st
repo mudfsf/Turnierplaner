@@ -71,6 +71,7 @@ ManageTeamsView >> createComponents [
 				addChildToContent: (Me5Form new
 					addChildToBody: (textFieldTeamName := Me5TextField new
 						text: 'Neues Team';
+						maxLength: 50;
 						placeholder: 'Teamname';
 						yourself);
 					addChildToBody: (multiComboBoxTeamMembers := Me5Select2MultiSelectBox new
