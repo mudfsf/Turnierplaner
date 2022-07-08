@@ -47,7 +47,7 @@ ManagePlayersView >> addPlayerEvent [
 			placeholder: 'Guthaben';
 			yourself));
 		yourself).
-	self newPlayerModal foot: (Me5Button newPrimary
+	self newPlayerModal foot: (Me5Button newSuccess
 		text: 'Speichern';
 		addClickEventSelector: #addPlayerSaveEvent: eventReceiver: self;
 		icon: Me5I newFasSave;
