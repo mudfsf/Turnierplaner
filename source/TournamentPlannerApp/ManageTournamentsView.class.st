@@ -121,6 +121,8 @@ ManageTournamentsView >> createTournament [
 		ifTrue: [self textFieldTournamentName setErrorText: 'Turnier hat keinen Namen'].
 	self multiComboBoxRivals selectedObjects size < 2
 		ifTrue: [self multiComboBoxRivals setErrorText: 'Turnier hat zu wenig Mitspieler'].
+	self multiComboBoxRivals selectedObjects size > 8
+		ifTrue: [self multiComboBoxRivals setErrorText: 'Turnier hat zu viel Mitspieler'].
 
 	theSelectedAsStringCollection := OrderedCollection new.
 	theSelectedCollection := OrderedCollection new.	

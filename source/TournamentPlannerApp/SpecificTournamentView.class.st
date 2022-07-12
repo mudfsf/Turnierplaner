@@ -190,10 +190,10 @@ SpecificTournamentView >> createErrorViewWithTitle: aTitle [
 		
 	self addChild: (Me5H1 newWithText: aTitle).
 	self addChild: (Me5H2 newWithText: 'Bitte Tab schlie&szlig;en, und &uuml;ber die Hauptseite das Turnier &ouml;ffnen!').
-"	self addChild: (Me5Button newDanger
+	self addChild: (Me5Button newDanger
 		text: 'Tab schlie&szlig;en';
 		addClickEventSelector: #closeTab;
-		yourself)."
+		yourself).
 	^self
 	
 ]

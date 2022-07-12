@@ -39,8 +39,8 @@ ManagePlayersView >> addPlayerEvent [
 			placeholder: 'E-Mail';
 			yourself));
 		addChildToBody: (theSymbolField := (Me5TextField new
-			text: 'Kürzel';
-			placeholder: 'Kürzel';
+			text: 'K&uuml;rzel';
+			placeholder: 'K&uuml;rzel';
 			yourself));
 		addChildToBody: (theMoneyField := (Me5TextField new
 			text: 'Guthaben';
